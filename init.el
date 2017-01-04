@@ -100,7 +100,9 @@
   :init (add-hook 'after-init-hook #'global-undo-tree-mode))
 (use-package undohist
   :commands (undohist-initialize)
-  :init (undohist-initialize))
+  :init (undohist-initialize)
+  :config
+  (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
 ;; Input Method (日本語入力)
 (use-package ddskk
