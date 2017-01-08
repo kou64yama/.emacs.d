@@ -176,6 +176,9 @@
 
 ;; JavaScript
 (use-package js2-mode
-  :mode (("\\.jsx?\\'" . js2-jsx-mode)))
+  :mode (("\\.jsx?\\'" . js2-jsx-mode))
+  :config
+  (setq js2-mode-show-strict-warnings nil
+        js2-mode-show-parse-errors nil))
 
 ;;; init.el ends here
