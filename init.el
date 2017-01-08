@@ -66,6 +66,7 @@
 (el-get-bundle rainbow-mode)
 (el-get-bundle smart-mode-line)
 (el-get-bundle smartparens)
+(el-get-bundle typescript-mode)
 (el-get-bundle undo-tree)
 (el-get-bundle undohist)
 (el-get-bundle use-package)
