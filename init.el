@@ -12,6 +12,8 @@
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
+(defvar package-bundled-packages nil)
+
 ;; Load custom file.
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
@@ -28,8 +30,6 @@
   (require 'use-package))
 
 ;; Define `package-bundle' and `package-bundle-sync'.
-(defvar package-bundled-packages nil)
-
 (defun package-bundle (pkg)
   "Add PKG to package-bundled-packages."
   (add-to-list 'package-bundled-packages pkg t))
