@@ -1,5 +1,7 @@
 *
 !.gitignore
+!.gitattributes
+!.editorconfig
 !README.md
 !LICENSE
 !init.el
