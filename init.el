@@ -1,7 +1,7 @@
 ;;; init.el --- Emacs Configuration
 ;;; Commentary:
 
-;; Copyright © 2016-present YAMADA Koji. All rights reserved.
+;; Copyright © 2016-present YAMADA Koji.  All rights reserved.
 
 ;; This source code is licensed under the MIT license found in the
 ;; LISENCE file in the root directory of this source tree.
@@ -51,6 +51,7 @@
 (package-bundle 'exec-path-from-shell)
 (package-bundle 'expand-region)
 (package-bundle 'flycheck)
+(package-bundle 'git-gutter-fringe+)
 (package-bundle 'ivy)
 (package-bundle 'js2-mode)
 (package-bundle 'magit)
@@ -242,6 +243,13 @@
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup)))
 
+(use-package git-gutter-fringe+
+  :init (add-hook 'after-init-hook #'global-git-gutter+-mode)
+  :config
+  (fringe-helper-define 'git-gutter-fr+-added '(top repeat) "xx......")
+  (fringe-helper-define 'git-gutter-fr+-deleted '(top repeat) "xx......")
+  (fringe-helper-define 'git-gutter-fr+-modified '(top repeat) "xx......"))
+
 ;;
 ;; Autocomplete
 ;; -----------------------------------------------------------------------------
@@ -258,7 +266,9 @@
 ;; Flycheck
 ;; http://www.flycheck.org/en/latest/
 (use-package flycheck
-  :init (add-hook 'after-init-hook #'global-flycheck-mode))
+  :init (add-hook 'after-init-hook #'global-flycheck-mode)
+  :config
+  (setq flycheck-indication-mode 'right-fringe))
 
 ;;
 ;; Snippet
