@@ -1,138 +1,218 @@
-;;; init.el --- Emacs Configuration File
+;;; init.el --- Emacs Configuration
 ;;; Commentary:
+
+;; Copyright © 2016-present YAMADA Koji. All rights reserved.
+
+;; This source code is licensed under the MIT license found in the
+;; LISENCE file in the root directory of this source tree.
+
 ;;; Code:
 
-;; El-Get Basic Setup
+;; Set `user-emacs-directory' if Emacs is launched with `emacs -q -l`.
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory load-file-name)))
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+;; Load custom file.
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; Install `use-package' if it isn't installed.
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
+(unless (require 'use-package nil 'noerror)
+  (package-refresh-contents)
+  (package-install 'use-package)
+  (require 'use-package))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(backup-inhibited t t)
- '(column-number-mode t)
- '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
- '(scroll-bar-mode nil)
- '(tool-bar-mode nil))
+;; Define `package-bundle' and `package-bundle-sync'.
+(defvar package-bundled-packages nil)
+
+(defun package-bundle (pkg)
+  "Add PKG to package-bundled-packages."
+  (add-to-list 'package-bundled-packages pkg t))
+
+(defun package-bundle-sync ()
+  "Sync bundled packages."
+  (custom-set-variables
+   '(package-bundleed-packages package-bundled-packages))
+  (package-install-selected-packages))
+
+;; Bundle packages.
+(package-bundle 'all-the-icons-dired)
+(package-bundle 'company)
+(package-bundle 'counsel)
+(package-bundle 'ddskk)
+(package-bundle 'drag-stuff)
+(package-bundle 'editorconfig)
+(package-bundle 'emojify)
+(package-bundle 'exec-path-from-shell)
+(package-bundle 'expand-region)
+(package-bundle 'flycheck)
+(package-bundle 'ivy)
+(package-bundle 'js2-mode)
+(package-bundle 'magit)
+(package-bundle 'markdown-mode)
+(package-bundle 'material-theme)
+(package-bundle 'mode-icons)
+(package-bundle 'multiple-cursors)
+(package-bundle 'rainbow-delimiters)
+(package-bundle 'rainbow-mode)
+(package-bundle 'smart-mode-line-powerline-theme)
+(package-bundle 'smartparens)
+(package-bundle 'swiper)
+(package-bundle 'undo-tree)
+(package-bundle 'undohist)
+(package-bundle 'use-package)
+(package-bundle 'volatile-highlights)
+(package-bundle 'web-mode)
+(package-bundle 'yascroll)
+(package-bundle 'yasnippet)
+
+(package-bundle-sync)
+
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(setq visible-bell t)
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(default ((t :family "monofur for Powerline" :height 120))))
-
 (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Yu Gothic"))
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+;; exec-path-from-shell
+;; https://github.com/purcell/exec-path-from-shell
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :init (exec-path-from-shell-initialize))
 
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
-
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-
-;; El-Get bundle
-(el-get-bundle company-mode)
-(el-get-bundle ddskk)
-(el-get-bundle drag-stuff)
-(el-get-bundle editorconfig)
-(el-get-bundle elpa:counsel)
-(el-get-bundle elpa:ivy)
-(el-get-bundle emojify)
-(el-get-bundle exec-path-from-shell)
-(el-get-bundle expand-region)
-(el-get-bundle flycheck)
-(el-get-bundle git-modes)
-(el-get-bundle js2-mode)
-(el-get-bundle json-mode)
-(el-get-bundle magit)
-(el-get-bundle markdown-mode)
-(el-get-bundle material-theme)
-(el-get-bundle mode-icons)
-(el-get-bundle multiple-cursors)
-(el-get-bundle powerline)
-(el-get-bundle rainbow-delimiters)
-(el-get-bundle rainbow-mode)
-(el-get-bundle smart-mode-line)
-(el-get-bundle smartparens)
-(el-get-bundle typescript-mode)
-(el-get-bundle undo-tree)
-(el-get-bundle undohist)
-(el-get-bundle use-package)
-(el-get-bundle volatile-highlights)
-(el-get-bundle web-mode)
-(el-get-bundle yaml-mode)
-(el-get-bundle yascroll)
-(el-get-bundle yasnippet)
-
+;;
 ;; Editor
+;; -----------------------------------------------------------------------------
+
+;; EditorConfig
+;; https://github.com/editorconfig/editorconfig-emacs
 (use-package editorconfig
   :init (add-hook 'after-init-hook #'editorconfig-mode))
+
+;; expand-region.el
+;; https://github.com/magnars/expand-region.el
 (use-package expand-region
   :bind (("C-=" . er/expand-region)))
+
+;; multiple-cursors.el
+;; https://github.com/magnars/multiple-cursors.el
 (use-package multiple-cursors
-  :bind (("C-<" . mc/mark-previous-like-this)
-	 ("C->" . mc/mark-next-like-this)
-	 ("C-c C-<" . mc/mark-all-like-this)))
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+;; Drag Stuff
+;; https://github.com/rejeep/drag-stuff.el
 (use-package drag-stuff
   :init (add-hook 'after-init-hook #'drag-stuff-global-mode))
+
+;; Smartparens
+;; https://github.com/Fuco1/smartparens
 (use-package smartparens-config
   :init (add-hook 'after-init-hook #'smartparens-global-mode))
+
+;; rainbow-delimiters
+;; https://github.com/Fanael/rainbow-delimiters
 (use-package rainbow-delimiters
   :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+;; rainbow-mode
+;; https://github.com/emacsmirror/rainbow-mode
 (use-package rainbow-mode
   :init (add-hook 'prog-mode-hook #'rainbow-mode))
-(use-package volatile-highlights-mode
+
+;; Volatile Highlights
+;; https://www.emacswiki.org/emacs/VolatileHighlights
+(use-package volatile-highlights
   :init (add-hook 'after-init-hook #'volatile-highlights-mode))
 
+;;
 ;; History
+;; -----------------------------------------------------------------------------
+
+;; Undo Tree
+;; https://www.emacswiki.org/emacs/UndoTree
 (use-package undo-tree
   :init (add-hook 'after-init-hook #'global-undo-tree-mode))
+
+;; undohist
+;; https://github.com/m2ym/undohist-el
 (use-package undohist
   :commands (undohist-initialize)
   :init (undohist-initialize)
   :config
   (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
-;; Input Method (日本語入力)
+;;
+;; Input Method
+;; -----------------------------------------------------------------------------
+
+;; Daredevil SKK
+;; http://openlab.jp/skk/
 (use-package ddskk
+  :bind (("C-x C-j" . skk-mode))
   :init (setq default-input-method "japanese-skk"))
 
+;;
 ;; Appearance
+;; -----------------------------------------------------------------------------
+
+;; Material Theme
+;; https://emacsthemes.com/themes/material-theme.html
 (use-package material-theme
-  :init (load-theme 'material t))
-(use-package powerline)
-(use-package smart-mode-line
+  :init (load-theme 'material))
+
+;; Smart-mode-line
+;; https://github.com/Malabarba/smart-mode-line/
+(use-package smart-mode-line-powerline-theme
   :init
-  (setq sml/no-confirm-load-theme t
-        sml/theme 'powerline)
+  (setq sml/theme 'powerline)
   (sml/setup))
+
+;; yascroll.el
+;; https://github.com/m2ym/yascroll-el
 (use-package yascroll
-  :init (global-yascroll-bar-mode))
+  :init (global-yascroll-bar-mode 1))
+
+;; Mode icons
+;; http://projects.ryuslash.org/mode-icons/
 (use-package mode-icons
-  :init (mode-icons-mode))
+  :init (add-hook 'after-init-hook #'mode-icons-mode))
+
+;; Emojify
+;; https://github.com/iqbalansari/emacs-emojify
 (use-package emojify
   :init (add-hook 'after-init-hook #'global-emojify-mode))
 
+;; all-the-icons-dired
+;; https://github.com/jtbm37/all-the-icons-dired
+(use-package all-the-icons-dired
+  :init
+  (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+
+;;
 ;; Minibuffer
+;; -----------------------------------------------------------------------------
+
+;; Ivy
+;; https://github.com/abo-abo/swiper#ivy
 (use-package ivy
-  :bind (("C-s" . swiper))
-  :init (add-hook 'after-init-hook #'ivy-mode))
-(use-package counsel
   :bind (("C-c C-r" . ivy-resume)
-         ("<f6>" . ivy-resume)
-         ("M-x" . counsel-M-x)
+         ("<f6>" . ivy-resume))
+  :init (ivy-mode 1))
+
+;; Counsel
+;; https://github.com/abo-abo/swiper#counsel
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
          ("<f1> f" . counsel-describe-function)
          ("<f1> v" . counsel-describe-variable)
@@ -147,23 +227,55 @@
          :map read-expression-map
          ("C-r" . counsel-expression-history)))
 
+;; Swiper
+;; https://github.com/abo-abo/swiper#swiper
+(use-package swiper
+  :bind (("C-s" . swiper)))
+
+;;
 ;; Autocomplete
+;; -----------------------------------------------------------------------------
+
+;; company-mode
+;; https://company-mode.github.io
 (use-package company-mode
   :init (add-hook 'after-init-hook #'global-company-mode))
 
+;;
 ;; Syntax checker
+;; -----------------------------------------------------------------------------
+
+;; Flycheck
+;; http://www.flycheck.org/en/latest/
 (use-package flycheck
   :init (add-hook 'after-init-hook #'global-flycheck-mode))
 
+;;
 ;; Snippet
+;; -----------------------------------------------------------------------------
+
+;; Yet another snippet extension
+;; https://joaotavora.github.io/yasnippet/
 (use-package yasnippet
   :init (add-hook 'after-init-hook #'yas-global-mode))
 
+;;
 ;; Markdown
-(use-package markdown-mode
-  :mode (("\\.md\\'" . gfm-mode)))
+;; -----------------------------------------------------------------------------
 
-;; Web
+;; Emacs Markdown Mode
+;; http://jblevins.org/projects/markdown-mode/
+(use-package markdown-mode
+  :mode (("README\\.md$" . gfm-mode)
+         ("\\.md\\$" . markdown-mode)
+         ("\\.markdown\\$" . markdown-mode)))
+
+;;
+;; HTML
+;; -----------------------------------------------------------------------------
+
+;; web-mode.el
+;; http://web-mode.org
 (use-package web-mode
   :mode (("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
@@ -173,9 +285,14 @@
          ("\\.mustache\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode)
          ("\\.html?\\'" . web-mode)
-         ("\\.tag?\\'" . web-mode)))
+         ("\\.vue\\'" . web-mode)))
 
+;;
 ;; JavaScript
+;; -----------------------------------------------------------------------------
+
+;; js2-mode
+;; https://github.com/mooz/js2-mode
 (use-package js2-mode
   :mode (("\\.jsx?\\'" . js2-jsx-mode))
   :config
