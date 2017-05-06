@@ -37,7 +37,7 @@
 (defun package-bundle-sync ()
   "Sync bundled packages."
   (custom-set-variables
-   '(package-bundleed-packages package-bundled-packages))
+   '(package-selected-packages package-bundled-packages))
   (package-install-selected-packages))
 
 ;; Bundle packages.
