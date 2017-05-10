@@ -69,6 +69,8 @@
 (package-bundle 'smartparens)
 (package-bundle 'swiper)
 (package-bundle 'tabbar-ruler)
+(package-bundle 'tide)
+(package-bundle 'typescript-mode)
 (package-bundle 'undo-tree)
 (package-bundle 'undohist)
 (package-bundle 'use-package)
@@ -351,5 +353,16 @@
   :config
   (setq js2-mode-show-strict-warnings nil
         js2-mode-show-parse-errors nil))
+
+;;
+;; TypeScript
+;; -----------------------------------------------------------------------------
+
+;; Tide
+;; https://github.com/ananthakumaran/tide
+(use-package tide
+  :init
+  (add-hook 'typescript-mode-hook #'tide-setup)
+  (add-hook 'before-save-hook 'tide-format-before-save))
 
 ;;; init.el ends here
