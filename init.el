@@ -68,6 +68,7 @@
 (package-bundle 'smart-mode-line-powerline-theme)
 (package-bundle 'smartparens)
 (package-bundle 'swiper)
+(package-bundle 'tabbar-ruler)
 (package-bundle 'undo-tree)
 (package-bundle 'undohist)
 (package-bundle 'use-package)
@@ -207,8 +208,15 @@
 ;; all-the-icons-dired
 ;; https://github.com/jtbm37/all-the-icons-dired
 (use-package all-the-icons-dired
-  :init
-  (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+  :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+
+;; Tabbar Ruler
+;; https://github.com/mattfidler/tabbar-ruler.el
+(use-package tabbar-ruler
+  :bind (("C-c t" . tabbar-ruler-move))
+  :init (require 'tabbar-ruler)
+  :config
+  (setq tabbar-buffer-groups-function 'tabbar-ruler-projectile-tabbar-buffer-groups))
 
 ;;
 ;; Minibuffer
