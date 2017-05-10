@@ -55,6 +55,7 @@
 (package-bundle 'ivy)
 (package-bundle 'js2-mode)
 (package-bundle 'json-mode)
+(package-bundle 'keyfreq)
 (package-bundle 'magit)
 (package-bundle 'markdown-mode)
 (package-bundle 'material-theme)
@@ -88,6 +89,13 @@
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :init (exec-path-from-shell-initialize))
+
+;; keyfreq
+;; https://github.com/dacap/keyfreq
+(use-package keyfreq
+  :init
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
 
 ;;
 ;; Editor
