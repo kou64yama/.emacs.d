@@ -261,7 +261,11 @@
 ;; Projectile
 ;; https://projectile.readthedocs.io/en/latest/
 (use-package projectile
-  :init (add-hook 'after-init-hook #'projectile-mode))
+  :init (add-hook 'after-init-hook #'projectile-mode)
+  :config
+  (setq projectile-globally-ignored-directories
+        (append '("elpa" "node_modules")
+                projectile-globally-ignored-directories)))
 
 ;; counsel-projectile
 ;; https://github.com/ericdanan/counsel-projectile
