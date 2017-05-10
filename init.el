@@ -54,6 +54,7 @@
 (package-bundle 'git-gutter-fringe+)
 (package-bundle 'ivy)
 (package-bundle 'js2-mode)
+(package-bundle 'json-mode)
 (package-bundle 'magit)
 (package-bundle 'markdown-mode)
 (package-bundle 'material-theme)
