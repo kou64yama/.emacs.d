@@ -43,6 +43,7 @@
 ;; Bundle packages.
 (package-bundle 'all-the-icons-dired)
 (package-bundle 'company)
+(package-bundle 'company-flow)
 (package-bundle 'counsel)
 (package-bundle 'counsel-projectile)
 (package-bundle 'ddskk)
@@ -51,7 +52,9 @@
 (package-bundle 'emojify)
 (package-bundle 'exec-path-from-shell)
 (package-bundle 'expand-region)
+(package-bundle 'flow-minor-mode)
 (package-bundle 'flycheck)
+(package-bundle 'flycheck-flow)
 (package-bundle 'git-gutter-fringe+)
 (package-bundle 'ivy)
 (package-bundle 'js2-mode)
@@ -298,6 +301,14 @@
 (use-package company-mode
   :init (add-hook 'after-init-hook #'global-company-mode))
 
+;; Company flow
+;; https://github.com/aaronjensen/company-flow
+(use-package company-flow
+  :init
+  (defun company-flow-setup ()
+    (add-to-list 'company-backends 'company-flow))
+  (add-hook 'company-mode-hook #'company-flow-setup))
+
 ;;
 ;; Syntax checker
 ;; -----------------------------------------------------------------------------
@@ -308,6 +319,16 @@
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
   (setq flycheck-indication-mode 'right-fringe))
+
+;; flycheck-flow
+;; https://github.com/lbolla/emacs-flycheck-flow
+(use-package flycheck-flow
+  :init
+  (defun flycheck-flow-setup ()
+    (flycheck-add-next-checker 'javascript-eslint 'javascript-flow)
+    (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage))
+  (add-hook 'flycheck-mode-hook #'flycheck-flow-setup))
+
 
 ;;
 ;; Snippet
@@ -357,6 +378,11 @@
   :config
   (setq js2-mode-show-strict-warnings nil
         js2-mode-show-parse-errors nil))
+
+;; flow-minor-mode
+;; https://github.com/an-sh/flow-minor-mode
+(use-package flow-minor-mode
+  :init (add-hook 'js2-mode-hook 'flow-minor-mode))
 
 ;;
 ;; TypeScript
