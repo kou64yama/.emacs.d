@@ -44,6 +44,7 @@
 (package-bundle 'all-the-icons-dired)
 (package-bundle 'company)
 (package-bundle 'counsel)
+(package-bundle 'counsel-projectile)
 (package-bundle 'ddskk)
 (package-bundle 'drag-stuff)
 (package-bundle 'editorconfig)
@@ -61,6 +62,7 @@
 (package-bundle 'material-theme)
 (package-bundle 'mode-icons)
 (package-bundle 'multiple-cursors)
+(package-bundle 'projectile)
 (package-bundle 'rainbow-delimiters)
 (package-bundle 'rainbow-mode)
 (package-bundle 'smart-mode-line-powerline-theme)
@@ -241,6 +243,20 @@
 ;; https://github.com/abo-abo/swiper#swiper
 (use-package swiper
   :bind (("C-s" . swiper)))
+
+;;
+;; Project
+;; -----------------------------------------------------------------------------
+
+;; Projectile
+;; https://projectile.readthedocs.io/en/latest/
+(use-package projectile
+  :init (add-hook 'after-init-hook #'projectile-mode))
+
+;; counsel-projectile
+;; https://github.com/ericdanan/counsel-projectile
+(use-package counsel-projectile
+  :init (add-hook 'projectile-mode-hook #'counsel-projectile-on))
 
 ;;
 ;; Git
