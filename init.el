@@ -1,44 +1,35 @@
-;;; init.el --- Emacs Configuration
+;;; init.el --- Emacs configurations
 ;;; Commentary:
 
-;; Copyright © 2016-present YAMADA Koji.  All rights reserved.
+;; Copyright (c) 2016-present YAMADA Koji.  All rights reserved.
 
 ;; This source code is licensed under the MIT license found in the
-;; LISENCE file in the root directory of this source tree.
+;; LICENSE file in the root directory of this source tree.
 
 ;;; Code:
 
-;; Set `user-emacs-directory' if Emacs is launched with `emacs -q -l`.
+;; Set `user-emacs-directory` if Emacs is launched with `emacs -q -l init.el`.
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-(defvar package-bundled-packages nil)
-
-;; Load custom file.
+;; Load `custom-file.el`.
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (when (file-exists-p custom-file)
   (load custom-file))
 
-;; Install `use-package' if it isn't installed.
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
-(unless (require 'use-package nil 'noerror)
-  (package-refresh-contents)
-  (package-install 'use-package)
-  (require 'use-package))
+;; Add "~/.emacs.d/site-lisp" and "~/.emacs.d/lisp" to `load-path`.
+(add-to-list 'load-path (locate-user-emacs-file "site-lisp"))
+(add-to-list 'load-path (locate-user-emacs-file "lisp"))
 
-;; Define `package-bundle' and `package-bundle-sync'.
-(defun package-bundle (pkg)
-  "Add PKG to package-bundled-packages."
-  (add-to-list 'package-bundled-packages pkg t))
-
-(defun package-bundle-sync ()
-  "Sync bundled packages."
-  (custom-set-variables
-   '(package-selected-packages package-bundled-packages))
-  (package-install-selected-packages))
+(require 'sensible)
+(require 'package-bundle)
 
 ;; Bundle packages.
 (package-bundle 'all-the-icons-dired)
@@ -82,21 +73,12 @@
 (package-bundle 'yascroll)
 (package-bundle 'yasnippet)
 
+;; Sync packages.
 (package-bundle-sync)
 
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(setq visible-bell t)
-
-(custom-set-faces
- '(default ((t :family "monofur for Powerline" :height 120))))
-(set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Yu Gothic"))
-
-;; exec-path-from-shell
-;; https://github.com/purcell/exec-path-from-shell
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :init (exec-path-from-shell-initialize))
+;;
+;; Benchmark
+;; -----------------------------------------------------------------------------
 
 ;; keyfreq
 ;; https://github.com/dacap/keyfreq
@@ -106,13 +88,23 @@
   (keyfreq-autosave-mode 1))
 
 ;;
+;; Environment Variables
+;; -----------------------------------------------------------------------------
+
+;; exec-path-from-shell
+;; https://github.com/purcell/exec-path-from-shell
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :init (exec-path-from-shell-initialize))
+
+;;
 ;; Editor
 ;; -----------------------------------------------------------------------------
 
 ;; EditorConfig
 ;; https://github.com/editorconfig/editorconfig-emacs
 (use-package editorconfig
-  :init (add-hook 'after-init-hook #'editorconfig-mode))
+  :init (add-to-list 'after-init-hook #'editorconfig-mode))
 
 ;; expand-region.el
 ;; https://github.com/magnars/expand-region.el
@@ -124,7 +116,6 @@
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; Drag Stuff
@@ -151,78 +142,6 @@
 ;; https://www.emacswiki.org/emacs/VolatileHighlights
 (use-package volatile-highlights
   :init (add-hook 'after-init-hook #'volatile-highlights-mode))
-
-;;
-;; History
-;; -----------------------------------------------------------------------------
-
-;; Undo Tree
-;; https://www.emacswiki.org/emacs/UndoTree
-(use-package undo-tree
-  :init (add-hook 'after-init-hook #'global-undo-tree-mode))
-
-;; undohist
-;; https://github.com/m2ym/undohist-el
-(use-package undohist
-  :commands (undohist-initialize)
-  :init (undohist-initialize)
-  :config
-  (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
-
-;;
-;; Input Method
-;; -----------------------------------------------------------------------------
-
-;; Daredevil SKK
-;; http://openlab.jp/skk/
-(use-package ddskk
-  :bind (("C-x C-j" . skk-mode))
-  :init (setq default-input-method "japanese-skk"))
-
-;;
-;; Appearance
-;; -----------------------------------------------------------------------------
-
-;; Material Theme
-;; https://emacsthemes.com/themes/material-theme.html
-(use-package material-theme
-  :init (load-theme 'material))
-
-;; Smart-mode-line
-;; https://github.com/Malabarba/smart-mode-line/
-(use-package smart-mode-line-powerline-theme
-  :init
-  (setq sml/theme 'powerline)
-  (sml/setup))
-
-;; yascroll.el
-;; https://github.com/m2ym/yascroll-el
-(use-package yascroll
-  :init (global-yascroll-bar-mode 1))
-
-;; Mode icons
-;; http://projects.ryuslash.org/mode-icons/
-(use-package mode-icons
-  :init (add-hook 'after-init-hook #'mode-icons-mode))
-
-;; Emojify
-;; https://github.com/iqbalansari/emacs-emojify
-(use-package emojify
-  :init (add-hook 'after-init-hook #'global-emojify-mode))
-
-;; all-the-icons-dired
-;; https://github.com/jtbm37/all-the-icons-dired
-(use-package all-the-icons-dired
-  :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
-
-;; Tabbar Ruler
-;; https://github.com/mattfidler/tabbar-ruler.el
-(use-package tabbar-ruler
-  :bind (("C-c t" . tabbar-ruler-move))
-  :init (require 'tabbar-ruler)
-  :config
-  (setq tabbar-buffer-groups-function 'tabbar-ruler-projectile-tabbar-buffer-groups))
-
 ;;
 ;; Minibuffer
 ;; -----------------------------------------------------------------------------
@@ -258,6 +177,78 @@
   :bind (("C-s" . swiper)))
 
 ;;
+;; Appearance
+;; -----------------------------------------------------------------------------
+
+;; Material Theme
+;; https://emacsthemes.com/themes/material-theme.html
+(use-package material-theme
+  :init (load-theme 'material))
+
+;; Smart-mode-line
+;; https://github.com/Malabarba/smart-mode-line/
+(use-package smart-mode-line-powerline-theme
+  :init
+  (setq sml/theme 'powerline)
+  (sml/setup))
+
+;; yascroll.el
+;; https://github.com/m2ym/yascroll-el
+(use-package yascroll
+  :if window-system
+  :init (global-yascroll-bar-mode 1))
+
+;; Mode icons
+;; http://projects.ryuslash.org/mode-icons/
+(use-package mode-icons
+  :init (add-hook 'after-init-hook #'mode-icons-mode))
+
+;; Emojify
+;; https://github.com/iqbalansari/emacs-emojify
+(use-package emojify
+  :init (add-hook 'after-init-hook #'global-emojify-mode))
+
+;; all-the-icons-dired
+;; https://github.com/jtbm37/all-the-icons-dired
+(use-package all-the-icons-dired
+  :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
+
+;; Tabbar Ruler
+;; https://github.com/mattfidler/tabbar-ruler.el
+(use-package tabbar-ruler
+  :bind (("C-c t" . tabbar-ruler-move))
+  :init (require 'tabbar-ruler)
+  :config
+  (setq tabbar-buffer-groups-function 'tabbar-ruler-projectile-tabbar-buffer-groups))
+
+;;
+;; History
+;; -----------------------------------------------------------------------------
+
+;; Undo Tree
+;; https://www.emacswiki.org/emacs/UndoTree
+(use-package undo-tree
+  :init (add-hook 'after-init-hook #'global-undo-tree-mode))
+
+;; undohist
+;; https://github.com/m2ym/undohist-el
+(use-package undohist
+  :commands (undohist-initialize)
+  :init (undohist-initialize)
+  :config
+  (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
+
+;;
+;; Input Method
+;; -----------------------------------------------------------------------------
+
+;; Daredevil SKK
+;; http://openlab.jp/skk/
+(use-package ddskk
+  :bind (("C-x C-j" . skk-mode))
+  :init (setq default-input-method "japanese-skk"))
+
+;;
 ;; Project
 ;; -----------------------------------------------------------------------------
 
@@ -276,7 +267,7 @@
   :init (add-hook 'projectile-mode-hook #'counsel-projectile-on))
 
 ;;
-;; Git
+;; CVS
 ;; -----------------------------------------------------------------------------
 
 ;; Magit
@@ -285,7 +276,10 @@
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup)))
 
+;; git-gutter-fringe+
+;; https://github.com/nonsequitur/git-gutter-fringe-plus
 (use-package git-gutter-fringe+
+  :if window-system
   :init (add-hook 'after-init-hook #'global-git-gutter+-mode)
   :config
   (fringe-helper-define 'git-gutter-fr+-added '(top repeat) "xx......")
@@ -329,7 +323,6 @@
     (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage))
   (add-hook 'flycheck-mode-hook #'flycheck-flow-setup))
 
-
 ;;
 ;; Snippet
 ;; -----------------------------------------------------------------------------
@@ -338,17 +331,6 @@
 ;; https://joaotavora.github.io/yasnippet/
 (use-package yasnippet
   :init (add-hook 'after-init-hook #'yas-global-mode))
-
-;;
-;; Markdown
-;; -----------------------------------------------------------------------------
-
-;; Emacs Markdown Mode
-;; http://jblevins.org/projects/markdown-mode/
-(use-package markdown-mode
-  :mode (("README\\.md$" . gfm-mode)
-         ("\\.md\\$" . markdown-mode)
-         ("\\.markdown\\$" . markdown-mode)))
 
 ;;
 ;; HTML
