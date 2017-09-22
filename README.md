@@ -23,6 +23,7 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
   * `C-x M-g`: Invoke `magit-dispatch-popup`.
   * `C-=`: Invoke `er/expand-region`.
   * `C-S-c C-S-c`: Invoke `mc/edit-lines`.
+  * `C-<`: Invoke `mc/mark-previous-like-this`.
   * `C->`: Invoke `mc/mark-next-like-this`.
   * `C-c C-<`: Invoke `mc/mark-all-like-this`.
   * `C-c t`: Invoke `tabbar-ruler-move`.
