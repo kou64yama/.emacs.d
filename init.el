@@ -35,6 +35,7 @@
 (package-bundle 'all-the-icons-dired)
 (package-bundle 'company)
 (package-bundle 'company-flow)
+(package-bundle 'company-go)
 (package-bundle 'counsel)
 (package-bundle 'counsel-projectile)
 (package-bundle 'ddskk)
@@ -47,6 +48,7 @@
 (package-bundle 'flycheck)
 (package-bundle 'flycheck-flow)
 (package-bundle 'git-gutter-fringe+)
+(package-bundle 'go-mode)
 (package-bundle 'ivy)
 (package-bundle 'js2-mode)
 (package-bundle 'json-mode)
@@ -303,6 +305,14 @@
     (add-to-list 'company-backends 'company-flow))
   (add-hook 'company-mode-hook #'company-flow-setup))
 
+;; Company Go
+;; https://github.com/nsf/gocode/blob/master/emacs-company
+(use-package company-go
+  :init
+  (defun company-go-setup ()
+    (add-to-list 'company-backends 'company-go))
+  (add-hook 'company-mode-hook #'company-go-setup))
+
 ;;
 ;; Syntax checker
 ;; -----------------------------------------------------------------------------
@@ -376,5 +386,14 @@
   :init
   (add-hook 'typescript-mode-hook #'tide-setup)
   (add-hook 'before-save-hook 'tide-format-before-save))
+
+;; Go
+;; -----------------------------------------------------------------------------
+
+;; go-mode
+;; https://github.com/dominikh/go-mode.el
+(use-package go-mode
+  :config
+  (add-hook 'before-save-hook #'gofmt-before-save))
 
 ;;; init.el ends here
