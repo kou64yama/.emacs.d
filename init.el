@@ -214,6 +214,7 @@
 ;; all-the-icons-dired
 ;; https://github.com/jtbm37/all-the-icons-dired
 (use-package all-the-icons-dired
+  :if (not (eq window-system 'w32))
   :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
 
 ;; Tabbar Ruler
