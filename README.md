@@ -42,6 +42,10 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
   * `C-x l`: Invoke `counsel-locate`.
   * `C-S-o`: Invoke `counsel-rhythmbox`.
   * `C-s`: Invoke `swiper`.
+  * `<M-up>`: Invoke `drag-stuff-up`
+  * `<M-down>`: Invoke `drag-stuff-down`
+  * `<M-right>`: Invoke `drag-stuff-right`
+  * `<M-left>`: Invoke `drag-stuff-left`
 * read-expression-map
   * `C-r`: Invoke `counsel-expression-history`.
   

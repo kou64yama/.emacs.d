@@ -124,7 +124,8 @@
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff.el
 (use-package drag-stuff
-  :init (add-hook 'after-init-hook #'drag-stuff-global-mode))
+  :init (add-hook 'after-init-hook #'drag-stuff-global-mode)
+  :config (drag-stuff-define-keys))
 
 ;; Smartparens
 ;; https://github.com/Fuco1/smartparens
