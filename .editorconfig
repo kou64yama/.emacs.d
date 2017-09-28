@@ -17,3 +17,6 @@ trim_trailing_whitespace = false
 
 [*.el]
 indent_size = unset
+
+[snippets/**/*]
+insert_final_newline = false

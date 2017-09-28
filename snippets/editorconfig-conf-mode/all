@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: all
+# key: all
+# --
+[*]
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+end_of_line = lf
+charset = utf-8
+
+indent_style = ${1:space}
+indent_size = ${2:2}
+$0
