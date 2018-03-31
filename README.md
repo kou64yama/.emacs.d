@@ -1,22 +1,20 @@
-# Emacs configurations
+# ~/.emacs.d
 
 My emacs configurations.
 
 ## Requirements
 
-This configurations requires the following to run:
-
-* [Emacs](https://www.gnu.org/software/emacs/) 25 or newer
+* [Emacs](https://www.gnu.org/software/emacs/) 25+
 
 ## Installation
 
 Checkout this repository at `~/.emacs.d`:
 
-```sh
+```bash
 $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 ```
 
-## Usage
+## Key bindings
 
 * global-map
   * `C-x g`: Invoke `magit-status`.
@@ -49,10 +47,9 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 * read-expression-map
   * `C-r`: Invoke `counsel-expression-history`.
   
-
 ## Packages
 
-* [all-the-icons-dired](https://github.com/jtbm37/all-the-icons-dired)
+* [adoc-mode](https://github.com/sensorflo/adoc-mode/wiki)
 * [company-flow](https://github.com/aaronjensen/company-flow)
 * [company-go](https://github.com/nsf/gocode/tree/master/emacs-company)
 * [company](https://company-mode.github.io)
@@ -61,14 +58,14 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 * [ddskk](http://openlab.jp/skk/)
 * [drag-stuff](https://github.com/rejeep/drag-stuff.el)
 * [editorconfig](https://github.com/editorconfig/editorconfig-emacs)
-* [emojify](https://github.com/iqbalansari/emacs-emojify)
 * [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell)
 * [expand-region](https://github.com/magnars/expand-region.el)
-* [flow-minor-mode](https://github.com/an-sh/flow-minor-mode)
 * [flycheck-flow](https://github.com/lbolla/emacs-flycheck-flow)
 * [flycheck](http://www.flycheck.org/en/latest/)
+* [font-utils](https://github.com/rolandwalker/font-utils)
 * [git-gutter-fringe+](https://github.com/nonsequitur/git-gutter-fringe-plus)
 * [go-mode](https://github.com/dominikh/go-mode.el)
+* [google-translate](https://github.com/atykhonov/google-translate)
 * [ivy](https://github.com/abo-abo/swiper#ivy)
 * [js2-mode](https://github.com/mooz/js2-mode)
 * [json-mode](https://github.com/joshwnj/json-mode)
@@ -80,17 +77,14 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 * [multiple-cursors](https://github.com/magnars/multiple-cursors.el)
 * [projectile](https://projectile.readthedocs.io/en/latest/)
 * [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)
-* [rainbow-mode](https://github.com/emacsmirror/rainbow-mode)
 * [smart-mode-line-powerline-theme](https://github.com/Malabarba/smart-mode-line/)
 * [smartparens](https://github.com/Fuco1/smartparens)
 * [swiper](https://github.com/abo-abo/swiper#swiper)
-* [tabbar-ruler](https://github.com/mattfidler/tabbar-ruler.el)
 * [tide](https://github.com/ananthakumaran/tide)
 * [typescript-mode](https://github.com/ananthakumaran/typescript.el)
 * [undo-tree](https://www.emacswiki.org/emacs/UndoTree)
 * [undohist](https://github.com/m2ym/undohist-el)
 * [use-package](https://github.com/jwiegley/use-package)
-* [volatile-highlights](https://www.emacswiki.org/emacs/VolatileHighlights)
 * [web-mode](http://web-mode.org)
 * [yascroll](https://github.com/m2ym/yascroll-el)
 * [yasnippet](https://joaotavora.github.io/yasnippet/)

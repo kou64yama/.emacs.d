@@ -1,7 +1,7 @@
-;;; init.el --- Emacs configurations
+;;; init.el -- Emacs configurations
 ;;; Commentary:
 
-;; Copyright (c) 2016-present YAMADA Koji.  All rights reserved.
+;; Copyright (c) 2016-present YAMADA Koji.
 
 ;; This source code is licensed under the MIT license found in the
 ;; LICENSE file in the root directory of this source tree.
@@ -9,19 +9,11 @@
 ;;; Code:
 
 ;; Set `user-emacs-directory` if Emacs is launched with `emacs -q -l init.el`.
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-;; Load `custom-file.el`.
-(setq custom-file (locate-user-emacs-file "custom.el"))
-(when (file-exists-p custom-file)
+;; Load `custom.el`.
+(when (file-exists-p (setq custom-file (locate-user-emacs-file "custom.el")))
   (load custom-file))
 
 ;; Add "~/.emacs.d/site-lisp" and "~/.emacs.d/lisp" to `load-path`.
@@ -29,54 +21,64 @@
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
 
 (require 'sensible)
-(require 'package-bundle)
+(require 'eplug)
 
-;; Bundle packages.
-(package-bundle 'all-the-icons-dired)
-(package-bundle 'company)
-(package-bundle 'company-flow)
-(package-bundle 'company-go)
-(package-bundle 'counsel)
-(package-bundle 'counsel-projectile)
-(package-bundle 'ddskk)
-(package-bundle 'drag-stuff)
-(package-bundle 'editorconfig)
-(package-bundle 'emojify)
-(package-bundle 'exec-path-from-shell)
-(package-bundle 'expand-region)
-(package-bundle 'flow-minor-mode)
-(package-bundle 'flycheck)
-(package-bundle 'flycheck-flow)
-(package-bundle 'git-gutter-fringe+)
-(package-bundle 'go-mode)
-(package-bundle 'ivy)
-(package-bundle 'js2-mode)
-(package-bundle 'json-mode)
-(package-bundle 'keyfreq)
-(package-bundle 'magit)
-(package-bundle 'markdown-mode)
-(package-bundle 'material-theme)
-(package-bundle 'mode-icons)
-(package-bundle 'multiple-cursors)
-(package-bundle 'projectile)
-(package-bundle 'rainbow-delimiters)
-(package-bundle 'rainbow-mode)
-(package-bundle 'smart-mode-line-powerline-theme)
-(package-bundle 'smartparens)
-(package-bundle 'swiper)
-(package-bundle 'tabbar-ruler)
-(package-bundle 'tide)
-(package-bundle 'typescript-mode)
-(package-bundle 'undo-tree)
-(package-bundle 'undohist)
-(package-bundle 'use-package)
-(package-bundle 'volatile-highlights)
-(package-bundle 'web-mode)
-(package-bundle 'yascroll)
-(package-bundle 'yasnippet)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
 
-;; Sync packages.
-(package-bundle-sync)
+(eplug 'adoc-mode)
+(eplug 'company)
+(eplug 'company-flow)
+(eplug 'company-go)
+(eplug 'counsel)
+(eplug 'counsel-projectile)
+(eplug 'ddskk)
+(eplug 'drag-stuff)
+(eplug 'editorconfig)
+(eplug 'exec-path-from-shell)
+(eplug 'expand-region)
+(eplug 'flycheck)
+(eplug 'flycheck-flow)
+(eplug 'font-utils)
+(eplug 'git-gutter-fringe+)
+(eplug 'go-mode)
+(eplug 'google-translate)
+(eplug 'ivy)
+(eplug 'js2-mode)
+(eplug 'json-mode)
+(eplug 'keyfreq)
+(eplug 'magit)
+(eplug 'markdown-mode)
+(eplug 'material-theme)
+(eplug 'mode-icons)
+(eplug 'multiple-cursors)
+(eplug 'projectile)
+(eplug 'rainbow-delimiters)
+(eplug 'smart-mode-line-powerline-theme)
+(eplug 'smartparens)
+(eplug 'swiper)
+(eplug 'tide)
+(eplug 'typescript-mode)
+(eplug 'undo-tree)
+(eplug 'undohist)
+(eplug 'use-package)
+(eplug 'web-mode)
+(eplug 'yascroll)
+(eplug 'yasnippet-snippets)
+
+(and (eplug-check)
+     (y-or-n-p (format "Install %s? " (eplug-check)))
+     (eplug-install))
+
+;;
+;; Window
+;; -----------------------------------------------------------------------------
+
+(when window-system
+  (add-to-list 'default-frame-alist '(alpha . .95))
+  (add-to-list 'default-frame-alist '(width . 100))
+  (add-to-list 'default-frame-alist '(height . 30)))
 
 ;;
 ;; Benchmark
@@ -86,8 +88,8 @@
 ;; https://github.com/dacap/keyfreq
 (use-package keyfreq
   :init
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
+  (keyfreq-mode)
+  (keyfreq-autosave-mode))
 
 ;;
 ;; Environment Variables
@@ -106,7 +108,7 @@
 ;; EditorConfig
 ;; https://github.com/editorconfig/editorconfig-emacs
 (use-package editorconfig
-  :init (add-to-list 'after-init-hook #'editorconfig-mode))
+  :init (editorconfig-mode))
 
 ;; expand-region.el
 ;; https://github.com/magnars/expand-region.el
@@ -124,28 +126,19 @@
 ;; Drag Stuff
 ;; https://github.com/rejeep/drag-stuff.el
 (use-package drag-stuff
-  :init (add-hook 'after-init-hook #'drag-stuff-global-mode)
+  :init (drag-stuff-global-mode)
   :config (drag-stuff-define-keys))
 
 ;; Smartparens
 ;; https://github.com/Fuco1/smartparens
 (use-package smartparens-config
-  :init (add-hook 'after-init-hook #'smartparens-global-mode))
+  :init (smartparens-global-mode))
 
 ;; rainbow-delimiters
 ;; https://github.com/Fanael/rainbow-delimiters
 (use-package rainbow-delimiters
-  :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-;; rainbow-mode
-;; https://github.com/emacsmirror/rainbow-mode
-(use-package rainbow-mode
-  :init (add-hook 'prog-mode-hook #'rainbow-mode))
-
-;; Volatile Highlights
-;; https://www.emacswiki.org/emacs/VolatileHighlights
-(use-package volatile-highlights
-  :init (add-hook 'after-init-hook #'volatile-highlights-mode))
 ;;
 ;; Minibuffer
 ;; -----------------------------------------------------------------------------
@@ -153,9 +146,9 @@
 ;; Ivy
 ;; https://github.com/abo-abo/swiper#ivy
 (use-package ivy
-  :bind (("C-c C-r" . ivy-resume)
+  :bind (("C-c c-r" . ivy-resume)
          ("<f6>" . ivy-resume))
-  :init (ivy-mode 1))
+  :init (ivy-mode))
 
 ;; Counsel
 ;; https://github.com/abo-abo/swiper#counsel
@@ -187,11 +180,11 @@
 ;; Material Theme
 ;; https://emacsthemes.com/themes/material-theme.html
 (use-package material-theme
-  :init (load-theme 'material))
+  :init (load-theme 'material t))
 
 ;; Smart-mode-line
 ;; https://github.com/Malabarba/smart-mode-line/
-(use-package smart-mode-line-powerline-theme
+(use-package smart-mode-line
   :init
   (setq sml/theme 'powerline)
   (sml/setup))
@@ -200,31 +193,23 @@
 ;; https://github.com/m2ym/yascroll-el
 (use-package yascroll
   :if window-system
-  :init (global-yascroll-bar-mode 1))
+  :init (global-yascroll-bar-mode))
+
+;; font-utils
+;; https://github.com/rolandwalker/font-utils
+(use-package font-utils
+  :if window-system
+  :init
+  (let ((family (font-utils-first-existing-font
+            '("saxMono"
+              "monofur for Powerline"
+              "Consolas"))))
+    (when (set-face-attribute 'default nil :family family :height 120))))
 
 ;; Mode icons
 ;; http://projects.ryuslash.org/mode-icons/
 (use-package mode-icons
-  :init (add-hook 'after-init-hook #'mode-icons-mode))
-
-;; Emojify
-;; https://github.com/iqbalansari/emacs-emojify
-(use-package emojify
-  :init (add-hook 'after-init-hook #'global-emojify-mode))
-
-;; all-the-icons-dired
-;; https://github.com/jtbm37/all-the-icons-dired
-(use-package all-the-icons-dired
-  :if (not (eq window-system 'w32))
-  :init (add-hook 'dired-mode-hook #'all-the-icons-dired-mode))
-
-;; Tabbar Ruler
-;; https://github.com/mattfidler/tabbar-ruler.el
-(use-package tabbar-ruler
-  :bind (("C-c t" . tabbar-ruler-move))
-  :init (require 'tabbar-ruler)
-  :config
-  (setq tabbar-buffer-groups-function 'tabbar-ruler-projectile-tabbar-buffer-groups))
+  :init (mode-icons-mode))
 
 ;;
 ;; History
@@ -233,7 +218,7 @@
 ;; Undo Tree
 ;; https://www.emacswiki.org/emacs/UndoTree
 (use-package undo-tree
-  :init (add-hook 'after-init-hook #'global-undo-tree-mode))
+  :init (global-undo-tree-mode))
 
 ;; undohist
 ;; https://github.com/m2ym/undohist-el
@@ -242,6 +227,10 @@
   :init (undohist-initialize)
   :config
   (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
+
+(use-package magit
+  :bind (("C-x g" . magit-status)
+         ("C-x M-g" . magit-dispatch-popup)))
 
 ;;
 ;; Input Method
@@ -260,7 +249,7 @@
 ;; Projectile
 ;; https://projectile.readthedocs.io/en/latest/
 (use-package projectile
-  :init (add-hook 'after-init-hook #'projectile-mode)
+  :init (projectile-mode)
   :config
   (setq projectile-globally-ignored-directories
         (append '("elpa" "node_modules")
@@ -285,20 +274,20 @@
 ;; https://github.com/nonsequitur/git-gutter-fringe-plus
 (use-package git-gutter-fringe+
   :if window-system
-  :init (add-hook 'after-init-hook #'global-git-gutter+-mode)
+  :init (global-git-gutter+-mode)
   :config
-  (fringe-helper-define 'git-gutter-fr+-added '(top repeat) "xx......")
-  (fringe-helper-define 'git-gutter-fr+-deleted '(top repeat) "xx......")
-  (fringe-helper-define 'git-gutter-fr+-modified '(top repeat) "xx......"))
+  (fringe-helper-define 'git-gutter-fr+-added '(top repeat) "xxxx....")
+  (fringe-helper-define 'git-gutter-fr+-deleted '(top repeat) "xxxx....")
+  (fringe-helper-define 'git-gutter-fr+-modified '(top repeat) "xxxx...."))
 
 ;;
 ;; Autocomplete
 ;; -----------------------------------------------------------------------------
 
-;; company-mode
+;; company
 ;; https://company-mode.github.io
-(use-package company-mode
-  :init (add-hook 'after-init-hook #'global-company-mode))
+(use-package company
+  :init (global-company-mode))
 
 ;; Company flow
 ;; https://github.com/aaronjensen/company-flow
@@ -306,7 +295,7 @@
   :init
   (defun company-flow-setup ()
     (add-to-list 'company-backends 'company-flow))
-  (add-hook 'company-mode-hook #'company-flow-setup))
+  (add-hook 'company-mode-hook 'company-flow-setup))
 
 ;; Company Go
 ;; https://github.com/nsf/gocode/blob/master/emacs-company
@@ -314,7 +303,8 @@
   :init
   (defun company-go-setup ()
     (add-to-list 'company-backends 'company-go))
-  (add-hook 'company-mode-hook #'company-go-setup))
+  (add-hook 'company-mode-hook 'company-go-setup)
+  (setq gofmt-command (executable-find "goimports")))
 
 ;;
 ;; Syntax checker
@@ -323,7 +313,7 @@
 ;; Flycheck
 ;; http://www.flycheck.org/en/latest/
 (use-package flycheck
-  :init (add-hook 'after-init-hook #'global-flycheck-mode)
+  :init (global-flycheck-mode)
   :config
   (setq flycheck-indication-mode 'right-fringe))
 
@@ -331,10 +321,20 @@
 ;; https://github.com/lbolla/emacs-flycheck-flow
 (use-package flycheck-flow
   :init
-  (defun flycheck-flow-setup ()
+  (defun setup-flycheck-flow ()
     (flycheck-add-next-checker 'javascript-eslint 'javascript-flow)
     (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage))
-  (add-hook 'flycheck-mode-hook #'flycheck-flow-setup))
+  (add-hook 'flycheck-mode-hook 'setup-flycheck-flow))
+
+;;
+;; Translate
+;; -----------------------------------------------------------------------------
+
+(use-package google-translate-default-ui
+  :bind (("C-c t" . google-translate-smooth-translate))
+  :config
+  (setq google-translate-translation-directions-alist
+        '(("en" . "ja") ("ja" . "en"))))
 
 ;;
 ;; Snippet
@@ -343,7 +343,15 @@
 ;; Yet another snippet extension
 ;; https://joaotavora.github.io/yasnippet/
 (use-package yasnippet
-  :init (add-hook 'after-init-hook #'yas-global-mode))
+  :init (yas-global-mode))
+
+;;
+;; Org
+;; -----------------------------------------------------------------------------
+
+(use-package org
+  :config
+  (setq org-agenda-files '("~/Agenda")))
 
 ;;
 ;; HTML
@@ -374,11 +382,6 @@
   (setq js2-mode-show-strict-warnings nil
         js2-mode-show-parse-errors nil))
 
-;; flow-minor-mode
-;; https://github.com/an-sh/flow-minor-mode
-(use-package flow-minor-mode
-  :init (add-hook 'js2-mode-hook 'flow-minor-mode))
-
 ;;
 ;; TypeScript
 ;; -----------------------------------------------------------------------------
@@ -387,9 +390,14 @@
 ;; https://github.com/ananthakumaran/tide
 (use-package tide
   :init
-  (add-hook 'typescript-mode-hook #'tide-setup)
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (tide-hl-identifier-mode))
+  (add-hook 'typescript-mode-hook 'setup-tide-mode)
   (add-hook 'before-save-hook 'tide-format-before-save))
 
+;;
 ;; Go
 ;; -----------------------------------------------------------------------------
 
@@ -397,6 +405,6 @@
 ;; https://github.com/dominikh/go-mode.el
 (use-package go-mode
   :config
-  (add-hook 'before-save-hook #'gofmt-before-save))
+  (add-hook 'before-save-hook 'gofmt-before-save))
 
 ;;; init.el ends here
