@@ -257,8 +257,11 @@
 
 ;; counsel-projectile
 ;; https://github.com/ericdanan/counsel-projectile
+;; (use-package counsel-projectile
+;;   :init (add-hook 'projectile-mode-hook 'counsel-projectile-mode))
 (use-package counsel-projectile
-  :init (add-hook 'projectile-mode-hook #'counsel-projectile-on))
+  :init
+  (setq counsel-projectile-mode t))
 
 ;;
 ;; CVS
