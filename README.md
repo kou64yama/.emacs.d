@@ -66,6 +66,7 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 * [git-gutter-fringe+](https://github.com/nonsequitur/git-gutter-fringe-plus)
 * [go-mode](https://github.com/dominikh/go-mode.el)
 * [google-translate](https://github.com/atykhonov/google-translate)
+* [groovy-mode](https://github.com/Groovy-Emacs-Modes/groovy-emacs-modes)
 * [ivy](https://github.com/abo-abo/swiper#ivy)
 * [js2-mode](https://github.com/mooz/js2-mode)
 * [json-mode](https://github.com/joshwnj/json-mode)

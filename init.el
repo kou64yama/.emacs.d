@@ -44,6 +44,7 @@
 (eplug 'git-gutter-fringe+)
 (eplug 'go-mode)
 (eplug 'google-translate)
+(eplug 'groovy-mode)
 (eplug 'ivy)
 (eplug 'js2-mode)
 (eplug 'json-mode)
@@ -252,7 +253,7 @@
   :init (projectile-mode)
   :config
   (setq projectile-globally-ignored-directories
-        (append '("elpa" "node_modules")
+        (append '("elpa" "node_modules" "vendor")
                 projectile-globally-ignored-directories)))
 
 ;; counsel-projectile
