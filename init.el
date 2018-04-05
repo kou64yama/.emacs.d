@@ -36,6 +36,7 @@
 (eplug 'ddskk)
 (eplug 'drag-stuff)
 (eplug 'editorconfig)
+(eplug 'emojify)
 (eplug 'exec-path-from-shell)
 (eplug 'expand-region)
 (eplug 'flycheck)
@@ -211,6 +212,11 @@
 ;; http://projects.ryuslash.org/mode-icons/
 (use-package mode-icons
   :init (mode-icons-mode))
+
+;; Emojify
+;; https://github.com/iqbalansari/emacs-emojify
+(use-package emojify
+  :init (global-emojify-mode))
 
 ;;
 ;; History
