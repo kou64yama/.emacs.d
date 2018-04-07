@@ -203,10 +203,18 @@
   :if window-system
   :init
   (let ((family (font-utils-first-existing-font
-            '("saxMono"
-              "monofur for Powerline"
-              "Consolas"))))
-    (when (set-face-attribute 'default nil :family family :height 120))))
+                 '("monofur for Powerline"
+                   "Menlo"
+                   "Consolas")))
+        (ja-family (font-utils-first-existing-font
+                    '("Ricty Diminished"
+                      "Yu Gothic"
+                      "IPA Gothic"
+                      "Meiryo"))))
+    (when family (set-face-attribute 'default nil :family family :height 135))
+    (when ja-family (set-fontset-font (frame-parameter nil 'font)
+                                      'japanese-jisx0208
+                                      (font-spec :family ja-family)))))
 
 ;; Mode icons
 ;; http://projects.ryuslash.org/mode-icons/
