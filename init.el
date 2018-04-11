@@ -372,6 +372,16 @@
   (setq org-agenda-files '("~/Agenda")))
 
 ;;
+;; Markdown
+;; -----------------------------------------------------------------------------
+
+;; Markdown Mode
+;; https://jblevins.org/projects/markdown-mode/
+(use-package markdown-mode
+  :config
+  (setq markdown-command (executable-find "markdown-it")))
+
+;;
 ;; HTML
 ;; -----------------------------------------------------------------------------
 
