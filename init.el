@@ -382,6 +382,15 @@
   (setq markdown-command (executable-find "markdown-it")))
 
 ;;
+;; AsciiDoc
+;; -----------------------------------------------------------------------------
+
+;; adoc-mode
+;; https://github.com/sensorflo/adoc-mode/wiki
+(use-package adoc-mode
+  :mode (("\\.adoc\\'" . adoc-mode)))
+
+;;
 ;; HTML
 ;; -----------------------------------------------------------------------------
 
