@@ -20,7 +20,6 @@
 (add-to-list 'load-path (locate-user-emacs-file "site-lisp"))
 (add-to-list 'load-path (locate-user-emacs-file "lisp"))
 
-(require 'sensible)
 (require 'eplug)
 
 (add-to-list 'package-archives
@@ -72,6 +71,15 @@
 (and (eplug-check)
      (y-or-n-p (format "Install %s? " (eplug-check)))
      (eplug-install))
+
+(setq backup-inhibited t
+      column-number-mode t
+      inhibit-startup-message -1
+      visible-bell t)
+(setq-default indent-tabs-mode nil)
+
+(when window-system (tool-bar-mode -1))
+(unless window-system (menu-bar-mode -1))
 
 ;;
 ;; Window
