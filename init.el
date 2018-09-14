@@ -51,9 +51,9 @@
 (eplug 'keyfreq)
 (eplug 'magit)
 (eplug 'markdown-mode)
-(eplug 'material-theme)
 (eplug 'mode-icons)
 (eplug 'multiple-cursors)
+(eplug 'nord-theme)
 (eplug 'projectile)
 (eplug 'rainbow-delimiters)
 (eplug 'smart-mode-line-powerline-theme)
@@ -189,9 +189,9 @@
 ;; -----------------------------------------------------------------------------
 
 ;; Material Theme
-;; https://emacsthemes.com/themes/material-theme.html
-(use-package material-theme
-  :init (load-theme 'material t))
+;; https://emacsthemes.com/themes/nord-theme.html
+(use-package nord-theme
+  :init (load-theme 'nord t))
 
 ;; Smart-mode-line
 ;; https://github.com/Malabarba/smart-mode-line/

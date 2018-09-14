@@ -46,7 +46,7 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
   * `<M-left>`: Invoke `drag-stuff-left`
 * read-expression-map
   * `C-r`: Invoke `counsel-expression-history`.
-  
+
 ## Packages
 
 * [adoc-mode](https://github.com/sensorflo/adoc-mode/wiki)
@@ -73,7 +73,7 @@ $ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
 * [keyfreq](https://github.com/dacap/keyfreq)
 * [magit](https://magit.vc)
 * [markdown-mode](http://jblevins.org/projects/markdown-mode/)
-* [material-theme](https://emacsthemes.com/themes/material-theme.html)
+* [nord-theme](https://emacsthemes.com/themes/nord-theme.html)
 * [mode-icons](http://projects.ryuslash.org/mode-icons/)
 * [multiple-cursors](https://github.com/magnars/multiple-cursors.el)
 * [projectile](https://projectile.readthedocs.io/en/latest/)
