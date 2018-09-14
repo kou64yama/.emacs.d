@@ -69,7 +69,8 @@
 (eplug 'yasnippet-snippets)
 
 (and (eplug-check)
-     (y-or-n-p (format "Install %s? " (eplug-check)))
+     (y-or-n-p (format "Install %s? "
+                       (mapconcat 'symbol-name (eplug-check) ",")))
      (eplug-install))
 
 (setq backup-inhibited t

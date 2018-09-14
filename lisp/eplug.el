@@ -11,31 +11,40 @@
 (eval-when-compile (require 'cl))
 (require 'package)
 
-(defvar eplug-bundled nil)
+(defvar eplug-initialized nil)
+(defvar eplug-bundled-list nil)
 
 (defcustom eplug-last-refresh nil
-  ""
+  "Last refreshed time."
   :group 'eplug)
 
+(defun eplug-init ()
+  "Initialize."
+  (unless eplug-initialized
+    (setq eplug-initialized t)
+    (add-to-list 'package-archives
+                 '("melpa" . "https://melpa.org/packages/") t)
+    (package-initialize)))
+
 (defun eplug (pkg)
-  ""
-  (add-to-list 'eplug-bundled pkg))
+  "Bundle PKG."
+  (add-to-list 'eplug-bundled-list pkg))
 
 (defun eplug-check ()
-  ""
+  "Check uninstalled packages."
   (mapcan (lambda (pkg)
 	    (unless (package-installed-p pkg)
 	      (list pkg)))
-	  eplug-bundled))
+	  eplug-bundled-list))
 
 (defun eplug-install ()
-  ""
+  "Install bundled packages."
   (dolist (pkg (eplug-check))
     (eplug-refresh)
     (package-install pkg)))
 
 (defun eplug-refresh ()
-  ""
+  "Refresh package contents."
   (let ((now (float-time)))
     (when (or (not eplug-last-refresh)
               (> (- now eplug-last-refresh) 86400))
