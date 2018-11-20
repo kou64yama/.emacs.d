@@ -215,7 +215,7 @@
   :if window-system
   :init
   (let ((family (font-utils-first-existing-font
-                 '("monofur for Powerline"
+                 '("Share Tech Mono"
                    "Menlo"
                    "Consolas")))
         (ja-family (font-utils-first-existing-font
@@ -223,7 +223,7 @@
                       "Yu Gothic"
                       "IPA Gothic"
                       "Meiryo"))))
-    (when family (set-face-attribute 'default nil :family family :height 135))
+    (when family (set-face-attribute 'default nil :family family :height (* 15 9)))
     (when ja-family (set-fontset-font (frame-parameter nil 'font)
                                       'japanese-jisx0208
                                       (font-spec :family ja-family)))))
