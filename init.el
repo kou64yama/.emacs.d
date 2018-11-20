@@ -83,8 +83,11 @@
       visible-bell t)
 (setq-default indent-tabs-mode nil)
 
-(when window-system (tool-bar-mode -1))
-(unless window-system (menu-bar-mode -1))
+(when window-system
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1))
+(unless window-system
+  (menu-bar-mode -1))
 
 ;;
 ;; Window
