@@ -42,6 +42,9 @@
 (eplug 'flycheck-flow)
 (eplug 'font-utils)
 (eplug 'git-gutter-fringe+)
+(eplug 'gitattributes-mode)
+(eplug 'gitconfig-mode)
+(eplug 'gitignore-mode)
 (eplug 'go-mode)
 (eplug 'google-translate)
 (eplug 'groovy-mode)
@@ -50,6 +53,7 @@
 (eplug 'json-mode)
 (eplug 'keyfreq)
 (eplug 'magit)
+(eplug 'magithub)
 (eplug 'markdown-mode)
 (eplug 'mode-icons)
 (eplug 'multiple-cursors)
@@ -251,10 +255,6 @@
   :config
   (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
-(use-package magit
-  :bind (("C-x g" . magit-status)
-         ("C-x M-g" . magit-dispatch-popup)))
-
 ;;
 ;; Input Method
 ;; -----------------------------------------------------------------------------
@@ -295,6 +295,12 @@
 (use-package magit
   :bind (("C-x g" . magit-status)
          ("C-x M-g" . magit-dispatch-popup)))
+
+;; Magithub
+;; https://github.com/vermiculus/magithub
+(use-package magithub
+  :after mgit
+  :config (magithub-feature-autoinject t))
 
 ;; git-gutter-fringe+
 ;; https://github.com/nonsequitur/git-gutter-fringe-plus

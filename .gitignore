@@ -6,6 +6,8 @@ undohist
 projectile-bookmarks.eld
 *.cache
 recentf
+magithub
+var
 
 # Created by https://www.gitignore.io/api/emacs
 
