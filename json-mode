@@ -1,0 +1,836 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex cc2edd6..6d36f7d 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -1,10 +1,10 @@[m
+# ~/.emacs.d[m
+
+My [31m[-emacs-][m[32m{+Emacs+}[m configurations.
+
+## Requirements[m
+
+[31m[-*-][m[32m{+-+}[m [Emacs](https://www.gnu.org/software/emacs/) 25+
+
+## Installation[m
+
+[36m@@ -14,85 +14,40 @@[m [mCheckout this repository at `~/.emacs.d`:[m
+$ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d[m
+```[m
+
+[31m[-## Key bindings-][m
+
+[31m[-* global-map-][m
+[31m[-  * `C-x g`: Invoke `magit-status`.-][m
+[31m[-  * `C-x M-g`: Invoke `magit-dispatch-popup`.-][m
+[31m[-  * `C-=`: Invoke `er/expand-region`.-][m
+[31m[-  * `C-S-c C-S-c`: Invoke `mc/edit-lines`.-][m
+[31m[-  * `C-<`: Invoke `mc/mark-previous-like-this`.-][m
+[31m[-  * `C->`: Invoke `mc/mark-next-like-this`.-][m
+[31m[-  * `C-c C-<`: Invoke `mc/mark-all-like-this`.-][m
+[31m[-  * `C-c t`: Invoke `tabbar-ruler-move`.-][m
+[31m[-  * `C-x C-j`: Invoke `ssk-mode`.-][m
+[31m[-  * `C-c C-r` or `<f6>`: Invoke `ivy-resume`.-][m
+[31m[-  * `M-x`: Invoke `counsel-M-x`.-][m
+[31m[-  * `C-x C-f`: Invoke `counsel-find-file`.-][m
+[31m[-  * `<f1> f`: Invoke `counsel-describe-function`.-][m
+[31m[-  * `<f1> v`: Invoke `counsel-describe-variable`.-][m
+[31m[-  * `<f1> l`: Invoke `counsel-find-library`.-][m
+[31m[-  * `<f2> i`: Invoke `counsel-info-lookup-symbol`.-][m
+[31m[-  * `<f2> u`: Invoke `counsel-unicode-char`.-][m
+[31m[-  * `C-c g`: Invoke `counsel-git`.-][m
+[31m[-  * `C-c j`: Invoke `counsel-git-grep`.-][m
+[31m[-  * `C-c k`: Invoke `counsel-ag`.-][m
+[31m[-  * `C-x l`: Invoke `counsel-locate`.-][m
+[31m[-  * `C-S-o`: Invoke `counsel-rhythmbox`.-][m
+[31m[-  * `C-s`: Invoke `swiper`.-][m
+[31m[-  * `<M-up>`: Invoke `drag-stuff-up`-][m
+[31m[-  * `<M-down>`: Invoke `drag-stuff-down`-][m
+[31m[-  * `<M-right>`: Invoke `drag-stuff-right`-][m
+[31m[-  * `<M-left>`: Invoke `drag-stuff-left`-][m
+[31m[-* read-expression-map-][m
+[31m[-  * `C-r`: Invoke `counsel-expression-history`.-][m
+
+## Packages[m
+
+[31m[-* [adoc-mode](https://github.com/sensorflo/adoc-mode/wiki)-][m
+[31m[-* [company-flow](https://github.com/aaronjensen/company-flow)-][m
+[31m[-* [company-go](https://github.com/nsf/gocode/tree/master/emacs-company)-][m
+[31m[-*-][m[32m{+- [add-node-modules-path](https://github.com/codesuki/add-node-modules-path)+}[m
+[32m{+- [benchmark-init](https://github.com/dholm/benchmark-init-el)+}[m
+[32m{+-+}[m [company](https://company-mode.github.io)
+[31m[-* [counsel-projectile](https://github.com/ericdanan/counsel-projectile)-][m
+[31m[-*-][m[32m{+-+}[m [counsel](https://github.com/abo-abo/swiper#counsel)
+[31m[-*-][m[32m{+- [dashboard](https://github.com/rakanalh/emacs-dashboard)+}[m
+[32m{+-+}[m [ddskk](http://openlab.jp/skk/)
+[31m[-*-][m[32m{+- [docker](https://github.com/Silex/docker.el)+}[m
+[32m{+- [dockerfile-mode](https://github.com/spotify/dockerfile-mode)+}[m
+[32m{+-+}[m [drag-stuff](https://github.com/rejeep/drag-stuff.el)
+[31m[-*-][m[32m{+-+}[m [editorconfig](https://github.com/editorconfig/editorconfig-emacs)
+[31m[-*-][m[32m{+- [emojify](https://github.com/iqbalansari/emacs-emojify)+}[m
+[32m{+-+}[m [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell)
+[31m[-*-][m[32m{+-+}[m [expand-region](https://github.com/magnars/expand-region.el)
+[31m[-* [flycheck-flow](https://github.com/lbolla/emacs-flycheck-flow)-][m
+[31m[-* [flycheck](http://www.flycheck.org/en/latest/)-][m
+[31m[-* [font-utils](https://github.com/rolandwalker/font-utils)-][m
+[31m[-* [git-gutter-fringe+](https://github.com/nonsequitur/git-gutter-fringe-plus)-][m
+[31m[-* [gitattributes-mode](https://github.com/magit/git-modes/blob/master/gitattributes-mode.el)-][m
+[31m[-* [gitconfig-mode](https://github.com/magit/git-modes/blob/master/gitconfig-mode.el)-][m
+[31m[-* [gitignore-mode](https://github.com/magit/git-modes/blob/master/gitignore-mode.el)-][m
+[31m[-* [go-mode](https://github.com/dominikh/go-mode.el)-][m
+[31m[-* [google-translate](https://github.com/atykhonov/google-translate)-][m
+[31m[-* [groovy-mode](https://github.com/Groovy-Emacs-Modes/groovy-emacs-modes)-][m
+[31m[-*-][m[32m{+- [flycheck](http://www.flycheck.org/en/lattest/)+}[m
+[32m{+-+}[m [ivy](https://github.com/abo-abo/swiper#ivy)
+[31m[-*-][m[32m{+-+}[m [js2-mode](https://github.com/mooz/js2-mode)
+[31m[-* [json-mode](https://github.com/joshwnj/json-mode)-][m
+[31m[-*-][m[32m{+-+}[m [keyfreq](https://github.com/dacap/keyfreq)
+[31m[-*-][m[32m{+-+}[m [magit](https://magit.vc)
+[31m[-* [magithub](https://github.com/vermiculus/magithub)-][m
+[31m[-* [markdown-mode](http://jblevins.org/projects/markdown-mode/)-][m
+[31m[-*-][m[32m{+- [markdown-mode](https://jblevins.org/projects/markdown-mode)+}[m
+[32m{+-+}[m [mode-icons](http://projects.ryuslash.org/mode-icons/)
+[31m[-* [multiple-cursors](https://github.com/magnars/multiple-cursors.el)-][m
+[31m[-*-][m[32m{+-+}[m [nord-theme](https://emacsthemes.com/themes/nord-theme.html)
+[31m[-*-][m[32m{+-+}[m [projectile](https://projectile.readthedocs.io/en/latest/)
+[31m[-*-][m[32m{+-+}[m [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)
+[31m[-* [smart-mode-line-powerline-theme](https://github.com/Malabarba/smart-mode-line/)-][m
+[31m[-*-][m[32m{+- [smart-mode-line-powerline-theme](https://github.com/Malabarba/smart-mode-line)+}[m
+[32m{+-+}[m [smartparens](https://github.com/Fuco1/smartparens)
+[31m[-*-][m[32m{+-+}[m [swiper](https://github.com/abo-abo/swiper#swiper)
+[31m[-*-][m[32m{+-+}[m [tide](https://github.com/ananthakumaran/tide)
+[31m[-* [typescript-mode](https://github.com/ananthakumaran/typescript.el)-][m
+[31m[-*-][m[32m{+- [typescript-mode](https://github.com/emacs-typescript/typescript.el)+}[m
+[32m{+-+}[m [undo-tree](https://www.emacswiki.org/emacs/UndoTree)
+[31m[-*-][m[32m{+-+}[m [undohist](https://github.com/m2ym/undohist-el)
+[31m[-* [use-package](https://github.com/jwiegley/use-package)-][m
+[31m[-*-][m[32m{+-+}[m [web-mode](http://web-mode.org)
+[31m[-* [yascroll](https://github.com/m2ym/yascroll-el)-][m
+[31m[-* [yasnippet](https://joaotavora.github.io/yasnippet/)-][m[32m{+- [yaml-mode](https://github.com/yoshiki/yaml-mode)+}[m
+
+## License[m
+
+[1mdiff --git a/init.el b/init.el[m
+[1mindex a45c08f..6382ee6 100644[m
+[1m--- a/init.el[m
+[1m+++ b/init.el[m
+[36m@@ -1,4 +1,4 @@[m
+;;; init.el -- [32m{+My+}[m Emacs [31m[-configurations-][m[32m{+Configuration+}[m
+;;; Commentary:[m
+
+;; Copyright (c) 2016-present YAMADA Koji.[m
+[36m@@ -8,168 +8,161 @@[m
+
+;;; Code:[m
+
+[31m[-;; Set `user-emacs-directory` if Emacs is launched with `emacs -q -l init.el`.-][m
+(when load-file-name[m
+  (setq user-emacs-directory (file-name-directory load-file-name)))[m
+
+[31m[-;; Load `custom.el`.-][m
+(when (file-exists-p (setq custom-file (locate-user-emacs-file "custom.el")))[m
+  (load custom-file))[m
+
+;;
+[31m[-Add "~/.emacs.d/site-lisp" and "~/.emacs.d/lisp" to `load-path`.-][m[32m{+;; Setup load-path+}[m
+[32m{+;; -----------------------------------------------------------------------------+}[m
+
+(add-to-list 'load-path (locate-user-emacs-file "site-lisp"))[m
+(add-to-list 'load-path (locate-user-emacs-file "lisp"))[m
+
+[32m{+;;+}[m
+[32m{+;; Setup package+}[m
+[32m{+;; -----------------------------------------------------------------------------+}[m
+
+(require [31m[-'eplug)-][m[32m{+'package)+}[m
+
+[32m{+(defcustom package-contents-last-refreshed nil+}[m
+[32m{+  "Last refreshed time."+}[m
+[32m{+  :group 'package)+}[m
+
+(add-to-list 'package-archives[m
+	     [31m[-'("melpa"-][m[32m{+'("melpha"+}[m . "https://melpa.org/packages/") t)
+(package-initialize)[m
+
+[31m[-(eplug 'adoc-mode)-][m
+[31m[-(eplug 'company)-][m
+[31m[-(eplug 'company-flow)-][m
+[31m[-(eplug 'company-go)-][m
+[31m[-(eplug 'counsel)-][m
+[31m[-(eplug 'counsel-projectile)-][m
+[31m[-(eplug 'ddskk)-][m
+[31m[-(eplug 'drag-stuff)-][m
+[31m[-(eplug 'editorconfig)-][m
+[31m[-(eplug 'emojify)-][m
+[31m[-(eplug 'exec-path-from-shell)-][m
+[31m[-(eplug 'expand-region)-][m
+[31m[-(eplug 'flycheck)-][m
+[31m[-(eplug 'flycheck-flow)-][m
+[31m[-(eplug 'font-utils)-][m
+[31m[-(eplug 'git-gutter-fringe+)-][m
+[31m[-(eplug 'gitattributes-mode)-][m
+[31m[-(eplug 'gitconfig-mode)-][m
+[31m[-(eplug 'gitignore-mode)-][m
+[31m[-(eplug 'go-mode)-][m
+[31m[-(eplug 'google-translate)-][m
+[31m[-(eplug 'groovy-mode)-][m
+[31m[-(eplug 'ivy)-][m
+[31m[-(eplug 'js2-mode)-][m
+[31m[-(eplug 'json-mode)-][m
+[31m[-(eplug 'keyfreq)-][m
+[31m[-(eplug 'magit)-][m
+[31m[-(eplug 'magithub)-][m
+[31m[-(eplug 'markdown-mode)-][m
+[31m[-(eplug 'mode-icons)-][m
+[31m[-(eplug 'multiple-cursors)-][m
+[31m[-(eplug 'nord-theme)-][m
+[31m[-(eplug 'projectile)-][m
+[31m[-(eplug 'rainbow-delimiters)-][m
+[31m[-(eplug 'smart-mode-line-powerline-theme)-][m
+[31m[-(eplug 'smartparens)-][m
+[31m[-(eplug 'swiper)-][m
+[31m[-(eplug 'tide)-][m
+[31m[-(eplug 'typescript-mode)-][m
+[31m[-(eplug 'undo-tree)-][m
+[31m[-(eplug 'undohist)-][m
+[31m[-(eplug 'use-package)-][m
+[31m[-(eplug 'web-mode)-][m
+[31m[-(eplug 'yascroll)-][m
+[31m[-(eplug 'yasnippet-snippets)-][m
+
+[31m[-(and (eplug-check)-][m
+[31m[-     (y-or-n-p (format "Install %s? "-][m
+[31m[-                       (mapconcat 'symbol-name (eplug-check) ",")))-][m
+[31m[-     (eplug-install))-][m[32m{+(let ((now (float-time)))+}[m
+[32m{+  (when (or (not package-contents-last-refreshed)+}[m
+[32m{+	    (> (- now package-contents-last-refreshed) (* 7 24 60 60)))+}[m
+[32m{+    (package-refresh-contents)+}[m
+[32m{+    (customize-save-variable 'package-contents-last-refreshed (float-time))))+}[m
+
+[31m[-(setq backup-inhibited t-][m
+[31m[-      column-number-mode t-][m
+[31m[-      inhibit-startup-message -1-][m
+[31m[-      visible-bell t)-][m
+[31m[-(setq-default indent-tabs-mode nil)-][m[32m{+(unless (package-installed-p 'use-package)+}[m
+[32m{+  (package-install 'use-package))+}[m
+
+[31m[-(when window-system-][m
+[31m[-  (tool-bar-mode -1)-][m
+[31m[-  (scroll-bar-mode -1))-][m
+[31m[-(unless window-system-][m
+[31m[-  (menu-bar-mode -1))-][m[32m{+;;+}[m
+[32m{+;; Benchmark+}[m
+[32m{+;; -----------------------------------------------------------------------------+}[m
+
+[32m{+(use-package benchmark-init+}[m
+[32m{+  ;; https://github.com/dholm/benchmark-init-el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :hook ((after-init . benchmark-init/deactivate)))+}[m
+
+;;[m
+;; [31m[-Window-][m[32m{+Environment variables+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-(when window-system-][m
+[31m[-  (add-to-list 'default-frame-alist '(width . 100))-][m
+[31m[-  (add-to-list 'default-frame-alist '(height . 30)))-][m[32m{+(use-package exec-path-from-shell+}[m
+[32m{+  ;; https://github.com/purcell/exec-path-from-shell+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :if (member system-type '(gnu/linux ns))+}[m
+[32m{+  :init (exec-path-from-shell-initialize))+}[m
+
+;;[m
+;; [31m[-Benchmark-][m[32m{+Statistics+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; keyfreq-][m
+[31m[-;; https://github.com/dacap/keyfreq-][m
+(use-package keyfreq[m
+  [32m{+;; https://github.com/dacap/keyfreq+}[m
+[32m{+  :ensure t+}[m
+  :init[m
+  (keyfreq-mode)[m
+  (keyfreq-autosave-mode))[m
+
+;;[m
+;; [31m[-Environment Variables-][m[32m{+Input Method+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; exec-path-from-shell-][m
+[31m[-;; https://github.com/purcell/exec-path-from-shell-][m(use-package [31m[-exec-path-from-shell-][m
+[31m[-  :if (memq window-system '(mac ns x))-][m[32m{+ddskk+}[m
+[32m{+  ;; http://openlab.jp/skk/+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :bind (("C-x C-j" . skk-mode))+}[m
+  :init [31m[-(exec-path-from-shell-initialize))-][m[32m{+(setq default-input-method "japanese-skk"))+}[m
+
+;;[m
+;; [31m[-Editor-][m[32m{+Dashboard+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; EditorConfig-][m
+[31m[-;; https://github.com/editorconfig/editorconfig-emacs-][m(use-package [31m[-editorconfig-][m
+[31m[-  :init (editorconfig-mode))-][m[32m{+dashboard+}[m
+[32m{+  ;; https://github.com/rakanalh/emacs-dashboard+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :config+}[m
+[32m{+  (dashboard-setup-startup-hook))+}[m
+
+;;[31m[-expand-region.el-][m
+;; [31m[-https://github.com/magnars/expand-region.el-][m
+[31m[-(use-package expand-region-][m
+[31m[-  :bind (("C-=" . er/expand-region)))-][m[32m{+Appearance+}[m
+[32m{+;; -----------------------------------------------------------------------------+}[m
+
+[31m[-;; multiple-cursors.el-][m
+[31m[-;; https://github.com/magnars/multiple-cursors.el-][m(use-package [31m[-multiple-cursors-][m
+[31m[-  :bind (("C-S-c C-S-c" . mc/edit-lines)-][m
+[31m[-         ("C-<" . mc/mark-previous-like-this)-][m
+[31m[-         ("C->" . mc/mark-next-like-this)-][m
+[31m[-         ("C-c C-<" . mc/mark-all-like-this)))-][m[32m{+nord-theme+}[m
+[32m{+  ;; https://emacsthemes.com/themes/nord-theme.html+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :init (load-theme 'nord t))+}[m
+
+[31m[-;; Drag Stuff-][m
+[31m[-;; https://github.com/rejeep/drag-stuff.el-][m(use-package [31m[-drag-stuff-][m[32m{+smart-mode-line-powerline-theme+}[m
+[32m{+  ;; https://github.com/Malabarba/smart-mode-line+}[m
+[32m{+  :ensure t+}[m
+  :init
+  [31m[-(drag-stuff-global-mode)-][m
+[31m[-  :config (drag-stuff-define-keys))-][m[32m{+(setq sml/theme 'powerline)+}[m
+[32m{+  (sml/setup))+}[m
+
+[31m[-;; Smartparens-][m
+[31m[-;; https://github.com/Fuco1/smartparens-][m(use-package [31m[-smartparens-config-][m[32m{+mode-icons+}[m
+[32m{+  ;; http://projects.ryuslash.org/mode-icons/+}[m
+[32m{+  :ensure t+}[m
+  :init [31m[-(smartparens-global-mode))-][m[32m{+(mode-icons-mode))+}[m
+
+[32m{+(use-package emojify+}[m
+[32m{+  ;; https://github.com/iqbalansari/emacs-emojify+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :if window-system+}[m
+[32m{+  :init (global-emojify-mode))+}[m
+
+;;[31m[-rainbow-delimiters-][m
+;; [31m[-https://github.com/Fanael/rainbow-delimiters-][m[32m{+Font+}[m
+[32m{+;; ----------------------------------------------------------------------------------------+}[m
+
+(use-package [31m[-rainbow-delimiters-][m[32m{+font+}[m
+[32m{+  ;; 567890123456789012345678901234567890123456789012345678901234567890123456789+}[m
+[32m{+  ;; Grumpy wizards make toxic brew for the evil Queen and Jack.+}[m
+[32m{+  ;;+}[m
+[32m{+  ;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、+}[m
+[32m{+  ;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。+}[m
+[32m{+  ;; 567890123456789012345678901234567890123456789012345678901234567890123456789+}[m
+[32m{+  :if window-system+}[m
+[32m{+  :bind (("C-+" . font/increase-height)+}[m
+[32m{+         ("C--" . font/decrease-height)+}[m
+[32m{+         ("C-0" . font/reset-height))+}[m
+  :init
+  [31m[-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode))-][m[32m{+(set-face-attribute 'default nil :family "Ricty Diminished")+}[m
+[32m{+  (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Ricty Diminished"))+}[m
+[32m{+  (setq font/default-height 130)+}[m
+[32m{+  (font/reset-height))+}[m
+
+;;[m
+;; Minibuffer[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Ivy-][m
+[31m[-;; https://github.com/abo-abo/swiper#ivy-][m
+(use-package ivy[m
+  [32m{+;; https://github.com/abo-abo/swiper#ivy+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :delight+}[m
+  :bind (("C-c c-r" . ivy-resume)[m
+         ("<f6>" . ivy-resume))[m
+  :init [31m[-(ivy-mode))-][m[32m{+(ivy-mode)+}[m
+[32m{+  :config+}[m
+[32m{+  (setq ivy-re-builders-alist+}[m
+[32m{+        '((t . ivy--regex-fuzzy))))+}[m
+
+[31m[-;; Counsel-][m
+[31m[-;; https://github.com/abo-abo/swiper#counsel-][m
+(use-package counsel[m
+  [32m{+;; https://github.com/abo-abo/swiper#counsel+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :bind (("M-x" . counsel-M-x)[m
+         ("C-x C-f" . counsel-find-file)[m
+         ("<f1> f" . counsel-describe-function)[m
+[36m@@ -185,235 +178,154 @@[m
+         :map read-expression-map[m
+         ("C-r" . counsel-expression-history)))[m
+
+[31m[-;; Swiper-][m
+[31m[-;; https://github.com/abo-abo/swiper#swiper-][m
+(use-package swiper[m
+  [32m{+;; https://github.com/abo-abo/swiper#swiper+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :bind (("C-s" . swiper)))[m
+
+;;[m
+;; [31m[-Appearance-][m[32m{+Editor+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Material Theme-][m
+[31m[-;; https://emacsthemes.com/themes/nord-theme.html-][m(use-package [31m[-nord-theme-][m[32m{+editorconfig+}[m
+[32m{+  ;; https://github.com/editorconfig/editorconfig-emacs+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+  :init [31m[-(load-theme 'nord t))-][m[32m{+(editorconfig-mode))+}[m
+
+[31m[-;; Smart-mode-line-][m
+[31m[-;; https://github.com/Malabarba/smart-mode-line/-][m(use-package [31m[-smart-mode-line-][m
+[31m[-  :init-][m
+[31m[-  (setq sml/theme 'powerline)-][m
+[31m[-  (sml/setup))-][m[32m{+expand-region+}[m
+[32m{+  ;; https://github.com/magnars/expand-region.el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :bind (("C-=" . er/expand-region)))+}[m
+
+[31m[-;; yascroll.el-][m
+[31m[-;; https://github.com/m2ym/yascroll-el-][m(use-package [31m[-yascroll-][m
+[31m[-  :if window-system-][m
+[31m[-  :init (global-yascroll-bar-mode))-][m[32m{+multiple-cursors+}[m
+[32m{+  ;; https://github.com/magnars/multiple-cursors.el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :bind (("C-S-c C-S-c" . mc/edit-lines)+}[m
+[32m{+         ("C-<" . mc/mark-previous-like-this)+}[m
+[32m{+         ("C->" . mc/mark-next-like-this)+}[m
+[32m{+         ("C-c C-<" . mc/mark-all-like-this)))+}[m
+
+[32m{+(use-package drag-stuff+}[m
+  ;; [31m[-font-utils-][m
+[31m[-;; https://github.com/rolandwalker/font-utils-][m[32m{+https://github.com/rejeep/drag-stuff.el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+[32m{+  :init (drag-stuff-global-mode)+}[m
+[32m{+  :config (drag-stuff-define-keys))+}[m
+
+(use-package [31m[-font-utils-][m
+[31m[-  :if window-system-][m[32m{+smartparens+}[m
+[32m{+  ;; https://github.com/Fuco1/smartparens+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+  :init[m
+  [31m[-(let ((family (font-utils-first-existing-font-][m
+[31m[-                 '("Share Tech Mono"-][m
+[31m[-                   "Menlo"-][m
+[31m[-                   "Consolas")))-][m
+[31m[-        (ja-family (font-utils-first-existing-font-][m
+[31m[-                    '("Ricty Diminished"-][m
+[31m[-                      "Yu Gothic"-][m
+[31m[-                      "IPA Gothic"-][m
+[31m[-                      "Meiryo"))))-][m
+[31m[-    (when family (set-face-attribute 'default nil :family family :height (* 15 9)))-][m
+[31m[-    (when ja-family (set-fontset-font (frame-parameter nil 'font)-][m
+[31m[-                                      'japanese-jisx0208-][m
+[31m[-                                      (font-spec :family ja-family)))))-][m
+
+[31m[-;; Mode icons-][m
+[31m[-;; http://projects.ryuslash.org/mode-icons/-][m
+[31m[-(use-package mode-icons-][m
+[31m[-  :init (mode-icons-mode))-][m[32m{+(require 'smartparens-config)+}[m
+[32m{+  (smartparens-global-mode))+}[m
+
+[31m[-;; Emojify-][m
+[31m[-;; https://github.com/iqbalansari/emacs-emojify-][m(use-package [31m[-emojify-][m
+[31m[-  :init (global-emojify-mode))-][m[32m{+rainbow-delimiters+}[m
+[32m{+  ;; https://github.com/Fanael/rainbow-delimiters+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :disabled+}[m
+[32m{+  :hook prog-mode)+}[m
+
+;;[m
+;; History[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Undo Tree-][m
+[31m[-;; https://www.emacswiki.org/emacs/UndoTree-][m
+(use-package undo-tree[m
+  [32m{+;; https://www.emacswiki.org/emacs/UndoTree+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+  :init (global-undo-tree-mode))[m
+
+[31m[-;; undohist-][m
+[31m[-;; https://github.com/m2ym/undohist-el-][m
+(use-package undohist[m
+  [32m{+;; https://github.com/m2ym/undohist-el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :commands (undohist-initialize)[m
+  :init (undohist-initialize)[m
+  :config (setq [31m[-undohist-ignored-files-][m[32m{+undohist-ignore-files+}[m '("/tmp/" "COMMIT_EDITMSG")))[31m[-;;-][m
+[31m[-;; Input Method-][m
+[31m[-;; ------------------------------------------------------------------------------][m
+
+[31m[-;; Daredevil SKK-][m
+[31m[-;; http://openlab.jp/skk/-][m
+[31m[-(use-package ddskk-][m
+[31m[-  :bind (("C-x C-j" . skk-mode))-][m
+[31m[-  :init (setq default-input-method "japanese-skk"))-][m
+
+;;[m
+;; Project[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Projectile-][m
+[31m[-;; https://projectile.readthedocs.io/en/latest/-][m
+(use-package projectile[m
+  [32m{+;; https://projectile.readthedocs.io/en/latest/+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+  :init (projectile-mode)[m
+  :config[m
+  (setq projectile-globally-ignored-directories[m
+        (append '("elpa" "node_modules" "vendor")[m
+                projectile-globally-ignored-directories)))[m
+
+[31m[-;; counsel-projectile-][m
+[31m[-;; https://github.com/ericdanan/counsel-projectile-][m
+[31m[-;; (use-package counsel-projectile-][m
+[31m[-;;   :init (add-hook 'projectile-mode-hook 'counsel-projectile-mode))-][m
+[31m[-(use-package counsel-projectile-][m
+[31m[-  :init-][m
+[31m[-  (setq counsel-projectile-mode t))-][m
+
+[31m[-;;-][m
+[31m[-;; CVS-][m
+[31m[-;; ------------------------------------------------------------------------------][m
+
+[31m[-;; Magit-][m
+[31m[-;; https://magit.vc-][m
+[31m[-(use-package magit-][m
+[31m[-  :bind (("C-x g" . magit-status)-][m
+[31m[-         ("C-x M-g" . magit-dispatch-popup)))-][m
+
+[31m[-;; Magithub-][m
+[31m[-;; https://github.com/vermiculus/magithub-][m
+[31m[-(use-package magithub-][m
+[31m[-  :after mgit-][m
+[31m[-  :config (magithub-feature-autoinject t))-][m
+
+[31m[-;; git-gutter-fringe+-][m
+[31m[-;; https://github.com/nonsequitur/git-gutter-fringe-plus-][m
+[31m[-(use-package git-gutter-fringe+-][m
+[31m[-  :if window-system-][m
+[31m[-  :init (global-git-gutter+-mode)-][m
+[31m[-  :config-][m
+[31m[-  (fringe-helper-define 'git-gutter-fr+-added '(top repeat) "xxxx....")-][m
+[31m[-  (fringe-helper-define 'git-gutter-fr+-deleted '(top repeat) "xxxx....")-][m
+[31m[-  (fringe-helper-define 'git-gutter-fr+-modified '(top repeat) "xxxx...."))-][m
+
+;;[m
+;; Autocomplete[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; company-][m
+[31m[-;; https://company-mode.github.io-][m
+(use-package company[m
+  [32m{+;; https://company-mode.github.io+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :delight+}[m
+  :init (global-company-mode))[m
+
+[31m[-;; Company flow-][m
+[31m[-;; https://github.com/aaronjensen/company-flow-][m
+[31m[-(use-package company-flow-][m
+[31m[-  :init-][m
+[31m[-  (defun company-flow-setup ()-][m
+[31m[-    (add-to-list 'company-backends 'company-flow))-][m
+[31m[-  (add-hook 'company-mode-hook 'company-flow-setup))-][m
+
+[31m[-;; Company Go-][m
+[31m[-;; https://github.com/nsf/gocode/blob/master/emacs-company-][m
+[31m[-(use-package company-go-][m
+[31m[-  :init-][m
+[31m[-  (defun company-go-setup ()-][m
+[31m[-    (add-to-list 'company-backends 'company-go))-][m
+[31m[-  (add-hook 'company-mode-hook 'company-go-setup)-][m
+[31m[-  (setq gofmt-command (executable-find "goimports")))-][m
+
+;;[m
+;; Syntax checker[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Flycheck-][m
+[31m[-;; http://www.flycheck.org/en/latest/-][m
+(use-package flycheck[m
+[31m[-:init (global-flycheck-mode)-][m
+[31m[-  :config-][m
+[31m[-  (setq flycheck-indication-mode 'right-fringe))-][m
+
+[31m[-;; flycheck-flow-][m  ;; [31m[-https://github.com/lbolla/emacs-flycheck-flow-][m
+[31m[-(use-package flycheck-flow-][m[32m{+http://www.flycheck.org/en/lattest/+}[m
+[32m{+  :ensure t+}[m
+  :init [31m[-(defun setup-flycheck-flow ()-][m
+[31m[-    (flycheck-add-next-checker 'javascript-eslint 'javascript-flow)-][m
+[31m[-    (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage))-][m
+[31m[-  (add-hook 'flycheck-mode-hook 'setup-flycheck-flow))-][m
+
+[31m[-;;-][m
+[31m[-;; Translate-][m
+[31m[-;; ------------------------------------------------------------------------------][m
+
+[31m[-(use-package google-translate-default-ui-][m
+[31m[-  :bind (("C-c t" . google-translate-smooth-translate))-][m
+[31m[-  :config-][m
+[31m[-  (setq google-translate-translation-directions-alist-][m
+[31m[-        '(("en" . "ja") ("ja" . "en"))))-][m[32m{+(global-flycheck-mode))+}[m
+
+;;[m
+;; [31m[-Snippet-][m[32m{+CVS+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Yet another snippet extension-][m
+[31m[-;; https://joaotavora.github.io/yasnippet/-][m(use-package [31m[-yasnippet-][m
+[31m[-  :init (yas-global-mode))-][m[32m{+magit+}[m
+[32m{+  ;; https://magit.vc+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :bind (("C-x g" . magit-status)+}[m
+[32m{+         ("C-x M-g" . magit-dispatch-popup)))+}[m
+
+;;[m
+;; [31m[-Org-][m[32m{+Docker+}[m
+;; -----------------------------------------------------------------------------[m
+
+(use-package [31m[-org-][m[32m{+docker+}[m
+[32m{+  ;; https://github.com/Silex/docker.el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :bind ("C-c d" . docker)+}[m
+  :config[m
+  (setq [31m[-org-agenda-files '("~/Agenda")))-][m[32m{+docker-image-run-arguments '("-i" "-t" "--rm")))+}[m
+
+[32m{+(use-package dockerfile-mode+}[m
+[32m{+  ;; https://github.com/spotify/dockerfile-mode+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :mode (("Dockerfile\\'" . dockerfile-mode)))+}[m
+
+;;[m
+;; Markdown[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Markdown Mode-][m
+[31m[-;; https://jblevins.org/projects/markdown-mode/-][m
+(use-package markdown-mode[m
+[31m[-:config-][m
+[31m[-  (setq markdown-command (executable-find "markdown-it")))-][m  ;; [31m[-;; AsciiDoc-][m
+[31m[-;; ------------------------------------------------------------------------------][m
+
+[31m[-;; adoc-mode-][m
+[31m[-;; https://github.com/sensorflo/adoc-mode/wiki-][m
+[31m[-(use-package adoc-mode-][m[32m{+https://jblevins.org/projects/markdown-mode+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :mode [31m[-(("\\.adoc\\'"-][m[32m{+(("\\.md'"+}[m . [31m[-adoc-mode)))-][m[32m{+markdown-mode)))+}[m
+
+;;[m
+;; [31m[-HTML-][m[32m{+Web+}[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; web-mode.el-][m
+[31m[-;; http://web-mode.org-][m
+(use-package web-mode[m
+  [32m{+;; http://web-mode.org+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :mode (("\\.phtml\\'" . web-mode)[m
+         ("\\.tpl\\.php\\'" . web-mode)[m
+         ("\\.[agj]sp\\'" . web-mode)[m
+[36m@@ -428,37 +340,71 @@[m
+;; JavaScript[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; js2-mode-][m
+[31m[-;; https://github.com/mooz/js2-mode-][m
+(use-package js2-mode[m
+  [32m{+;; https://github.com/mooz/js2-mode+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :mode (("\\.jsx?\\'" . js2-jsx-mode))[m
+  :config[m
+  (setq js2-mode-show-strict-warnings nil[m
+        js2-mode-show-parse-errors [31m[-nil))-][m[32m{+nil)+}[m
+[32m{+  :init+}[m
+[32m{+  (use-package add-node-modules-path+}[m
+[32m{+    ;; https://github.com/codesuki/add-node-modules-path+}[m
+[32m{+    :ensure t+}[m
+[32m{+    :hook ((js2-mode . add-node-modules-path))))+}[m
+
+;;[m
+;; TypeScript[m
+;; -----------------------------------------------------------------------------[m
+
+[31m[-;; Tide-][m
+[31m[-;; https://github.com/ananthakumaran/tide-][m(use-package [31m[-tide-][m[32m{+typescript-mode+}[m
+[32m{+  ;; https://github.com/emacs-typescript/typescript.el+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+  :init[m
+  [31m[-(defun setup-tide-mode ()-][m
+[31m[-    (interactive)-][m
+[31m[-    (tide-setup)-][m
+[31m[-    (tide-hl-identifier-mode))-][m
+[31m[-  (add-hook 'typescript-mode-hook 'setup-tide-mode)-][m
+[31m[-  (add-hook 'before-save-hook 'tide-format-before-save))-][m[32m{+(use-package add-node-modules-path+}[m
+[32m{+    ;; https://github.com/codesuki/add-node-modules-path+}[m
+[32m{+    :ensure t+}[m
+[32m{+    :hook ((js2-mode . add-node-modules-path))))+}[m
+
+[32m{+(use-package tide+}[m
+[32m{+  ;; https://github.com/ananthakumaran/tide+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t+}[m
+[32m{+  :after (typescript-mode company flycheck)+}[m
+[32m{+  :hook ((typescript-mode . tide-setup)+}[m
+[32m{+         (typescript-mode . tide-hl-identifier-mode)+}[m
+[32m{+         (before-save . tide-format-before-save)))+}[m
+
+[32m{+;; (use-package vue-mode+}[m
+[32m{+;;   ;; https://github.com/AdamNiederer/vue-mode+}[m
+[32m{+;;   :ensure t+}[m
+[32m{+;;   :defer t)+}[m
+
+;;[m
+;; [31m[-Go-][m[32m{+YAML+}[m
+;; -----------------------------------------------------------------------------[m
+
+[32m{+(use-package yaml-mode+}[m
+  ;; [31m[-go-mode-][m[32m{+https://github.com/yoshiki/yaml-mode+}[m
+[32m{+  :ensure t+}[m
+[32m{+  :defer t)+}[m
+
+;; [31m[-https://github.com/dominikh/go-mode.el-][m
+[31m[-(use-package go-mode-][m
+[31m[-  :config-][m
+[31m[-  (add-hook 'before-save-hook 'gofmt-before-save))-][m[32m{+-----------------------------------------------------------------------------+}[m
+
+[32m{+(setq backup-inhibited t+}[m
+[32m{+      indent-tabs-mode nil+}[m
+[32m{+      inhibit-startup-message t)+}[m
+
+[32m{+(column-number-mode)+}[m
+
+[32m{+(when window-system+}[m
+[32m{+  (tool-bar-mode -1)+}[m
+[32m{+  (scroll-bar-mode -1)+}[m
+[32m{+  (add-to-list 'default-frame-alist '(width . 120))+}[m
+[32m{+  (add-to-list 'default-frame-alist '(height . 40)))+}[m
+[32m{+(unless window-system+}[m
+[32m{+  (menu-bar-mode -1))+}[m
+
+;;; init.el ends here[m
+[1mdiff --git a/lisp/eplug.el b/lisp/eplug.el[m
+[1mdeleted file mode 100644[m
+[1mindex a206704..0000000[m
+[1m--- a/lisp/eplug.el[m
+[1m+++ /dev/null[m
+[36m@@ -1,55 +0,0 @@[m
+[31m[-;;; eplug.el -- Package manager-][m
+[31m[-;;; Commentary:-][m
+
+[31m[-;; Copyright (c) 2016-present YAMADA Koji.-][m
+
+[31m[-;; This source code is licensed under the MIT license found in the-][m
+[31m[-;; LICENSE file in the root directory of this source tree.-][m
+
+[31m[-;;; Code:-][m
+
+[31m[-(eval-when-compile (require 'cl))-][m
+[31m[-(require 'package)-][m
+
+[31m[-(defvar eplug-initialized nil)-][m
+[31m[-(defvar eplug-bundled-list nil)-][m
+
+[31m[-(defcustom eplug-last-refresh nil-][m
+[31m[-  "Last refreshed time."-][m
+[31m[-  :group 'eplug)-][m
+
+[31m[-(defun eplug-init ()-][m
+[31m[-  "Initialize."-][m
+[31m[-  (unless eplug-initialized-][m
+[31m[-    (setq eplug-initialized t)-][m
+[31m[-    (add-to-list 'package-archives-][m
+[31m[-                 '("melpa" . "https://melpa.org/packages/") t)-][m
+[31m[-    (package-initialize)))-][m
+
+[31m[-(defun eplug (pkg)-][m
+[31m[-  "Bundle PKG."-][m
+[31m[-  (add-to-list 'eplug-bundled-list pkg))-][m
+
+[31m[-(defun eplug-check ()-][m
+[31m[-  "Check uninstalled packages."-][m
+[31m[-  (mapcan (lambda (pkg)-][m
+[31m[-	    (unless (package-installed-p pkg)-][m
+[31m[-	      (list pkg)))-][m
+[31m[-	  eplug-bundled-list))-][m
+
+[31m[-(defun eplug-install ()-][m
+[31m[-  "Install bundled packages."-][m
+[31m[-  (dolist (pkg (eplug-check))-][m
+[31m[-    (eplug-refresh)-][m
+[31m[-    (package-install pkg)))-][m
+
+[31m[-(defun eplug-refresh ()-][m
+[31m[-  "Refresh package contents."-][m
+[31m[-  (let ((now (float-time)))-][m
+[31m[-    (when (or (not eplug-last-refresh)-][m
+[31m[-              (> (- now eplug-last-refresh) 86400))-][m
+[31m[-      (package-refresh-contents)-][m
+[31m[-      (customize-save-variable 'eplug-last-refresh (float-time)))))-][m
+
+[31m[-(provide 'eplug)-][m
+[31m[-;;; eplug.el ends here-][m
+[1mdiff --git a/lisp/font.el b/lisp/font.el[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3523b05[m
+[1m--- /dev/null[m
+[1m+++ b/lisp/font.el[m
+[36m@@ -0,0 +1,38 @@[m
+[32m{+;;; font.el -- Font Utilities+}[m
+[32m{+;;; Commentary:+}[m
+[32m{+;;; Code:+}[m
+
+[32m{+(face-attribute 'default :family)+}[m
+
+[32m{+(defcustom font/default-height (face-attribute 'default :height)+}[m
+[32m{+  ""+}[m
+[32m{+  :group 'font)+}[m
+
+[32m{+(defun font/set-height (height)+}[m
+[32m{+  ""+}[m
+[32m{+  (interactive)+}[m
+[32m{+  (when (< 0 height)+}[m
+[32m{+    (set-face-attribute 'default nil :height height)))+}[m
+
+[32m{+(defun font/reset-height ()+}[m
+[32m{+  ""+}[m
+[32m{+  (interactive)+}[m
+[32m{+  (font/set-height font/default-height))+}[m
+
+[32m{+(defun font/get-height ()+}[m
+[32m{+  ""+}[m
+[32m{+  (interactive)+}[m
+[32m{+  (face-attribute 'default :height))+}[m
+
+[32m{+(defun font/increase-height ()+}[m
+[32m{+  ""+}[m
+[32m{+  (interactive)+}[m
+[32m{+  (font/set-height (+ (font/get-height) 10)))+}[m
+
+[32m{+(defun font/decrease-height ()+}[m
+[32m{+  ""+}[m
+[32m{+  (interactive)+}[m
+[32m{+  (font/set-height (- (font/get-height) 10)))+}[m
+
+[32m{+(provide 'font)+}[m
+[32m{+;;; font.el ends here+}[m
