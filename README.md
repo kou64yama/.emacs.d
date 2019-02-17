@@ -11,7 +11,7 @@ My Emacs configurations.
 Checkout this repository at `~/.emacs.d`:
 
 ```bash
-$ git clone https://github.com/kou64yama/dot.emacs.d.git ~/.emacs.d
+$ git clone https://github.com/kou64yama/.emacs.d.git ~/.emacs.d
 ```
 
 ## Packages
