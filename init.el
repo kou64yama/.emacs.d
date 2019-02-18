@@ -245,7 +245,7 @@
   :defer t
   :commands (undohist-initialize)
   :init (undohist-initialize)
-  :config (setq undohist-ignore-files '("/tmp/" "COMMIT_EDITMSG")))
+  :config (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
 ;;
 ;; Project
