@@ -86,7 +86,6 @@
   :config
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
-  (global-linum-mode)
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 36)))
 
