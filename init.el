@@ -77,6 +77,10 @@
 ;; -----------------------------------------------------------------------------
 
 (use-package emacs
+  :config
+  (menu-bar-mode -1))
+
+(use-package emacs
   :if window-system
   :config
   (tool-bar-mode -1)
@@ -84,11 +88,6 @@
   (global-linum-mode)
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 36)))
-
-(use-package emacs
-  :if (not window-system)
-  :config
-  (menu-bar-mode -1))
 
 (use-package spacemacs-theme
   :ensure
