@@ -78,6 +78,7 @@
 
 (use-package emacs
   :config
+  (global-hl-line-mode)
   (menu-bar-mode -1))
 
 (use-package emacs
