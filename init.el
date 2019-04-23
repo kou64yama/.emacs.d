@@ -336,6 +336,16 @@
 (use-package gitignore-mode :ensure)
 (use-package gitattributes-mode :ensure)
 
+(use-package git-gutter-fringe
+  :ensure
+  :if window-system
+  :init
+  (global-git-gutter-mode)
+  :config
+  (fringe-helper-define 'git-gutter-fr:added '(top repeat) "xxxx....")
+  (fringe-helper-define 'git-gutter-fr:deleted '(top repeat) "xxxx....")
+  (fringe-helper-define 'git-gutter-fr:modified '(top repeat) "xxxx...."))
+
 ;;
 ;; Slack
 ;; -----------------------------------------------------------------------------
