@@ -311,7 +311,10 @@
 (use-package flycheck
   :ensure
   :init
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  :config
+  (setq flycheck-indication-mode 'right-fringe
+        flycheck-highlighting-mode 'symbols))
 
 ;;
 ;; Search
