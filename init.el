@@ -116,6 +116,13 @@
   :init
   (global-emojify-mode))
 
+(use-package dimmer
+  :ensure
+  :init
+  (dimmer-mode)
+  :config
+  (setq dimmer-fraction .5))
+
 ;;
 ;; Font
 ;; -----------------------------------------------------------------------------
