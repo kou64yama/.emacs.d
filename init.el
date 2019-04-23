@@ -169,8 +169,8 @@
          ("C-c k" . counsel-ag)
          ("C-x l" . counsel-locate)
          ("C-S-o" . counsel-rhythmbox)
-         :map read-expression-map
-         ("C-r" . counsel-expression-history)))
+         :map minibuffer-local-map
+         ("C-r" . counsel-minibuffer-history)))
 
 ;;
 ;; Editor
