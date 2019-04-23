@@ -328,6 +328,17 @@
 (use-package gitattributes-mode :ensure)
 
 ;;
+;; Slack
+;; -----------------------------------------------------------------------------
+
+(use-package slack
+  :ensure
+  :commands slack-start
+  :init
+  (when (file-exists-p "~/.emacs.d/slack.el")
+    (load-file "~/.emacs.d/slack.el")))
+
+;;
 ;; LSP
 ;; -----------------------------------------------------------------------------
 
