@@ -1,0 +1,11 @@
+* Requirements
+
+- [[https://www.gnu.org/software/emacs/][Emacs]] 26+
+
+* Installation
+
+Checkout this repository at =~/.emacs.d=:
+
+#+BEGIN_SRC bash
+git clone https://github.com/kou64yama/.emacs.d.git ~/.emacs.d
+#+END_SRC

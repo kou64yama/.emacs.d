@@ -2,6 +2,6 @@
 !.gitignore
 !.gitattributes
 !.editorconfig
-!README.md
+!README.*
 !LICENSE
 !init.el
