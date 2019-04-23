@@ -152,7 +152,8 @@
   (ivy-mode)
   :config
   (setq ivy-re-builders-alist
-        '((t . ivy--regex-fuzzy))))
+        '((read-file-name-internal . ivy--regex-fuzzy)
+          (t . ivy--regex-plus))))
 
 (use-package counsel
   ;; https://github.com/abo-abo/swiper#counsel
