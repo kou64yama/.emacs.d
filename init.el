@@ -86,6 +86,8 @@
   :config
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 36)))
 
