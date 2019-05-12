@@ -82,7 +82,7 @@
   (menu-bar-mode -1))
 
 (use-package emacs
-  :if window-system
+  :if (display-graphic-p)
   :config
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -105,14 +105,14 @@
 (use-package mode-icons
   ;; http://projects.ryuslash.org/mode-icons/
   :ensure
-  :if window-system
+  :if (display-graphic-p)
   :init
   (mode-icons-mode))
 
 (use-package emojify
   ;; https://github.com/iqbalansari/emacs-emojify
   :ensure
-  :if window-system
+  :if (display-graphic-p)
   :init
   (global-emojify-mode))
 
@@ -134,7 +134,7 @@
 ;;
 
 (use-package emacs
-  :if window-system
+  :if (display-graphic-p)
   :config
   (set-face-attribute 'default nil :family "Ricty Diminished" :height 128)
   (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Ricty Diminished")))
@@ -339,7 +339,7 @@
 
 (use-package git-gutter-fringe
   :ensure
-  :if window-system
+  :if (display-graphic-p)
   :init
   (global-git-gutter-mode)
   :config
