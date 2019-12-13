@@ -1,7 +1,1 @@
-*
-!.gitignore
-!.gitattributes
-!.editorconfig
-!README.*
-!LICENSE
-!init.el
+local

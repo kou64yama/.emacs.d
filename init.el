@@ -11,6 +11,10 @@
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
+(setq user-emacs-directory
+      (expand-file-name (format "local/%s.%s" emacs-major-version emacs-minor-version)
+                        user-emacs-directory))
+
 (when (file-exists-p (setq custom-file (locate-user-emacs-file "custom.el")))
   (load custom-file))
 
