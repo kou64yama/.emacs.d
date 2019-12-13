@@ -397,5 +397,6 @@
 (use-package groovy-mode :ensure)
 (use-package kotlin-mode :ensure)
 (use-package adoc-mode :ensure)
+(use-package ssh-config-mode :ensure)
 
 ;;; init.el ends here
