@@ -95,11 +95,11 @@
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 36)))
 
-(use-package spacemacs-theme
+(use-package atom-one-dark-theme
   :ensure
   :defer
   :init
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'atom-one-dark t))
 
 (use-package smart-mode-line-powerline-theme
   ;; https://github.com/Malabarba/smart-mode-line
