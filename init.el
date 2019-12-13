@@ -123,6 +123,7 @@
   (global-emojify-mode))
 
 (use-package dimmer
+  ;; https://github.com/gonewest818/dimmer.el
   :ensure
   :init
   (dimmer-mode)
