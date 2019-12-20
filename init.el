@@ -195,7 +195,13 @@
   ;; https://github.com/editorconfig/editorconfig-emacs
   :ensure
   :init
-  (editorconfig-mode))
+  (editorconfig-mode)
+  :config
+  (add-hook 'editorconfig-after-apply-functions
+            (lambda (props)
+              (setq web-mode-block-padding 0
+                    web-mode-style-padding 0
+                    web-mode-script-padding 0))))
 
 (use-package expand-region
   ;; https://github.com/magnars/expand-region.el
@@ -321,6 +327,7 @@
   :init
   (global-flycheck-mode)
   :config
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (setq flycheck-indication-mode 'right-fringe
         flycheck-highlighting-mode 'symbols))
 
@@ -389,8 +396,22 @@
 ;; Language
 ;; -----------------------------------------------------------------------------
 
-(use-package json-mode :ensure)
-(use-package typescript-mode :ensure)
+(use-package web-mode :ensure
+  :mode ("\\.phtml\\'"
+         "\\.tpl\\.php'"
+         "\\.[agj]sp\\'"
+         "\\.as[cp]x\\'"
+         "\\.erb\\'"
+         "\\.mustache\\'"
+         "\\.djhtml\\'"
+         "\\.html?\\'"
+         "\\.vue\\'"
+         "\\.[jt]sx?\\'")
+  :config
+  (setq web-mode-block-padding 0
+        web-mode-script-padding 0
+        web-mode-style-padding 0))
+
 (use-package yaml-mode :ensure)
 (use-package dockerfile-mode :ensure)
 (use-package gradle-mode :ensure)
