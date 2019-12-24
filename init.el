@@ -82,7 +82,8 @@
 
 (use-package emacs
   :config
-  (global-hl-line-mode))
+  (global-hl-line-mode)
+  (global-display-line-numbers-mode))
 
 (use-package emacs
   :if (display-graphic-p)
