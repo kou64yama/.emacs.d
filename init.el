@@ -82,8 +82,7 @@
 
 (use-package emacs
   :config
-  (global-hl-line-mode)
-  (menu-bar-mode -1))
+  (global-hl-line-mode))
 
 (use-package emacs
   :if (display-graphic-p)
@@ -94,6 +93,11 @@
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(width . 100))
   (add-to-list 'default-frame-alist '(height . 36)))
+
+(use-package emacs
+  :if (not (display-graphic-p))
+  :config
+  (menu-bar-mode -1))
 
 (use-package atom-one-dark-theme
   :ensure
