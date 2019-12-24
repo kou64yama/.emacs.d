@@ -57,6 +57,9 @@
   :if (memq window-system '(mac ns x))
   :init (exec-path-from-shell-initialize))
 
+(use-package direnv :ensure
+  :config (direnv-mode))
+
 ;;
 ;; Input Method
 ;; -----------------------------------------------------------------------------
