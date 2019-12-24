@@ -427,6 +427,9 @@
   (setq web-mode-block-padding 0
         web-mode-script-padding 0
         web-mode-style-padding 0))
+(use-package prettier-js :ensure
+  :init
+  (add-hook 'web-mode-hook 'prettier-js-mode))
 
 (use-package yaml-mode :ensure)
 (use-package dockerfile-mode :ensure)
