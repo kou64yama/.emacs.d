@@ -421,7 +421,8 @@
          "\\.djhtml\\'"
          "\\.html?\\'"
          "\\.vue\\'"
-         "\\.[jt]sx?\\'")
+         "\\.[jt]sx?\\'"
+         "\\.json\\'")
   :config
   (setq web-mode-block-padding 0
         web-mode-script-padding 0
