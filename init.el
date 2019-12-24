@@ -101,7 +101,9 @@
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(width . 100))
-  (add-to-list 'default-frame-alist '(height . 36)))
+  (add-to-list 'default-frame-alist '(height . 36))
+  (setq-default indicate-empty-lines t
+                indicate-buffer-boundaries '((top . nil) (bottom . right) (down . right))))
 
 (use-package emacs
   :if (not (display-graphic-p))
