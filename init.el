@@ -50,6 +50,14 @@
   (keyfreq-autosave-mode))
 
 ;;
+;; Environment
+;; -----------------------------------------------------------------------------
+
+(use-package exec-path-from-shell :ensure
+  :if (memq window-system '(mac ns x))
+  :init (exec-path-from-shell-initialize))
+
+;;
 ;; Input Method
 ;; -----------------------------------------------------------------------------
 
