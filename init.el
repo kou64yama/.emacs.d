@@ -400,14 +400,12 @@
   (lsp-mode . lsp-lens-mode)
   (go-mode . lsp-deferred)
   (java-mode . lsp-deferred)
+  (web-mode . lsp-deferred)
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui :ensure :commands lsp-ui-mode)
 (use-package company-lsp :ensure :commands company-lsp)
-
-(use-package lsp-java
-  :ensure
-  :after lsp)
+(use-package lsp-java :ensure :after lsp)
 
 (use-package dap-mode
   :ensure
@@ -431,16 +429,15 @@
          "\\.djhtml\\'"
          "\\.html?\\'"
          "\\.vue\\'"
-         "\\.[jt]sx?\\'"
-         "\\.json\\'")
+         "\\.[jt]sx?\\'")
   :init
   (defun web-mode-setup ()
     (setq web-mode-block-padding 0
           web-mode-script-padding 0
           web-mode-style-padding 0))
+  (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup)))
   :hook
-  (after-init . web-mode-setup)
-  (editorconfig-after-apply-functions . web-mode-setup))
+  (after-init . web-mode-setup))
 
 (use-package prettier-js
   :ensure
