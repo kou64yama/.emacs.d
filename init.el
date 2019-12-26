@@ -33,8 +33,8 @@
 ;; Benchmark
 ;; -----------------------------------------------------------------------------
 
+;; https://github.com/dholm/benchmark-init-el
 (use-package benchmark-init
-  ;; https://github.com/dholm/benchmark-init-el
   :ensure
   :init (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
@@ -42,59 +42,62 @@
 ;; Statistics
 ;; -----------------------------------------------------------------------------
 
+;; https://github.com/dacap/keyfreq
 (use-package keyfreq
-  ;; https://github.com/dacap/keyfreq
   :ensure
-  :init
-  (keyfreq-mode)
-  (keyfreq-autosave-mode))
+  :hook
+  (after-init . keyfreq-mode)
+  (after-init . keyfreq-autosave-mode))
 
 ;;
 ;; Environment
 ;; -----------------------------------------------------------------------------
 
-(use-package exec-path-from-shell :ensure
+(use-package exec-path-from-shell
+  :ensure
   :if (memq window-system '(mac ns x))
   :init (exec-path-from-shell-initialize))
 
-(use-package direnv :ensure
-  :config (direnv-mode))
+(use-package direnv
+  :ensure
+  :hook
+  (after-init . direnv-mode))
 
 ;;
 ;; Input Method
 ;; -----------------------------------------------------------------------------
 
+;; http://openlab.jp/skk/
 (use-package ddskk
-  ;; http://openlab.jp/skk/
   :ensure
-  :bind (("C-x C-j" . ssk-mode))
-  :init
-  (setq default-input-method "japanese-skk"))
+  :bind (("C-x C-j" . skk-mode))
+  :custom
+  (default-input-method "japanese-skk"))
 
 ;;
 ;; Dashboard
 ;; -----------------------------------------------------------------------------
 
+;; https://github.com/rakanalh/emacs-dashboard
 (use-package dashboard
-  ;; https://github.com/rakanalh/emacs-dashboard
   :ensure
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-items '((recents . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5))
-        show-week-agenda-p t))
+  :custom
+  (dashboard-items '((recents . 15)
+                     (bookmarks . 5)
+                     (projects . 5)
+                     (agenda . 5)))
+  (dashboard-startup-banner 1)
+  :hook
+  (after-init . dashboard-setup-startup-hook))
 
 ;;
 ;; Appearance
 ;; -----------------------------------------------------------------------------
 
 (use-package emacs
-  :config
-  (global-hl-line-mode)
-  (global-display-line-numbers-mode))
+  :hook
+  (after-init . global-hl-line-mode)
+  (after-init . global-display-line-numbers-mode))
 
 (use-package emacs
   :if (display-graphic-p)
@@ -113,40 +116,30 @@
   :config
   (menu-bar-mode -1))
 
-(use-package atom-one-dark-theme
-  :ensure
-  :defer
-  :init
-  (load-theme 'atom-one-dark t))
-
-(use-package smart-mode-line-powerline-theme
-  ;; https://github.com/Malabarba/smart-mode-line
+(use-package doom-themes
   :ensure
   :init
-  (setq sml/theme 'powerline)
-  (sml/setup))
+  (load-theme 'doom-peacock t))
 
-(use-package mode-icons
-  ;; http://projects.ryuslash.org/mode-icons/
+(use-package doom-modeline
   :ensure
-  :if (display-graphic-p)
-  :init
-  (mode-icons-mode))
+  :hook
+  (after-init . doom-modeline-mode))
 
+;; https://github.com/iqbalansari/emacs-emojify
 (use-package emojify
-  ;; https://github.com/iqbalansari/emacs-emojify
   :ensure
   :if (display-graphic-p)
-  :init
-  (global-emojify-mode))
+  :hook
+  (after-init . global-emojify-mode))
 
+;; https://github.com/gonewest818/dimmer.el
 (use-package dimmer
-  ;; https://github.com/gonewest818/dimmer.el
   :ensure
-  :init
-  (dimmer-mode)
-  :config
-  (setq dimmer-fraction .5))
+  :hook
+  (after-init . dimmer-mode)
+  :custom
+  (dimmer-fraction .5))
 
 ;;
 ;; Font
@@ -156,7 +149,6 @@
 ;;
 ;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、
 ;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。
-;;
 
 (use-package emacs
   :if (display-graphic-p)
@@ -168,20 +160,34 @@
 ;; Minibuffer
 ;; -----------------------------------------------------------------------------
 
+;; https://github.com/abo-abo/swiper#ivy
 (use-package ivy
-  ;; https://github.com/abo-abo/swiper#ivy
   :ensure
   :bind (("C-c c-r" . ivy-resume)
          ("<f6>" . ivy-resume))
-  :init
-  (ivy-mode)
-  :config
-  (setq ivy-re-builders-alist
-        '((read-file-name-internal . ivy--regex-fuzzy)
-          (t . ivy--regex-plus))))
+  :hook
+  (after-init . ivy-mode)
+  :custom
+  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
+  (ivy-re-builders-alist '((read-file-name-internal . ivy--regex-fuzzy)
+                           (t . ivy--regex-plus))))
 
+(use-package ivy-posframe
+  :ensure
+  :after ivy
+  :custom
+  (ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  :hook
+  (ivy-mode . ivy-posframe-mode))
+
+(use-package ivy-rich
+  :ensure
+  :after ivy
+  :hook
+  (after-init . ivy-rich-mode))
+
+;; https://github.com/abo-abo/swiper#counsel
 (use-package counsel
-  ;; https://github.com/abo-abo/swiper#counsel
   :ensure
   :bind (("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
@@ -203,138 +209,131 @@
 ;; -----------------------------------------------------------------------------
 
 (use-package emacs
+  :custom
+  (backup-inhibited t)
+  (inhibit-startup-message t)
   :config
   (column-number-mode)
-  (setq-default indent-tabs-mode nil)
-  (setq backup-inhibited t
-        inhibit-startup-message t))
+  (setq-default indent-tabs-mode nil))
 
+;; https://github.com/editorconfig/editorconfig-emacs
 (use-package editorconfig
-  ;; https://github.com/editorconfig/editorconfig-emacs
   :ensure
-  :init
-  (editorconfig-mode)
-  :config
-  (add-hook 'editorconfig-after-apply-functions
-            (lambda (props)
-              (setq web-mode-block-padding 0
-                    web-mode-style-padding 0
-                    web-mode-script-padding 0))))
+  :hook
+  (after-init . editorconfig-mode))
 
+;; https://github.com/magnars/expand-region.el
 (use-package expand-region
-  ;; https://github.com/magnars/expand-region.el
   :ensure
   :bind (("C-=" . er/expand-region)))
 
+;; https://github.com/magnars/multiple-cursors.el
 (use-package multiple-cursors
-  ;; https://github.com/magnars/multiple-cursors.el
   :ensure
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C-<" . mc/mark-previous-like-this)
          ("C->" . mc/mark-next-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
+;; https://github.com/rejeep/drag-stuff.el
 (use-package drag-stuff
-  ;; https://github.com/rejeep/drag-stuff.el
   :ensure
-  :config
-  (drag-stuff-global-mode)
-  (drag-stuff-define-keys))
+  :hook
+  (after-init . drag-stuff-global-mode)
+  (after-init . drag-stuff-define-keys))
 
+;; https://github.com/Fuco1/smartparens
 (use-package smartparens
-  ;; https://github.com/Fuco1/smartparens
   :ensure
-  :init
-  (require 'smartparens-config)
-  (smartparens-global-mode))
+  :init (require 'smartparens-config)
+  :hook
+  (after-init . smartparens-global-mode))
 
+;; https://github.com/Fanael/rainbow-delimiters
 (use-package rainbow-delimiters
-  ;; https://github.com/Fanael/rainbow-delimiters
   :ensure
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;;
+;; Assistant
+;; -----------------------------------------------------------------------------
+
+;; https://github.com/justbur/emacs-which-key
+(use-package which-key :ensure
+  :hook
+  (after-init . which-key-mode))
 
 ;;
 ;; Org Mode
 ;; -----------------------------------------------------------------------------
 
 (use-package org
-  :config
-  (setq org-directory "~/agenda"
-        org-agenda-files '("~/agenda")))
+  :custom
+  (org-directory "~/agenda")
+  (org-agenda-files '("~/agenda")))
 
 ;;
 ;; History
 ;; -----------------------------------------------------------------------------
 
+;; https://www.emacswiki.org/emacs/UndoTree
 (use-package undo-tree
-  ;; https://www.emacswiki.org/emacs/UndoTree
   :ensure
-  :init
-  (global-undo-tree-mode))
+  :hook
+  (after-init . global-undo-tree-mode))
 
+;; https://github.com/m2ym/undohist-el
 (use-package undohist
-  ;; https://github.com/m2ym/undohist-el
   :ensure
-  :commands (undohist-initialize)
-  :init
-  (undohist-initialize)
-  :config
-  (setq undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
+  :commands undohist-initialize
+  :hook
+  (after-init . undohist-initialize)
+  :custom
+  (undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
 ;;
 ;; Project
 ;; -----------------------------------------------------------------------------
 
+;; https://projectile.readthedocs.io/en/latest/
 (use-package projectile
-  ;; https://projectile.readthedocs.io/en/latest/
   :ensure
-  :init
-  (projectile-mode)
+  :hook
+  (after-init . projectile-mode)
   :config
-  (setq projectile-globally-ignored-directories
-        (append '("elpa" "node_modules" "vendor")
-                projectile-globally-ignored-directories)))
+  (setq projectile-globally-ignored-directories (append '("elpa" "node_modules" "vendor")
+                                                        projectile-globally-ignored-directories)))
 
-(use-package treemacs
+(use-package neotree
   :ensure
-  :bind (("M-0" . treemacs-select-window)
-         ("C-x t 1" . treemacs-delete-other-windows)
-         ("C-x t t" . treemacs)
-         ("C-x t B" . treemacs-bookmark)
-         ("C-x t C-t" . treemacs-find-file)
-         ("C-x t M-t" . treemacs-find-tag))
-  :config
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t)
-  (treemacs-fringe-indicator-mode t)
-  (pcase (cons (not (null (executable-find "git")))
-               (not (null (executable-find "python3"))))
-    (`(t . t)
-     (treemacs-git-mode 'deferred))
-    (`(t . _)
-     (treemacs-git-mode 'simple))))
-
-(use-package treemacs-projectile
-  :ensure
-  :after treemacs projectile)
-
-(use-package treemacs-magit
-  :ensure
-  :after treemacs magit)
+  :bind (("<f8>" . neotree-toggle))
+  :custom
+  (neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 ;;
 ;; Autocomplete
 ;; -----------------------------------------------------------------------------
 
+;; https://company-mode.github.io
 (use-package company
-  ;; https://company-mode.github.io
   :ensure
-  :init
-  (global-company-mode))
+  :hook
+  (after-init . global-company-mode)
+  :custom
+  (company-tooltip-limit 20)
+  (company-idle-delay .3)
+  (company-echo-delay 0)
+  (company-begin-commands '(self-insert-command)))
 
-(use-package company-lsp
+(use-package company-box
   :ensure
-  :commands company-lsp)
+  :hook
+  (company-mode . company-box-mode))
+
+(use-package company-quickhelp
+  :ensure
+  :hook
+  (company-mode . company-quickhelp-mode))
 
 ;;
 ;; Syntax checker
@@ -342,12 +341,13 @@
 
 (use-package flycheck
   :ensure
-  :init
-  (global-flycheck-mode)
+  :hook
+  (after-init . global-flycheck-mode)
+  :custom
+  (flycheck-indication-mode 'right-fringe)
+  (flycheck-highlighting-mode 'symbols)
   :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-  (setq flycheck-indication-mode 'right-fringe
-        flycheck-highlighting-mode 'symbols))
+  (flycheck-add-mode 'javascript-eslint 'web-mode))
 
 ;;
 ;; Search
@@ -396,7 +396,18 @@
 
 (use-package lsp-mode
   :ensure
-  :commands lsp)
+  :hook
+  (lsp-mode . lsp-lens-mode)
+  (go-mode . lsp-deferred)
+  (java-mode . lsp-deferred)
+  :commands (lsp lsp-deferred))
+
+(use-package lsp-ui :ensure :commands lsp-ui-mode)
+(use-package company-lsp :ensure :commands company-lsp)
+
+(use-package lsp-java
+  :ensure
+  :after lsp)
 
 (use-package dap-mode
   :ensure
@@ -405,16 +416,12 @@
   (dap-mode t)
   (dap-ui-mode t))
 
-(use-package lsp-ui
-  :ensure
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode))
-
 ;;
 ;; Language
 ;; -----------------------------------------------------------------------------
 
-(use-package web-mode :ensure
+(use-package web-mode
+  :ensure
   :mode ("\\.phtml\\'"
          "\\.tpl\\.php'"
          "\\.[agj]sp\\'"
@@ -426,13 +433,18 @@
          "\\.vue\\'"
          "\\.[jt]sx?\\'"
          "\\.json\\'")
-  :config
-  (setq web-mode-block-padding 0
-        web-mode-script-padding 0
-        web-mode-style-padding 0))
-(use-package prettier-js :ensure
   :init
-  (add-hook 'web-mode-hook 'prettier-js-mode))
+  (defun web-mode-setup ()
+    (setq web-mode-block-padding 0
+          web-mode-script-padding 0
+          web-mode-style-padding 0))
+  :hook
+  (after-init . web-mode-setup)
+  (editorconfig-after-apply-functions . web-mode-setup))
+
+(use-package prettier-js
+  :ensure
+  :hook (web-mode . prettier-js-mode))
 
 (use-package yaml-mode :ensure)
 (use-package dockerfile-mode :ensure)
@@ -441,5 +453,15 @@
 (use-package kotlin-mode :ensure)
 (use-package adoc-mode :ensure)
 (use-package ssh-config-mode :ensure)
+
+(use-package go-mode
+  :ensure
+  :init
+  (add-to-list 'exec-path (expand-file-name "~/go/bin"))
+  (defun lsp-go-install-save-hooks ()
+    (add-hook 'before-save-hook #'lsp-format-buffer t t)
+    (add-hook 'before-save-hook #'lsp-organize-imports t t))
+  :hook
+  (go-mode . lsp-go-install-save-hooks))
 
 ;;; init.el ends here
