@@ -131,7 +131,9 @@
   :ensure
   :if (display-graphic-p)
   :hook
-  (after-init . global-emojify-mode))
+  (after-init . global-emojify-mode)
+  :config
+  (setq emojify-display-style 'unicode))
 
 ;; https://github.com/gonewest818/dimmer.el
 (use-package dimmer
@@ -146,15 +148,15 @@
 ;; -----------------------------------------------------------------------------
 ;;
 ;; Grumpy wizards make toxic brew for the evil Queen and Jack.
-;;
 ;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、
 ;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。
 
 (use-package emacs
   :if (display-graphic-p)
   :config
-  (set-face-attribute 'default nil :family "Ricty Diminished" :height 128)
-  (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Ricty Diminished")))
+  (set-face-attribute 'default nil :family "Terminus (TTF)" :height 130)
+  (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil '(#x1F000 . #x1FAFF) "Noto Emoji"))
 
 ;;
 ;; Minibuffer
