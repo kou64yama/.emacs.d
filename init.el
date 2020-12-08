@@ -465,4 +465,9 @@
   :hook
   (go-mode . lsp-go-install-save-hooks))
 
+(use-package shfmt
+  :ensure
+  :hook
+  (sh-mode . shfmt-on-save-mode))
+
 ;;; init.el ends here
