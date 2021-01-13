@@ -171,49 +171,22 @@
 ;; Minibuffer
 ;; -----------------------------------------------------------------------------
 
-;; https://github.com/abo-abo/swiper#ivy
-(use-package ivy
+(use-package prescient
   :ensure
-  :bind (("C-c c-r" . ivy-resume)
-         ("<f6>" . ivy-resume))
-  :hook
-  (after-init . ivy-mode)
-  :custom
-  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
-  (ivy-re-builders-alist '((read-file-name-internal . ivy--regex-fuzzy)
-                           (t . ivy--regex-plus))))
+  :commands prescient-persist-mode
+  :init
+  (prescient-persist-mode +1))
 
-(use-package ivy-posframe
+(use-package selectrum
   :ensure
-  :after ivy
-  :custom
-  (ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  :hook
-  (ivy-mode . ivy-posframe-mode))
+  :init
+  (selectrum-mode +1))
 
-(use-package ivy-rich
+(use-package selectrum-prescient
   :ensure
-  :after ivy
-  :hook
-  (after-init . ivy-rich-mode))
-
-;; https://github.com/abo-abo/swiper#counsel
-(use-package counsel
-  :ensure
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("<f1> f" . counsel-describe-function)
-         ("<f1> v" . counsel-describe-variable)
-         ("<f1> l" . counsel-find-library)
-         ("<f2> i" . counsel-info-lookup-symbol)
-         ("<f2> u" . counsel-unicode-char)
-         ("C-c g" . counsel-git)
-         ("C-c j" . counsel-git-grep)
-         ("C-c k" . counsel-ag)
-         ("C-x l" . counsel-locate)
-         ("C-S-o" . counsel-rhythmbox)
-         :map minibuffer-local-map
-         ("C-r" . counsel-minibuffer-history)))
+  :after selectrum
+  :init
+  (selectrum-prescient-mode +1))
 
 ;;
 ;; Tab
@@ -372,9 +345,10 @@
 ;; Search
 ;; -----------------------------------------------------------------------------
 
-(use-package swiper
+(use-package ctrlf
   :ensure
-  :bind (("C-s" . swiper)))
+  :init
+  (ctrlf-mode +1))
 
 ;;
 ;; Git
