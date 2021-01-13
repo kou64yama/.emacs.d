@@ -149,16 +149,23 @@
 ;; Font
 ;; -----------------------------------------------------------------------------
 ;;
-;; Grumpy wizards make toxic brew for the evil Queen and Jack.
-;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、
-;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。
+;; ----------------------------------------------------------------------
+;; Grumpy wizards make toxic brew for the evil Queen and Jack.-----------
+;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、--
+;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。--------
+;; 😃😇😍😜😸🙈🐺🐰👽🐉💰🏡🎅🍪🍕🚀🚻💩📷📦------------------------------
+;; ----------------------------------------------------------------------
 
 (use-package emacs
   :if (display-graphic-p)
   :config
-  (set-face-attribute 'default nil :family "Terminus (TTF)" :height 130)
-  (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Ricty Diminished"))
-  (set-fontset-font nil '(#x1F000 . #x1FAFF) "Noto Emoji"))
+  (set-face-attribute 'default nil :family "Anka/Coder" :height 120)
+  (set-fontset-font (frame-parameter nil 'font)
+                    'japanese-jisx0208
+                    (font-spec :family "Ricty Diminished" :size 14))
+  (set-fontset-font (frame-parameter nil 'font)
+                    '(#x1F000 . #x1FAFF)
+                    (font-spec :family "Noto Emoji" :size 11)))
 
 ;;
 ;; Minibuffer
