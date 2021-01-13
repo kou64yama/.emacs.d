@@ -332,6 +332,11 @@
   :hook
   (company-mode . company-quickhelp-mode))
 
+(use-package company-prescient
+  :ensure
+  :init
+  (company-prescient-mode +1))
+
 ;;
 ;; Syntax checker
 ;; -----------------------------------------------------------------------------
