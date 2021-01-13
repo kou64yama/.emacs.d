@@ -216,6 +216,11 @@
   (column-number-mode)
   (setq-default indent-tabs-mode nil))
 
+(use-package smooth-scrolling
+  :ensure
+  :init
+  (smooth-scrolling-mode 1))
+
 ;; https://github.com/editorconfig/editorconfig-emacs
 (use-package editorconfig
   :ensure
