@@ -302,6 +302,7 @@
 
 ;; https://github.com/m2ym/undohist-el
 (use-package undohist
+  :disabled
   :ensure
   :commands undohist-initialize
   :hook
