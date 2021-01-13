@@ -216,6 +216,22 @@
          ("C-r" . counsel-minibuffer-history)))
 
 ;;
+;; Tab
+;; -----------------------------------------------------------------------------
+
+(use-package centaur-tabs
+  :ensure
+  :init
+  (centaur-tabs-mode t)
+  (centaur-tabs-headline-match)
+  (centaur-tabs-group-by-projectile-project)
+  :config
+  (setq centaur-tabs-style "bar"
+        centaur-tabs-set-icons t
+        centaur-tabs-set-bar 'left
+        centaur-tabs-cycle-scope 'tabs))
+
+;;
 ;; Editor
 ;; -----------------------------------------------------------------------------
 

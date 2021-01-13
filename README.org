@@ -1,6 +1,6 @@
 * Requirements
 
-- [[https://www.gnu.org/software/emacs/][Emacs]] 26+
+- [[https://www.gnu.org/software/emacs/][Emacs]] 27+
 
 * Installation
 
