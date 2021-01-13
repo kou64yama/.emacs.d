@@ -118,10 +118,10 @@
   :config
   (menu-bar-mode -1))
 
-(use-package doom-themes
+(use-package one-themes
   :ensure
   :init
-  (load-theme 'doom-peacock t))
+  (load-theme 'one-dark t))
 
 (use-package doom-modeline
   :ensure
