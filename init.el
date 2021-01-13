@@ -118,10 +118,10 @@
   :config
   (menu-bar-mode -1))
 
-(use-package one-themes
+(use-package srcery-theme
   :ensure
   :init
-  (load-theme 'one-dark t))
+  (load-theme 'srcery t))
 
 (use-package doom-modeline
   :ensure
