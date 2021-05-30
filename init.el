@@ -8,8 +8,6 @@
 
 ;;; Code:
 
-(cd "~")
-
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
@@ -20,134 +18,113 @@
 (when (file-exists-p (setq custom-file (locate-user-emacs-file "custom.el")))
   (load custom-file))
 
-(require 'package)
-(add-to-list 'package-archives '("melpha" . "https://melpa.org/packages/"))
-(package-initialize)
+;; https://github.com/conao3/leaf.el#install
+(eval-and-compile
+  (customize-set-variable
+   'package-archives '(("org" . "https://orgmode.org/elpa/")
+                       ("melpa" . "https://melpa.org/packages/")
+                       ("gnu" . "https://elpa.gnu.org/packages/")))
+  (package-initialize)
+  (unless (package-installed-p 'leaf)
+    (package-refresh-contents)
+    (package-install 'leaf))
 
-(condition-case nil
-    (require 'use-package)
-  (file-error
-   (package-refresh-contents)
-   (package-install 'use-package)
-   (require 'use-package)))
+  (leaf leaf-keywords
+    :ensure t
+    :init
+    (leaf hydra :ensure t)
+    (leaf el-get :ensure t)
+    (leaf blackout :ensure t)
+    :config
+    (leaf-keywords-init)))
 
-;;
-;; Benchmark
-;; -----------------------------------------------------------------------------
-
-;; https://github.com/dholm/benchmark-init-el
-(use-package benchmark-init
-  :ensure
-  :init (add-hook 'after-init-hook 'benchmark-init/deactivate))
+(leaf leaf-tree :ensure t)
+(leaf leaf-convert :ensure t)
 
 ;;
 ;; Statistics
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
+
+;; https://github.com/dholm/benchmark-init-el
+(leaf benchmark-init
+  :ensure t
+  :hook (after-init-hook . benchmark-init/deactivate)
+  :init (benchmark-init/activate))
 
 ;; https://github.com/dacap/keyfreq
-(use-package keyfreq
-  :ensure
-  :hook
-  (after-init . keyfreq-mode)
-  (after-init . keyfreq-autosave-mode))
+(leaf keyfreq
+  :ensure t
+  :init
+  (keyfreq-mode)
+  (keyfreq-autosave-mode))
 
 ;;
-;; Environment
-;; -----------------------------------------------------------------------------
+;; Environment Variables
+;; ---------------------------------------------------------------------
 
-(use-package exec-path-from-shell
-  :ensure
-  :if (memq window-system '(mac ns x))
+;; https://github.com/purcell/exec-path-from-shell
+(leaf exec-path-from-shell
+  :ensure t
   :init (exec-path-from-shell-initialize))
 
-(use-package direnv
-  :ensure
-  :hook
-  (after-init . direnv-mode))
-
 ;;
-;; Input Method
-;; -----------------------------------------------------------------------------
+;; Startup
+;; ---------------------------------------------------------------------
 
-;; http://openlab.jp/skk/
-(use-package ddskk
-  :ensure
-  :bind (("C-x C-j" . skk-mode))
+(leaf cus-start
   :custom
-  (default-input-method "japanese-skk"))
+  (inhibit-startup-message . t))
 
-;;
-;; Dashboard
-;; -----------------------------------------------------------------------------
+(leaf server
+  :disabled t
+  :commands server-running-p
+  :init
+  (unless (server-running-p)
+    (server-start)))
 
-;; https://github.com/rakanalh/emacs-dashboard
-(use-package dashboard
-  :ensure
-  :custom
-  (dashboard-items '((recents . 15)
-                     (bookmarks . 5)
-                     (projects . 5)
-                     (agenda . 5)))
-  (dashboard-startup-banner 1)
-  :hook
-  (after-init . dashboard-setup-startup-hook))
+;; https://github.com/emacs-dashboard/emacs-dashboard
+(leaf dashboard
+  :ensure t
+  :init (dashboard-setup-startup-hook)
+  :setq ((dashboard-items . '((projects . 15)
+                              (recents . 15)))
+         (dashboard-set-heading-icons . t)
+         (dashboard-set-file-icons . t)))
 
 ;;
 ;; Appearance
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
-(use-package emacs
-  :hook
-  (after-init . global-hl-line-mode)
-  (after-init . global-display-line-numbers-mode))
-
-(use-package emacs
-  :if (display-graphic-p)
-  :config
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+(leaf cus-start
+  :custom
+  (menu-bar-mode . t)
+  (tool-bar-mode . nil)
+  (scroll-bar-mode . nil)
+  :init
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(width . 100))
-  (add-to-list 'default-frame-alist '(height . 36))
-  (setq-default indicate-empty-lines t
-                indicate-buffer-boundaries '((top . nil) (bottom . right) (down . right))))
+  (add-to-list 'default-frame-alist '(height . 36)))
 
-(use-package emacs
-  :if (not (display-graphic-p))
-  :config
-  (menu-bar-mode -1))
+;; https://github.com/srcery-colors/srcery-emacs
+(leaf srcery-theme
+  :ensure t
+  :init (load-theme 'srcery t))
 
-(use-package srcery-theme
-  :ensure
-  :init
-  (load-theme 'srcery t))
-
-(use-package doom-modeline
-  :ensure
-  :hook
-  (after-init . doom-modeline-mode))
+;; https://github.com/seagle0128/doom-modeline
+(leaf doom-modeline
+  :ensure t
+  :init (doom-modeline-mode))
 
 ;; https://github.com/iqbalansari/emacs-emojify
-(use-package emojify
-  :ensure
-  :if (display-graphic-p)
-  :hook
-  (after-init . global-emojify-mode)
-  :config
-  (setq emojify-display-style 'unicode))
-
-;; https://github.com/gonewest818/dimmer.el
-(use-package dimmer
-  :ensure
-  :hook
-  (after-init . dimmer-mode)
-  :custom
-  (dimmer-fraction .5))
+(leaf emojify
+  :ensure t
+  :setq ((emojify-display-style . 'unicode))
+  :init (global-emojify-mode))
 
 ;;
 ;; Font
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 ;;
 ;; ----------------------------------------------------------------------
 ;; Grumpy wizards make toxic brew for the evil Queen and Jack.-----------
@@ -156,9 +133,9 @@
 ;; 😃😇😍😜😸🙈🐺🐰👽🐉💰🏡🎅🍪🍕🚀🚻💩📷📦------------------------------
 ;; ----------------------------------------------------------------------
 
-(use-package emacs
+(leaf cus-start
   :if (display-graphic-p)
-  :config
+  :init
   (set-face-attribute 'default nil :family "Anka/Coder" :height 120)
   (set-fontset-font (frame-parameter nil 'font)
                     'japanese-jisx0208
@@ -168,305 +145,306 @@
                     (font-spec :family "Noto Emoji" :size 11)))
 
 ;;
-;; Minibuffer
-;; -----------------------------------------------------------------------------
-
-(use-package prescient
-  :ensure
-  :commands prescient-persist-mode
-  :init
-  (prescient-persist-mode +1))
-
-(use-package selectrum
-  :ensure
-  :init
-  (selectrum-mode +1))
-
-(use-package selectrum-prescient
-  :ensure
-  :after selectrum
-  :init
-  (selectrum-prescient-mode +1))
-
-;;
 ;; Tab
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
-(use-package centaur-tabs
-  :ensure
+;; https://github.com/ema2159/centaur-tabs
+(leaf centaur-tabs
+  :ensure t
   :init
   (centaur-tabs-mode t)
   (centaur-tabs-headline-match)
   (centaur-tabs-group-by-projectile-project)
-  :config
-  (setq centaur-tabs-style "bar"
-        centaur-tabs-set-icons t
-        centaur-tabs-set-bar 'left
-        centaur-tabs-cycle-scope 'tabs))
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  :setq ((centaur-tabs-style . "bar")
+         (centaur-tabs-set-icons . t)
+         (centaur-tabs-set-bar . 'left)
+         (centaur-tabs-set-close-button . nil)
+         (centaur-tabs-cycle-scope . 'tabs)))
 
 ;;
-;; Editor
-;; -----------------------------------------------------------------------------
+;; Minibuffer
+;; ---------------------------------------------------------------------
 
-(use-package emacs
-  :custom
-  (backup-inhibited t)
-  (inhibit-startup-message t)
-  :config
-  (column-number-mode)
-  (setq-default indent-tabs-mode nil))
+;; https://github.com/raxod502/prescient.el
+(leaf prescient
+  :ensure t
+  :commands prescient-persist-mode
+  :init (prescient-persist-mode))
 
-(use-package smooth-scrolling
-  :ensure
-  :init
-  (smooth-scrolling-mode 1))
+;; https://github.com/raxod502/selectrum
+(leaf selectrum
+  :ensure t
+  :init (selectrum-mode))
 
-;; https://github.com/editorconfig/editorconfig-emacs
-(use-package editorconfig
-  :ensure
-  :hook
-  (after-init . editorconfig-mode))
+;; https://github.com/raxod502/selectrum
+(leaf selectrum-prescient
+  :ensure t
+  :after prescient selectrum
+  :init (selectrum-prescient-mode))
 
-;; https://github.com/magnars/expand-region.el
-(use-package expand-region
-  :ensure
-  :bind (("C-=" . er/expand-region)))
+;;
+;; Input Method
+;; ---------------------------------------------------------------------
 
-;; https://github.com/magnars/multiple-cursors.el
-(use-package multiple-cursors
-  :ensure
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C->" . mc/mark-next-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
-
-;; https://github.com/rejeep/drag-stuff.el
-(use-package drag-stuff
-  :ensure
-  :hook
-  (after-init . drag-stuff-global-mode)
-  (after-init . drag-stuff-define-keys))
-
-;; https://github.com/Fuco1/smartparens
-(use-package smartparens
-  :ensure
-  :init (require 'smartparens-config)
-  :hook
-  (after-init . smartparens-global-mode))
-
-;; https://github.com/Fanael/rainbow-delimiters
-(use-package rainbow-delimiters
-  :ensure
-  :hook (prog-mode . rainbow-delimiters-mode))
+;; https://github.com/skk-dev/ddskk
+(leaf ddskk
+  :ensure t
+  :bind
+  ("C-x C-j" . skk-mode)
+  :setq
+  (default-input-method . "japanese-skk"))
 
 ;;
 ;; Assistant
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
 ;; https://github.com/justbur/emacs-which-key
-(use-package which-key :ensure
-  :hook
-  (after-init . which-key-mode))
+(leaf which-key
+  :ensure t
+  :init (which-key-mode))
+
+;;
+;; Editor
+;; ---------------------------------------------------------------------
+
+(leaf cus-start
+  :custom
+  (indent-tabs-mode . nil)
+  (backup-inhibited . t)
+  :setq
+  (recentf-exclude . '("/\\.emacs\\d/local/"))
+  :setq-default `((indicate-empty-lines . t)
+                  (indicate-buffer-boundaries . '((top . nil) (bottom . right) (down . right))))
+  :init
+  (global-hl-line-mode)
+  (global-display-line-numbers-mode))
+
+;; https://github.com/aspiers/smooth-scrolling
+(leaf smooth-scrolling
+  :ensure t
+  :init (smooth-scrolling-mode))
+
+;; https://github.com/editorconfig/editorconfig-emacs
+(leaf editorconfig
+  :ensure t
+  :init (editorconfig-mode))
+
+;; https://github.com/magnars/expand-region.el
+(leaf expand-region
+  :ensure t
+  :bind
+  ("C-=" . er/expand-region))
+
+;; https://github.com/magnars/multiple-cursors.el
+(leaf multiple-cursors
+  :ensure t
+  :bind
+  ("C-S-c C-S-c" . mc/edit-lines)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C->" . mc/mark-next-like-this)
+  ("C-c C-<" . mc/mark-all-like-this))
+
+;; https://github.com/rejeep/drag-stuff.el
+(leaf drag-stuff
+  :ensure t
+  :init
+  (drag-stuff-global-mode)
+  (drag-stuff-define-keys))
+
+;; https://github.com/Fuco1/smartparens
+(leaf smartparens
+  :ensure t
+  :require smartparens-config
+  :init (smartparens-global-mode))
+
+;; https://github.com/Fanael/rainbow-delimiters
+(leaf rainbow-delimiters
+  :ensure t
+  :hook (prog-mode-hook . rainbow-delimiters-mode))
+
+;;
+;; Search
+;; ---------------------------------------------------------------------
+
+;; https://github.com/raxod502/ctrlf
+(leaf ctrlf
+  :ensure t
+  :init (ctrlf-mode))
 
 ;;
 ;; History
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
 ;; https://www.emacswiki.org/emacs/UndoTree
-(use-package undo-tree
-  :ensure
-  :hook
-  (after-init . global-undo-tree-mode))
+(leaf undo-tree
+  :ensure t
+  :init (global-undo-tree-mode))
 
-;; https://github.com/m2ym/undohist-el
-(use-package undohist
-  :disabled
-  :ensure
+;; https://github.com/emacsorphanage/undohist
+(leaf undohist
+  :ensure t
+  ;; https://github.com/emacsorphanage/undohist/issues/6#issuecomment-602962791
+  ;; > this package would not further develop
+  :disabled t
   :commands undohist-initialize
-  :hook
-  (after-init . undohist-initialize)
+  :init (undohist-initialize)
   :custom
   (undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
 
 ;;
 ;; Project
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
-;; https://projectile.readthedocs.io/en/latest/
-(use-package projectile
-  :ensure
-  :hook
-  (after-init . projectile-mode)
+;; https://github.com/bbatsov/projectile
+(leaf projectile
+  :ensure t
+  :init (projectile-mode)
   :config
-  (setq projectile-globally-ignored-directories (append '("elpa" "node_modules" "vendor")
-                                                        projectile-globally-ignored-directories)))
-
-(use-package neotree
-  :ensure
-  :bind (("<f8>" . neotree-toggle))
-  :custom
-  (neo-theme (if (display-graphic-p) 'icons 'arrow)))
+  (add-to-list 'projectile-globally-ignored-directories "elpa")
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  (add-to-list 'projectile-globally-ignored-directories "vendor"))
 
 ;;
-;; Autocomplete
-;; -----------------------------------------------------------------------------
+;; VCS
+;; ---------------------------------------------------------------------
 
-;; https://company-mode.github.io
-(use-package company
-  :ensure
-  :hook
-  (after-init . global-company-mode)
-  :custom
-  (company-tooltip-limit 20)
-  (company-idle-delay .3)
-  (company-echo-delay 0)
-  (company-begin-commands '(self-insert-command)))
+;; https://github.com/magit/magit
+(leaf magit :ensure t)
 
-(use-package company-box
-  :ensure
-  :hook
-  (company-mode . company-box-mode))
-
-(use-package company-quickhelp
-  :ensure
-  :hook
-  (company-mode . company-quickhelp-mode))
-
-(use-package company-prescient
-  :ensure
-  :init
-  (company-prescient-mode +1))
-
-;;
-;; Syntax checker
-;; -----------------------------------------------------------------------------
-
-(use-package flycheck
-  :ensure
-  :hook
-  (after-init . global-flycheck-mode)
-  :custom
-  (flycheck-indication-mode 'right-fringe)
-  (flycheck-highlighting-mode 'symbols)
-  :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
-
-;;
-;; Search
-;; -----------------------------------------------------------------------------
-
-(use-package ctrlf
-  :ensure
-  :init
-  (ctrlf-mode +1))
-
-;;
-;; Git
-;; -----------------------------------------------------------------------------
-
-(use-package magit
-  :ensure
-  :bind (("C-x g" . magit-status)))
-
-(use-package gitconfig-mode :ensure)
-(use-package gitignore-mode :ensure)
-(use-package gitattributes-mode :ensure)
-
-(use-package git-gutter-fringe
-  :ensure
-  :if (display-graphic-p)
+;; https://github.com/emacsorphanage/git-gutter-fringe
+(leaf git-gutter-fringe
+  :ensure t
+  :commands fringe-helper-define
   :init
   (global-git-gutter-mode)
-  :config
   (fringe-helper-define 'git-gutter-fr:added '(top repeat) "xxxx....")
   (fringe-helper-define 'git-gutter-fr:deleted '(top repeat) "xxxx....")
   (fringe-helper-define 'git-gutter-fr:modified '(top repeat) "xxxx...."))
 
 ;;
-;; Slack
-;; -----------------------------------------------------------------------------
+;; Autocomplete
+;; ---------------------------------------------------------------------
 
-(use-package slack
-  :ensure
-  :commands slack-start
-  :init
-  (when (file-exists-p "~/.emacs.d/slack.el")
-    (load-file "~/.emacs.d/slack.el")))
+;; https://company-mode.github.io
+(leaf company
+  :ensure t
+  :init (global-company-mode)
+  :custom
+  (company-tooltip-limit . 20)
+  (company-idle-delay . .3)
+  (company-begin-commands . '(self-insert-command)))
+
+;; https://github.com/sebastiencs/company-box
+(leaf company-box
+  :ensure t
+  :after company
+  :hook (company-mode-hook . company-box-mode))
+
+;; https://github.com/raxod502/prescient.el
+(leaf company-prescient
+  :ensure t
+  :after prescient company
+  :init (company-prescient-mode))
+
+;;
+;; Docker
+;; ---------------------------------------------------------------------
+
+;; https://github.com/Silex/docker.el
+(leaf docker
+  :ensure t
+  :bind
+  ("C-c d" . docker))
 
 ;;
 ;; LSP
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
-(use-package lsp-mode
-  :ensure
-  :hook
-  (lsp-mode . lsp-lens-mode)
-  (go-mode . lsp-deferred)
-  (java-mode . lsp-deferred)
-  (web-mode . lsp-deferred)
-  :commands (lsp lsp-deferred))
+;; https://github.com/emacs-lsp/lsp-mode
+(leaf lsp-mode
+  :ensure t
+  :hook (lsp-mode-hook . lsp-lens-mode))
 
-(use-package lsp-ui :ensure :commands lsp-ui-mode)
-(use-package company-lsp :ensure :commands company-lsp)
-(use-package lsp-java :ensure :after lsp)
+;; https://github.com/emacs-lsp/lsp-ui
+(leaf lsp-ui
+  :ensure t
+  :hook (lsp-mode-hook . lsp-ui-mode))
 
-(use-package dap-mode
-  :ensure
-  :after lsp
-  :config
-  (dap-mode t)
-  (dap-ui-mode t))
+;;
+;; Syntax checker
+;; ---------------------------------------------------------------------
+
+;; https://www.flycheck.org/en/latest/
+(leaf flycheck
+  :ensure t
+  :init (global-flycheck-mode)
+  :custom
+  (flycheck-indication-mode . 'right-fringe))
 
 ;;
 ;; Language
-;; -----------------------------------------------------------------------------
+;; ---------------------------------------------------------------------
 
-(use-package web-mode
-  :ensure
-  :mode ("\\.phtml\\'"
-         "\\.tpl\\.php'"
-         "\\.[agj]sp\\'"
-         "\\.as[cp]x\\'"
-         "\\.erb\\'"
-         "\\.mustache\\'"
-         "\\.djhtml\\'"
-         "\\.html?\\'"
-         "\\.vue\\'"
-         "\\.[jt]sx?\\'")
-  :init
+(leaf gitconfig-mode :ensure t)
+(leaf gitignore-mode :ensure t)
+(leaf gitattributes-mode :ensure t)
+(leaf ssh-config-mode :ensure t)
+
+;; ShellScript
+(leaf sh-mode
+  :hook (sh-mode-hook . lsp))
+
+(leaf shfmt
+  :ensure t
+  :hook (sh-mode-hook . shfmt-on-save-mode))
+
+;; HTML, JavaScript, CSS, ...
+(leaf web-mode
+  :ensure t
+  :mode
+  "\\.phtml\\'"
+  "\\.tpl\\.php'"
+  "\\.[agj]sp\\'"
+  "\\.as[cp]x\\'"
+  "\\.erb\\'"
+  "\\.mustache\\'"
+  "\\.djhtml\\'"
+  "\\.html?\\'"
+  "\\.vue\\'"
+  "\\.[jt]sx?\\'"
+  :config
   (defun web-mode-setup ()
     (setq web-mode-block-padding 0
           web-mode-script-padding 0
           web-mode-style-padding 0))
   (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup)))
-  :hook
-  (after-init . web-mode-setup))
+  :hook (web-mode-hook . lsp))
 
-(use-package prettier-js
-  :ensure
-  :hook (web-mode . prettier-js-mode))
+(leaf prettier-js
+  :ensure t
+  :hook (web-mode-hook . prettier-js-mode))
 
-(use-package yaml-mode :ensure)
-(use-package dockerfile-mode :ensure)
-(use-package gradle-mode :ensure)
-(use-package groovy-mode :ensure)
-(use-package kotlin-mode :ensure)
-(use-package adoc-mode :ensure)
-(use-package ssh-config-mode :ensure)
+(leaf dockerfile-mode
+  :ensure t
+  :hook (dockerfile-mode-hook . lsp))
 
-(use-package go-mode
-  :ensure
-  :init
-  (add-to-list 'exec-path (expand-file-name "~/go/bin"))
-  (defun lsp-go-install-save-hooks ()
-    (add-hook 'before-save-hook #'lsp-format-buffer t t)
-    (add-hook 'before-save-hook #'lsp-organize-imports t t))
-  :hook
-  (go-mode . lsp-go-install-save-hooks))
+(leaf kotlin-mode
+  :ensure t
+  :hook (kotlin-mode-hook . lsp))
 
-(use-package shfmt
-  :ensure
-  :hook
-  (sh-mode . shfmt-on-save-mode))
+(leaf go-mode
+  :ensure t
+  :hook (go-mode-hook . lsp))
+
+(leaf yaml-mode
+  :ensure t
+  :hook (yaml-mode-hook . lsp))
+
+(leaf gradle-mode :ensure t)
+(leaf groovy-mode :ensure t)
+(leaf adoc-mode :ensure t)
 
 ;;; init.el ends here
