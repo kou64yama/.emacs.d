@@ -388,6 +388,7 @@
 ;; Language
 ;; ---------------------------------------------------------------------
 
+(leaf git-modes :ensure t)
 (leaf ssh-config-mode :ensure t)
 
 ;; ShellScript
