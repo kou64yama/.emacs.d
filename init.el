@@ -183,6 +183,13 @@
                       symbol-subgroup
                       (font-spec :family "Noto Emoji" :size 11))))
 
+(leaf emojify
+  ;; https://github.com/iqbalansari/emacs-emojify
+  :ensure t
+  :global-minor-mode global-emojify-mode
+  :custom
+  (emojify-display-style . 'unicode))
+
 (leaf smooth-scrolling
   ;; https://github.com/aspiers/smooth-scrolling
   :ensure t
