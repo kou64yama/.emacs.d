@@ -527,6 +527,8 @@
 
 (leaf graphql-mode
   ;; https://github.com/davazp/graphql-mode
-  :ensure t)
+  :ensure t
+  :hook
+  (graphql-mode-hook . lsp))
 
 ;;; init.el ends here
