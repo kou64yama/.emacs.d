@@ -2,20 +2,20 @@
 
 ** Requirements
 
-- [[https://www.gnu.org/software/emacs/][Emacs]] 27+
+   + [[https://www.gnu.org/software/emacs/][GNU Emacs]] 26+
 
 ** Installation
 
-Checkout this repository at =~/.emacs.d=:
+   Checkout this repository into =~/.emacs.d=:
 
-#+BEGIN_SRC bash
-git clone https://github.com/kou64yama/.emacs.d.git ~/.emacs.d
-#+END_SRC
+   #+BEGIN_SRC bash
+     git clone https://github.com/kou64yama/.emacs.d.git ~/.emacs.d
+   #+END_SRC
 
 ** Tasting
 
-You can use Docker to try out this repository right away.
+   You can use Docker to try out this repository right away.
 
-#+BEGIN_SRC bash
-docker run --rm -it -w "$PWD:/workspace" ghcr.io/kou64yama/emacs:latest
-#+END_SRC
+   #+BEGIN_SRC bash
+     docker run --rm -it -v "$PWD:/workspace" ghcr.io/kou64yama/emacs:latest
+   #+END_SRC

@@ -10,6 +10,10 @@ end_of_line = lf
 charset = utf-8
 
 indent_style = space
+indent_size = 2
+
+[*.el]
+indent_size = unset
 
 [snippets/**/*.el]
 insert_final_newline = false

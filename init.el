@@ -1,21 +1,16 @@
 ;;; init.el -- Emacs Configuration File.
+
 ;;; Commentary:
 
-;; Copyright (c) 2016-present YAMADA Koji.
+;; Copyright (c) 2016-present Yamada Koji.
 ;;
-;; This source code is licensed unter the MIT license found in the
+;; This source code is licensed under the MIT license found in the
 ;; LICENSE file in the root directory of this source tree.
 
 ;;; Code:
 
-(when load-file-name
-  (setq user-emacs-directory (file-name-directory load-file-name)))
-
-(setq user-emacs-directory
-      (expand-file-name (format "local/%s.%s" emacs-major-version emacs-minor-version)
-                        user-emacs-directory))
-
-(when (file-exists-p (setq custom-file (locate-user-emacs-file "custom.el")))
+(setq custom-file (locate-user-emacs-file "init-local.el"))
+(when (file-exists-p custom-file)
   (load custom-file))
 
 ;; https://github.com/conao3/leaf.el#install
@@ -38,208 +33,75 @@
     :config
     (leaf-keywords-init)))
 
-(leaf leaf-tree :ensure t)
-(leaf leaf-convert :ensure t)
+;; Environment variables
 
-;;
-;; Statistics
-;; ---------------------------------------------------------------------
-
-;; https://github.com/dholm/benchmark-init-el
-(leaf benchmark-init
-  :ensure t
-  :hook (after-init-hook . benchmark-init/deactivate)
-  :init (benchmark-init/activate))
-
-;; https://github.com/dacap/keyfreq
-(leaf keyfreq
-  :ensure t
-  :init
-  (keyfreq-mode)
-  (keyfreq-autosave-mode))
-
-;;
-;; Environment Variables
-;; ---------------------------------------------------------------------
-
-;; https://github.com/purcell/exec-path-from-shell
 (leaf exec-path-from-shell
+  ;; https://github.com/purcell/exec-path-from-shell
   :ensure t
   :init (exec-path-from-shell-initialize))
 
-;;
-;; Startup
-;; ---------------------------------------------------------------------
+;; Statistics
 
-(leaf cus-start
-  :custom
-  (inhibit-startup-message . t))
-
-(leaf server
-  :disabled t
-  :commands server-running-p
-  :init
-  (unless (server-running-p)
-    (server-start)))
-
-;; https://github.com/emacs-dashboard/emacs-dashboard
-(leaf dashboard
+(leaf benchmark-init
+  ;; https://github.com/dholm/benchmark-init-el
   :ensure t
-  :init (dashboard-setup-startup-hook)
-  :setq ((dashboard-items . '((projects . 15)
-                              (recents . 15)))
-         (dashboard-set-heading-icons . t)
-         (dashboard-set-file-icons . t)))
+  :hook
+  (after-init-hook . benchmark-init/deactivate)
+  :init
+  (benchmark-init/activate))
 
-;;
-;; Appearance
-;; ---------------------------------------------------------------------
+(leaf keyfreq
+  ;; https://github.com/dacap/keyfreq
+  :ensure t
+  :global-minor-mode keyfreq-mode keyfreq-autosave-mode)
+
+;; Editor
 
 (leaf cus-start
   :custom
-  (menu-bar-mode . t)
+  (backup-inhibited . t)
+  (menu-bar-mode . nil)
   (tool-bar-mode . nil)
   (scroll-bar-mode . nil)
-  :init
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (add-to-list 'default-frame-alist '(width . 100))
-  (add-to-list 'default-frame-alist '(height . 36)))
-
-;; https://github.com/srcery-colors/srcery-emacs
-(leaf srcery-theme
-  :ensure t
-  :init (load-theme 'srcery t))
-
-;; https://github.com/seagle0128/doom-modeline
-(leaf doom-modeline
-  :ensure t
-  :init (doom-modeline-mode))
-
-;; https://github.com/iqbalansari/emacs-emojify
-(leaf emojify
-  :ensure t
-  :setq ((emojify-display-style . 'unicode))
-  :init (global-emojify-mode))
-
-;;
-;; Font
-;; ---------------------------------------------------------------------
-;;
-;; ----------------------------------------------------------------------
-;; Grumpy wizards make toxic brew for the evil Queen and Jack.-----------
-;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、--
-;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。--------
-;; 😃😇😍😜😸🙈🐺🐰👽🐉💰🏡🎅🍪🍕🚀🚻💩📷📦------------------------------
-;; ----------------------------------------------------------------------
-
-(leaf cus-start
-  :if (display-graphic-p)
-  :init
-  (set-face-attribute 'default nil :family "Anka/Coder" :height 120)
-  (set-fontset-font (frame-parameter nil 'font)
-                    'japanese-jisx0208
-                    (font-spec :family "Ricty Diminished" :size 14))
-  (set-fontset-font (frame-parameter nil 'font)
-                    '(#x1F000 . #x1FAFF)
-                    (font-spec :family "Noto Emoji" :size 11)))
-
-;;
-;; Tab
-;; ---------------------------------------------------------------------
-
-;; https://github.com/ema2159/centaur-tabs
-(leaf centaur-tabs
-  :ensure t
-  :init
-  (centaur-tabs-mode t)
-  (centaur-tabs-headline-match)
-  (centaur-tabs-group-by-projectile-project)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward)
-  :setq ((centaur-tabs-style . "bar")
-         (centaur-tabs-set-icons . t)
-         (centaur-tabs-set-bar . 'left)
-         (centaur-tabs-set-close-button . nil)
-         (centaur-tabs-cycle-scope . 'tabs)))
-
-;;
-;; Minibuffer
-;; ---------------------------------------------------------------------
-
-;; https://github.com/raxod502/prescient.el
-(leaf prescient
-  :ensure t
-  :commands prescient-persist-mode
-  :init (prescient-persist-mode))
-
-;; https://github.com/raxod502/selectrum
-(leaf selectrum
-  :ensure t
-  :init (selectrum-mode))
-
-;; https://github.com/raxod502/selectrum
-(leaf selectrum-prescient
-  :ensure t
-  :after prescient selectrum
-  :init (selectrum-prescient-mode))
-
-;;
-;; Input Method
-;; ---------------------------------------------------------------------
-
-;; https://github.com/skk-dev/ddskk
-(leaf ddskk
-  :ensure t
-  :bind
-  ("C-x C-j" . skk-mode)
-  :setq
-  (default-input-method . "japanese-skk"))
-
-;;
-;; Assistant
-;; ---------------------------------------------------------------------
-
-;; https://github.com/justbur/emacs-which-key
-(leaf which-key
-  :ensure t
-  :init (which-key-mode))
-
-;;
-;; Editor
-;; ---------------------------------------------------------------------
-
-(leaf cus-start
-  :custom
+  (line-number-mode . t)
+  (column-number-mode . t)
   (indent-tabs-mode . nil)
-  (backup-inhibited . t)
-  :setq
-  (recentf-exclude . '("/\\.emacs\\d/local/"))
-  :setq-default `((indicate-empty-lines . t)
-                  (indicate-buffer-boundaries . '((top . nil) (bottom . right) (down . right))))
-  :init
-  (global-hl-line-mode)
-  (global-display-line-numbers-mode))
+  :config
+  (dolist (alist '((ns-transparent-titlebar . t)
+                   (ns-appearance . dark)
+                   (width . 120)
+                   (height . 42)))
+    (add-to-list 'default-frame-alist alist)))
 
-;; https://github.com/aspiers/smooth-scrolling
-(leaf smooth-scrolling
-  :ensure t
-  :init (smooth-scrolling-mode))
+(leaf recentf
+  :custom
+  (recentf-exclude . '((expand-file-name "~/\\.emacs\\.d/elpa/"))))
 
-;; https://github.com/editorconfig/editorconfig-emacs
+(leaf hl-line
+  :global-minor-mode global-hl-line-mode)
+
+(leaf display-line-numbers
+  :if (display-graphic-p)
+  :hook
+  (prog-mode-hook . display-line-numbers-mode))
+
+(leaf autorevert
+  :global-minor-mode global-auto-revert-mode)
+
 (leaf editorconfig
+  ;; https://github.com/editorconfig/editorconfig-emacs
   :ensure t
-  :init (editorconfig-mode))
+  :config
+  (editorconfig-mode 1))
 
-;; https://github.com/magnars/expand-region.el
 (leaf expand-region
+  ;; https://github.com/magnars/expand-region.el
   :ensure t
   :bind
   ("C-=" . er/expand-region))
 
-;; https://github.com/magnars/multiple-cursors.el
 (leaf multiple-cursors
+  ;; https://github.com/magnars/multiple-cursors.el
   :ensure t
   :bind
   ("C-S-c C-S-c" . mc/edit-lines)
@@ -247,202 +109,441 @@
   ("C->" . mc/mark-next-like-this)
   ("C-c C-<" . mc/mark-all-like-this))
 
-;; https://github.com/rejeep/drag-stuff.el
 (leaf drag-stuff
+  ;; https://github.com/rejeep/drag-stuff.el
   :ensure t
-  :init
-  (drag-stuff-global-mode)
+  :global-minor-mode drag-stuff-global-mode
+  :config
   (drag-stuff-define-keys))
 
-;; https://github.com/Fuco1/smartparens
 (leaf smartparens
+  ;; https://github.com/Fuco1/smartparens
   :ensure t
   :require smartparens-config
-  :init (smartparens-global-mode))
+  :global-minor-mode smartparens-global-mode)
 
-;; https://github.com/Fanael/rainbow-delimiters
 (leaf rainbow-delimiters
+  ;; https://github.com/Fanael/rainbow-delimiters
   :ensure t
-  :hook (prog-mode-hook . rainbow-delimiters-mode))
+  :hook
+  (prog-mode-hook . rainbow-delimiters-mode))
 
-;;
-;; Search
-;; ---------------------------------------------------------------------
+(leaf font
+  ;; Grumpy wizards make toxic brew for the evil Queen and Jack.----------------
+  ;; あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、-------
+  ;; うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。-------------
+  ;; 😃😇😍😜😸🙈🐺🐰👽🐉💰🏡🎅🍪🍕🚀🚻💩📷📦-----------------------------------
+  :if (display-graphic-p)
+  :init
+  (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120)
+  (set-fontset-font nil
+                    'japanese-jisx0208
+                    (font-spec :family "Ricty Diminished" :size 14))
+  (dolist (symbol-subgroup
+           '((#x0250 . #x02AF)   ;; IPA Extensions
+             (#x0370 . #x03FF)   ;; Greek and Coptic
+             (#x0500 . #x052F)   ;; Cyrillic Supplement
+             (#x2000 . #x206F)   ;; General Punctuation
+             (#x2070 . #x209F)   ;; Superscripts and Subscripts
+             (#x20A0 . #x20CF)   ;; Currency Symbols
+             (#x2100 . #x214F)   ;; Letterlike Symbols
+             (#x2150 . #x218F)   ;; Number Forms
+             (#x2190 . #x21FF)   ;; Arrows
+             (#x2200 . #x22FF)   ;; Mathematical Operators
+             (#x2300 . #x23FF)   ;; Miscellaneous Technical
+             (#x2400 . #x243F)   ;; Control Pictures
+             (#x2440 . #x245F)   ;; Optical Char Recognition
+             (#x2460 . #x24FF)   ;; Enclosed Alphanumerics
+             (#x25A0 . #x25FF)   ;; Geometric Shapes
+             (#x2600 . #x26FF)   ;; Miscellaneous Symbols
+             (#x2700 . #x27bF)   ;; Dingbats
+             (#x27C0 . #x27EF)   ;; Misc Mathematical Symbols-A
+             (#x27F0 . #x27FF)   ;; Supplemental Arrows-A
+             (#x2900 . #x297F)   ;; Supplemental Arrows-B
+             (#x2980 . #x29FF)   ;; Misc Mathematical Symbols-B
+             (#x2A00 . #x2AFF)   ;; Suppl. Math Operators
+             (#x2B00 . #x2BFF)   ;; Misc Symbols and Arrows
+             (#x2E00 . #x2E7F)   ;; Supplemental Punctuation
+             (#x4DC0 . #x4DFF)   ;; Yijing Hexagram Symbols
+             (#xFE10 . #xFE1F)   ;; Vertical Forms
+             (#x10100 . #x1013F) ;; Aegean Numbers
+             (#x102E0 . #x102FF) ;; Coptic Epact Numbers
+             (#x1D000 . #x1D0FF) ;; Byzanthine Musical Symbols
+             (#x1D200 . #x1D24F) ;; Ancient Greek Musical Notation
+             (#x1F0A0 . #x1F0FF) ;; Playing Cards
+             (#x1F100 . #x1F1FF) ;; Enclosed Alphanumeric Suppl
+             (#x1F300 . #x1F5FF) ;; Misc Symbols and Pictographs
+             (#x1F600 . #x1F64F) ;; Emoticons
+             (#x1F650 . #x1F67F) ;; Ornamental Dingbats
+             (#x1F680 . #x1F6FF) ;; Transport and Map Symbols
+             (#x1F700 . #x1F77F) ;; Alchemical Symbols
+             (#x1F780 . #x1F7FF) ;; Geometric Shapes Extended
+             (#x1F800 . #x1F8FF))) ;; Supplemental Arrows-C
+    (set-fontset-font nil
+                      symbol-subgroup
+                      (font-spec :family "Noto Emoji" :size 11))))
 
-;; https://github.com/raxod502/ctrlf
-(leaf ctrlf
+(leaf emojify
+  ;; https://github.com/iqbalansari/emacs-emojify
   :ensure t
-  :init (ctrlf-mode))
-
-;;
-;; History
-;; ---------------------------------------------------------------------
-
-;; https://www.emacswiki.org/emacs/UndoTree
-(leaf undo-tree
-  :ensure t
-  :init (global-undo-tree-mode))
-
-;; https://github.com/emacsorphanage/undohist
-(leaf undohist
-  :ensure t
-  ;; https://github.com/emacsorphanage/undohist/issues/6#issuecomment-602962791
-  ;; > this package would not further develop
-  :disabled t
-  :commands undohist-initialize
-  :init (undohist-initialize)
+  :global-minor-mode global-emojify-mode
   :custom
-  (undohist-ignored-files '("/tmp/" "COMMIT_EDITMSG")))
+  (emojify-display-style . 'unicode))
 
-;;
-;; Project
-;; ---------------------------------------------------------------------
-
-;; https://github.com/bbatsov/projectile
-(leaf projectile
+(leaf smooth-scrolling
+  ;; https://github.com/aspiers/smooth-scrolling
   :ensure t
-  :init (projectile-mode)
+  :global-minor-mode smooth-scrolling-mode)
+
+;; Minibuffer
+
+(leaf ido
+  :global-minor-mode ido-mode
+  :custom
+  (ido-enable-flex-matching . t)
+  (ido-use-faces . nil)
   :config
-  (add-to-list 'projectile-globally-ignored-directories "elpa")
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  (add-to-list 'projectile-globally-ignored-directories "vendor"))
+  (ido-everywhere 1))
 
-;;
-;; VCS
-;; ---------------------------------------------------------------------
+(leaf flx-ido
+  ;; https://github.com/lewang/flx
+  :ensure t
+  :global-minor-mode flx-ido-mode)
 
-;; https://github.com/magit/magit
-(leaf magit :ensure t)
+(leaf ido-completing-read+
+  ;; https://github.com/DarwinAwardWinner/ido-completing-read-plus
+  :ensure t
+  :global-minor-mode ido-ubiquitous-mode)
 
-;; https://github.com/emacsorphanage/git-gutter-fringe
+(leaf prescient
+  ;; https://github.com/raxod502/prescient.el
+  :ensure t
+  :disabled t
+  :commands prescient-persist-mode
+  :global-minor-mode prescient-persist-mode)
+
+(leaf selectrum
+  ;; https://github.com/raxod502/selectrum
+  :ensure t
+  :disabled t
+  :global-minor-mode selectrum-mode)
+
+(leaf selectrum-prescient
+  ;; https://github.com/raxod502/selectrum
+  :ensure t
+  :disabled t
+  :after prescient selectrum
+  :global-minor-mode selectrum-prescient-mode)
+
+(leaf which-key
+  ;; https://github.com/justbur/emacs-which-key
+  :ensure t
+  :global-minor-mode which-key-mode)
+
+(leaf ddskk
+  ;; https://github.com/skk-dev/ddskk
+  :ensure t
+  :bind
+  ("C-x C-j" . skk-mode)
+  :setq-default
+  (default-input-method . "japanese-skk"))
+
+;; Tree
+
+(leaf treemacs
+  ;; https://github.com/Alexander-Miller/treemacs
+  :ensure t
+  :bind
+  ("M-0" . treemacs-select-window)
+  ("C-x t 1" . treemacs-delete-other-windows)
+  ("C-x t t" . treemacs)
+  ("C-x t d" . treemacs-select-directory)
+  ("C-x t B" . treemacs-bookmark)
+  ("C-x t C-t" . treemacs-find-file)
+  ("C-x t M-t" . treemacs-find-tag)
+  :config
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-fringe-indicator-mode 'always))
+
+(leaf treemacs-all-the-icons
+  :ensure t
+  :after treemacs all-the-icons)
+
+(leaf treemacs-projectile
+  :ensure t
+  :after treemacs projectile)
+
+(leaf treemacs-magit
+  :ensure t
+  :after treemacs magit)
+
+;; Appearance
+
+(leaf all-the-icons
+  ;; https://github.com/domtronn/all-the-icons.el
+  :ensure t
+  :if (display-graphic-p))
+
+(leaf all-the-icons-dired
+  ;; https://github.com/jtbm37/all-the-icons-dired
+  :ensure t
+  :hook
+  (dired-mode-hook . all-the-icons-dired-mode))
+
+(leaf srcery-theme
+  ;; https://github.com/srcery-colors/srcery-emacs
+  :ensure t
+  :init
+  (load-theme 'srcery t))
+
+(leaf spaceline
+  ;; https://github.com/TheBB/spaceline
+  :ensure t
+  :require spaceline-config
+  :init
+  (spaceline-emacs-theme))
+
+;; Dashboard
+
+(leaf dashboard
+  ;; https://github.com/emacs-dashboard/emacs-dashboard
+  :ensure t
+  :init
+  (dashboard-setup-startup-hook)
+  :custom
+  (dashboard-items . '((projects . 15) (recents . 15)))
+  (dashboard-set-heading-icons . t)
+  (dashboard-set-file-icons . t))
+
+;; Project
+
+(leaf projectile
+  ;; https://github.com/bbatsov/projectile
+  :ensure t
+  :global-minor-mode projectile-mode
+  :bind
+  (:projectile-mode-map
+   ("s-p" . projectile-command-map)
+   ("C-c p" . projectile-command-map)))
+
+;; Search
+
+(leaf ctrlf
+  ;; https://github.com/raxod502/ctrlf
+  :ensure t
+  :global-minor-mode ctrlf-mode)
+
+;; History
+
+(leaf undo-tree
+  ;; https://www.emacswiki.org/emacs/UndoTree
+  :ensure t
+  :global-minor-mode global-undo-tree-mode
+  :custom
+  (undo-tree-auto-save-history . nil))
+
+;; SCM
+
+(leaf magit
+  ;; https://magit.vc
+  :ensure t
+  :custom
+  (magit-repository-directories . '(("~/ghq" . 3))))
+
 (leaf git-gutter-fringe
+  ;; https://github.com/emacsorphanage/git-gutter-fringe
   :ensure t
   :commands fringe-helper-define
+  :global-minor-mode global-git-gutter-mode
   :init
-  (global-git-gutter-mode)
   (fringe-helper-define 'git-gutter-fr:added '(top repeat) "xxxx....")
   (fringe-helper-define 'git-gutter-fr:deleted '(top repeat) "xxxx....")
   (fringe-helper-define 'git-gutter-fr:modified '(top repeat) "xxxx...."))
 
-;;
-;; Autocomplete
-;; ---------------------------------------------------------------------
+;; Syntax checker
 
-;; https://company-mode.github.io
-(leaf company
+(leaf flycheck
+  ;; https://www.flycheck.org/en/latest/
   :ensure t
-  :init (global-company-mode)
+  :global-minor-mode global-flycheck-mode
   :custom
-  (company-tooltip-limit . 20)
-  (company-idle-delay . .3)
-  (company-begin-commands . '(self-insert-command)))
+  (flycheck-highlighting-mode . 'symbols))
 
-;; https://github.com/sebastiencs/company-box
+;; Completion
+
+(leaf company
+  ;; http://company-mode.github.io
+  :ensure t
+  :global-minor-mode global-company-mode)
+
 (leaf company-box
+  ;; https://github.com/sebastiencs/company-box
   :ensure t
   :after company
-  :hook (company-mode-hook . company-box-mode))
+  :hook
+  (company-mode-hook . company-box-mode))
 
-;; https://github.com/raxod502/prescient.el
 (leaf company-prescient
+  ;; https://github.com/raxod502/prescient.el
   :ensure t
-  :after prescient company
-  :init (company-prescient-mode))
+  :disabled t
+  :after company prescient
+  :global-minor-mode company-prescient-mode)
 
-;;
-;; Docker
-;; ---------------------------------------------------------------------
+;; Snippet
 
-;; https://github.com/Silex/docker.el
-(leaf docker
+(leaf yasnippet
+  ;; https://github.com/joaotavora/yasnippet
   :ensure t
-  :bind
-  ("C-c d" . docker))
+  :global-minor-mode yas-global-mode)
 
-;;
+(leaf yasnippet-snippets
+  ;; https://github.com/AndreaCrotti/yasnippet-snippets
+  :ensure t
+  :after yasnippet)
+
 ;; LSP
-;; ---------------------------------------------------------------------
 
-;; https://github.com/emacs-lsp/lsp-mode
 (leaf lsp-mode
-  :ensure t
-  :hook (lsp-mode-hook . lsp-lens-mode))
+  ;; https://emacs-lsp.github.io/lsp-mode/
+  :ensure t)
 
-;; https://github.com/emacs-lsp/lsp-ui
 (leaf lsp-ui
+  ;; https://emacs-lsp.github.io/lsp-ui/
   :ensure t
-  :hook (lsp-mode-hook . lsp-ui-mode))
-
-;;
-;; Syntax checker
-;; ---------------------------------------------------------------------
-
-;; https://www.flycheck.org/en/latest/
-(leaf flycheck
-  :ensure t
-  :init (global-flycheck-mode)
   :custom
-  (flycheck-indication-mode . 'right-fringe))
+  (lsp-ui-sideline-show-diagnostics . t)
+  (lsp-ui-sideline-show-hover . t)
+  (lsp-ui-sideline-show-code-actions . t)
+  (lsp-ui-sideline-update-mode . 'line)
+  (lsp-ui-imenu-auto-refresh . t)
+  (lsp-ui-imenu-refresh-delay . 1))
 
-;;
-;; Language
-;; ---------------------------------------------------------------------
+(leaf lsp-treemacs
+  ;; https://github.com/emacs-lsp/lsp-treemacs
+  :ensure t
+  :global-minor-mode lsp-treemacs-sync-mode)
 
-(leaf git-modes :ensure t)
-(leaf ssh-config-mode :ensure t)
+(leaf dap-mode
+  ;; https://emacs-lsp.github.io/dap-mode/
+  :ensure t
+  :after lsp-mode
+  :global-minor-mode dap-auto-configure-mode)
+
+;; Markdown
+
+(leaf markdown-mode
+  ;; https://jblevins.org/projects/markdown-mode/
+  :ensure t
+  :mode
+  ("README\\.md\\'" . gfm-mode))
+
+;; AsciiDoc
+
+(leaf adoc-mode
+  ;; https://github.com/sensorflo/adoc-mode
+  :ensure t
+  :mode
+  "\\.adoc\\'")
 
 ;; ShellScript
+
 (leaf sh-mode
   :hook (sh-mode-hook . lsp))
 
 (leaf shfmt
+  ;; https://github.com/purcell/emacs-shfmt
   :ensure t
   :hook (sh-mode-hook . shfmt-on-save-mode))
 
-;; HTML, JavaScript, CSS, ...
+;; Docker
+
+(leaf docker
+  ;; https://github.com/Silex/docker.el
+  :ensure t
+  :bind
+  ("C-c d" . docker))
+
+(leaf dockerfile-mode
+  ;; https://github.com/spotify/dockerfile-mode
+  :ensure t
+  :hook
+  (dockerfile-mode-hook . lsp))
+
+(leaf docker-tramp
+  ;; https://github.com/emacs-pe/docker-tramp.el
+  :ensure t)
+
+;; Web
+
 (leaf web-mode
+  ;; https://web-mode.org
   :ensure t
   :mode
   "\\.phtml\\'"
-  "\\.tpl\\.php'"
+  "\\.ptl\\.php\\'"
   "\\.[agj]sp\\'"
   "\\.as[cp]x\\'"
   "\\.erb\\'"
   "\\.mustache\\'"
   "\\.djhtml\\'"
-  "\\.html?\\'"
-  "\\.vue\\'"
   "\\.[jt]sx?\\'"
+  "\\.vue\\'"
+  :hook
+  (web-mode-hook . lsp)
   :config
   (defun web-mode-setup ()
     (setq web-mode-block-padding 0
           web-mode-script-padding 0
-          web-mode-style-padding 0))
-  (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup)))
-  :hook (web-mode-hook . lsp))
+          web-mode-sttyle-padding 0))
+  (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup))))
 
 (leaf prettier-js
+  ;; https://github.com/prettier/prettier-emacs
   :ensure t
-  :hook (web-mode-hook . prettier-js-mode))
+  :hook
+  (web-mode-hook . prettier-js-mode))
 
-(leaf dockerfile-mode
-  :ensure t
-  :hook (dockerfile-mode-hook . lsp))
+;; JSON
 
-(leaf kotlin-mode
+(leaf json-mode
+  ;; https://github.com/joshwnj/json-mode
   :ensure t
-  :hook (kotlin-mode-hook . lsp))
+  :hook
+  (json-mode-hook . lsp))
 
-(leaf go-mode
-  :ensure t
-  :hook (go-mode-hook . lsp))
+;; YAML
 
 (leaf yaml-mode
+  ;; https://github.com/yoshiki/yaml-mode
   :ensure t
-  :hook (yaml-mode-hook . lsp))
+  :hook
+  (yaml-mode-hook . lsp))
 
-(leaf gradle-mode :ensure t)
-(leaf groovy-mode :ensure t)
-(leaf adoc-mode :ensure t)
+;; Java
+
+(leaf lsp-java
+  ;; https://emacs-lsp.github.io/lsp-java/
+  :ensure t
+  :hook
+  (java-mode-hook . lsp))
+
+(leaf dap-java
+  :ensure nil)
+
+;; Kotlin
+
+(leaf kotlin-mode
+  ;; https://github.com/Emacs-Kotlin-Mode-Maintainers/kotlin-mode
+  :ensure t)
+
+;; GraphQL
+
+(leaf graphql-mode
+  ;; https://github.com/davazp/graphql-mode
+  :ensure t
+  :hook
+  (graphql-mode-hook . lsp))
 
 ;;; init.el ends here
