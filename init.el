@@ -474,15 +474,15 @@
   ;; https://web-mode.org
   :ensure t
   :mode
-  ("\\.phtml\\'" . web-mode)
-  ("\\.ptl\\.php\\'" . web-mode)
-  ("\\.[agj]sp\\'" . web-mode)
-  ("\\.as[cp]x\\'" . web-mode)
-  ("\\.erb\\'" . web-mode)
-  ("\\.mustache\\'" . web-mode)
-  ("\\.djhtml\\'" . web-mode)
-  ("\\.[jt]sx?\\'" . web-mode)
-  ("\\.vue\\'" . web-mode)
+  "\\.phtml\\'"
+  "\\.ptl\\.php\\'"
+  "\\.[agj]sp\\'"
+  "\\.as[cp]x\\'"
+  "\\.erb\\'"
+  "\\.mustache\\'"
+  "\\.djhtml\\'"
+  "\\.[jt]sx?\\'"
+  "\\.vue\\'"
   :hook
   (web-mode-hook . lsp)
   :config
