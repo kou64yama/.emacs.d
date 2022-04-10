@@ -432,6 +432,14 @@
   :mode
   ("README\\.md\\'" . gfm-mode))
 
+;; AsciiDoc
+
+(leaf adoc-mode
+  ;; https://github.com/sensorflo/adoc-mode
+  :ensure t
+  :mode
+  "\\.adoc\\'")
+
 ;; ShellScript
 
 (leaf sh-mode
