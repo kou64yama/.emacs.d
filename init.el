@@ -38,6 +38,9 @@
 (leaf exec-path-from-shell
   ;; https://github.com/purcell/exec-path-from-shell
   :ensure t
+  :if (or (memq window-system '(mac ns x)) (daemonp))
+  :setq
+  (exec-path-from-shell-arguments . nil)
   :init (exec-path-from-shell-initialize))
 
 ;; Statistics
