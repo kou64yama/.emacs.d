@@ -315,7 +315,7 @@
   ;; https://github.com/jtbm37/all-the-icons-dired
   :ensure t
   :hook
-   (dired-mode-hook . all-the-icons-dired-mode))
+  (dired-mode-hook . all-the-icons-dired-mode))
 
 ;; Dashboard
 
