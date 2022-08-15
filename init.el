@@ -280,6 +280,32 @@
 
 ;; Appearance
 
+(leaf modus-themes
+  ;; https://gitlab.com/protesilaos/modus-themes
+  :ensure t
+  :bind ("<f5>" . modus-themes-toggle)
+  :setq
+  (modus-themes-italic-constructs . t)
+  (modus-themes-bold-constructs . t)
+  (modus-themes-region . '(bg-only no-extend))
+  :init
+  (modus-themes-load-themes)
+  :config
+  (load-theme 'modus-vivendi))
+
+(leaf moody
+  ;; https://github.com/tarsius/moody
+  :ensure t
+  :config
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
+
+(leaf minions
+  ;; https://github.com/tarsius/minions
+  :ensure t
+  :config
+  (minions-mode))
+
 (leaf all-the-icons
   ;; https://github.com/domtronn/all-the-icons.el
   :ensure t
@@ -290,19 +316,6 @@
   :ensure t
   :hook
   (dired-mode-hook . all-the-icons-dired-mode))
-
-(leaf srcery-theme
-  ;; https://github.com/srcery-colors/srcery-emacs
-  :ensure t
-  :init
-  (load-theme 'srcery t))
-
-(leaf spaceline
-  ;; https://github.com/TheBB/spaceline
-  :ensure t
-  :require spaceline-config
-  :init
-  (spaceline-emacs-theme))
 
 ;; Dashboard
 
