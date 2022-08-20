@@ -475,9 +475,8 @@
   ;; https://jblevins.org/projects/markdown-mode/
   :ensure t
   :hook
-  (markdown-mode-hook . prettier-js-mode)
-  :mode
-  ("README\\.md\\'" . gfm-mode))
+  (markdown-mode-hook . lsp)
+  (markdown-mode-hook . prettier-js-mode))
 
 ;; AsciiDoc
 
