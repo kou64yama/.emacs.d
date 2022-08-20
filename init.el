@@ -588,7 +588,9 @@
 
 (leaf kotlin-mode
   ;; https://github.com/Emacs-Kotlin-Mode-Maintainers/kotlin-mode
-  :ensure t)
+  :ensure t
+  :hook
+  (kotlin-mode-hook . lsp))
 
 ;; GraphQL
 
