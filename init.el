@@ -88,7 +88,6 @@
   :global-minor-mode global-hl-line-mode)
 
 (leaf display-line-numbers
-  :if (display-graphic-p)
   :hook
   (prog-mode-hook . display-line-numbers-mode))
 
