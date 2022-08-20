@@ -546,7 +546,10 @@
   (typescript-mode-hook . lsp)
   (typescript-mode-hook . prettier-js-mode))
 
+(leaf css-mode
   :hook
+  (css-mode-hook . lsp)
+  (css-mode-hook . prettier-js-mode))
 
 ;; JSON
 
