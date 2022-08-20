@@ -453,6 +453,16 @@
   :after lsp-mode
   :global-minor-mode dap-auto-configure-mode)
 
+;; Highlighting
+
+(leaf tree-sitter-langs
+  ;; https://emacs-tree-sitter.github.io
+  :ensure t
+  :hook
+  (tree-sitter-after-on-hook . tree-sitter-hl-mode)
+  :config
+  (global-tree-sitter-mode))
+
 ;; Markdown
 
 (leaf markdown-mode
@@ -472,7 +482,9 @@
 ;; ShellScript
 
 (leaf sh-mode
-  :hook (sh-mode-hook . lsp))
+  :hook
+  (sh-mode-hook . lsp)
+  (sh-mode-hook . tree-sitter-mode))
 
 (leaf shfmt
   ;; https://github.com/purcell/emacs-shfmt
