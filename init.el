@@ -77,8 +77,9 @@
   (dolist (alist '((ns-transparent-titlebar . t)
                    (ns-appearance . dark)
                    (width . 120)
-                   (height . 42)))
-    (add-to-list 'default-frame-alist alist)))
+                   (height . 42)
+                   (alpha . 0.85)))
+    (add-to-list 'default-frame-alist alist t)))
 
 (leaf recentf
   :custom
