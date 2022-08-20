@@ -463,11 +463,19 @@
   :config
   (global-tree-sitter-mode))
 
+;; Formatter
+
+(leaf prettier-js
+  ;; https://github.com/prettier/prettier-emacs
+  :ensure t)
+
 ;; Markdown
 
 (leaf markdown-mode
   ;; https://jblevins.org/projects/markdown-mode/
   :ensure t
+  :hook
+  (markdown-mode-hook . prettier-js-mode)
   :mode
   ("README\\.md\\'" . gfm-mode))
 
@@ -525,11 +533,8 @@
           web-mode-sttyle-padding 0))
   (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup))))
 
-(leaf prettier-js
-  ;; https://github.com/prettier/prettier-emacs
   :ensure t
   :hook
-  (web-mode-hook . prettier-js-mode))
 
 ;; JSON
 
@@ -537,7 +542,8 @@
   ;; https://github.com/joshwnj/json-mode
   :ensure t
   :hook
-  (json-mode-hook . lsp))
+  (json-mode-hook . lsp)
+  (json-mode-hook . prettier-js-mode))
 
 ;; YAML
 
@@ -545,7 +551,8 @@
   ;; https://github.com/yoshiki/yaml-mode
   :ensure t
   :hook
-  (yaml-mode-hook . lsp))
+  (yaml-mode-hook . lsp)
+  (yaml-mode-hook . prettier-js-mode))
 
 ;; Java
 
