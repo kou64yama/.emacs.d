@@ -539,7 +539,13 @@
   (js-mode-hook . lsp)
   (js-mode-hook . prettier-js-mode))
 
+(leaf typescript-mode
   :ensure t
+  :mode "\\.tsx?\\'"
+  :hook
+  (typescript-mode-hook . lsp)
+  (typescript-mode-hook . prettier-js-mode))
+
   :hook
 
 ;; JSON
