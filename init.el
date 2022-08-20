@@ -533,6 +533,12 @@
           web-mode-sttyle-padding 0))
   (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup))))
 
+(leaf js-mode
+  :mode "\\.jsx?\\'"
+  :hook
+  (js-mode-hook . lsp)
+  (js-mode-hook . prettier-js-mode))
+
   :ensure t
   :hook
 
