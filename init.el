@@ -469,6 +469,30 @@
   ;; https://github.com/prettier/prettier-emacs
   :ensure t)
 
+;; Docker
+
+(leaf docker
+  ;; https://github.com/Silex/docker.el
+  :ensure t
+  :bind
+  ("C-c d" . docker))
+
+(leaf dockerfile-mode
+  ;; https://github.com/spotify/dockerfile-mode
+  :ensure t
+  :hook
+  (dockerfile-mode-hook . lsp))
+
+(leaf docker-tramp
+  ;; https://github.com/emacs-pe/docker-tramp.el
+  :ensure t)
+
+;; Kubernetes
+
+(leaf kubernetes
+  ;; https://github.com/kubernetes-el/kubernetes-el
+  :ensure t)
+
 ;; Markdown
 
 (leaf markdown-mode
@@ -497,24 +521,6 @@
   ;; https://github.com/purcell/emacs-shfmt
   :ensure t
   :hook (sh-mode-hook . shfmt-on-save-mode))
-
-;; Docker
-
-(leaf docker
-  ;; https://github.com/Silex/docker.el
-  :ensure t
-  :bind
-  ("C-c d" . docker))
-
-(leaf dockerfile-mode
-  ;; https://github.com/spotify/dockerfile-mode
-  :ensure t
-  :hook
-  (dockerfile-mode-hook . lsp))
-
-(leaf docker-tramp
-  ;; https://github.com/emacs-pe/docker-tramp.el
-  :ensure t)
 
 ;; Web
 
