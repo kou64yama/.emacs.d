@@ -515,14 +515,6 @@
   ;; https://web-mode.org
   :ensure t
   :mode
-  "\\.phtml\\'"
-  "\\.ptl\\.php\\'"
-  "\\.[agj]sp\\'"
-  "\\.as[cp]x\\'"
-  "\\.erb\\'"
-  "\\.mustache\\'"
-  "\\.djhtml\\'"
-  "\\.[jt]sx?\\'"
   "\\.vue\\'"
   :hook
   (web-mode-hook . lsp)
