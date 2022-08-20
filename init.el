@@ -88,7 +88,6 @@
   :global-minor-mode global-hl-line-mode)
 
 (leaf display-line-numbers
-  :if (display-graphic-p)
   :hook
   (prog-mode-hook . display-line-numbers-mode))
 
@@ -294,7 +293,10 @@
   :setq
   (modus-themes-italic-constructs . t)
   (modus-themes-bold-constructs . t)
-  (modus-themes-region . '(bg-only no-extend))
+  (modus-themes-subtle-line-numbers . t)
+  (modus-themes-mode-line . '(moody borderless (height . 0.9)))
+  (modus-themes-hl-line . '(intense))
+  (modus-themes-region . '(bg-only))
   :init
   (modus-themes-load-themes)
   :config
