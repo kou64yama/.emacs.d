@@ -536,6 +536,7 @@
   :mode "\\.jsx?\\'"
   :hook
   (js-mode-hook . lsp)
+  (js-mode-hook . tree-sitter-mode)
   (js-mode-hook . prettier-js-mode))
 
 (leaf typescript-mode
@@ -543,11 +544,13 @@
   :mode "\\.tsx?\\'"
   :hook
   (typescript-mode-hook . lsp)
+  (typescript-mode-hook . tree-sitter-mode)
   (typescript-mode-hook . prettier-js-mode))
 
 (leaf css-mode
   :hook
   (css-mode-hook . lsp)
+  (css-mode-hook . tree-sitter-mode)
   (css-mode-hook . prettier-js-mode))
 
 ;; JSON
@@ -557,6 +560,7 @@
   :ensure t
   :hook
   (json-mode-hook . lsp)
+  (json-mode-hook . tree-sitter-mode)
   (json-mode-hook . prettier-js-mode))
 
 ;; YAML
@@ -574,7 +578,8 @@
   ;; https://emacs-lsp.github.io/lsp-java/
   :ensure t
   :hook
-  (java-mode-hook . lsp))
+  (java-mode-hook . lsp)
+  (java-mode-hook . tree-sitter-mode))
 
 (leaf dap-java
   :ensure nil)
