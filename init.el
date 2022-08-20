@@ -20,9 +20,10 @@
                        ("melpa" . "https://melpa.org/packages/")
                        ("gnu" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
-  (unless (package-installed-p 'leaf)
+  (unless (and (package-installed-p 'leaf) (package-installed-p 'benchmark-init))
     (package-refresh-contents)
-    (package-install 'leaf))
+    (package-install 'leaf)
+    (package-install 'benchmark-init))
 
   (leaf leaf-keywords
     :ensure t
@@ -33,6 +34,10 @@
     :config
     (leaf-keywords-init)))
 
+;; https://github.com/dholm/benchmark-init-el
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+
 ;; Environment variables
 
 (leaf exec-path-from-shell
@@ -41,17 +46,16 @@
   :if (or (memq window-system '(mac ns x)) (daemonp))
   :setq
   (exec-path-from-shell-arguments . nil)
-  :init (exec-path-from-shell-initialize))
+  :init
+  (exec-path-from-shell-initialize))
 
-;; Statistics
-
-(leaf benchmark-init
-  ;; https://github.com/dholm/benchmark-init-el
+(leaf add-node-modules-path
+  ;; https://github.com/codesuki/add-node-modules-path
   :ensure t
   :hook
-  (after-init-hook . benchmark-init/deactivate)
-  :init
-  (benchmark-init/activate))
+  (prog-mode-hook . add-node-modules-path))
+
+;; Statistics
 
 (leaf keyfreq
   ;; https://github.com/dacap/keyfreq
