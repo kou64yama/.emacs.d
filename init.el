@@ -374,6 +374,11 @@
   :custom
   (magit-repository-directories . '(("~/ghq" . 3))))
 
+(leaf forge
+  ;; https://magit.vc/manual/forge/
+  :ensure t
+  :after magit)
+
 (leaf git-gutter-fringe
   ;; https://github.com/emacsorphanage/git-gutter-fringe
   :ensure t
