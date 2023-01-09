@@ -545,7 +545,9 @@
   (add-hook 'editorconfig-after-apply-functions (lambda (props) (web-mode-setup))))
 
 (leaf js-mode
-  :mode "\\.jsx?\\'"
+  :mode
+  "\\.jsx?\\'"
+  "\\.cjs\\'"
   :hook
   (js-mode-hook . lsp)
   (js-mode-hook . tree-sitter-mode)
