@@ -199,23 +199,43 @@
 
 ;; Minibuffer
 
-(leaf ido
-  :global-minor-mode ido-mode
+(leaf vertico
+  ;; https://github.com/minad/vertico
+  :ensure t
+  :global-minor-mode vertico-mode)
+
+(leaf orderless
+  ;; https://github.com/oantolin/orderless
+  :ensure t
   :custom
-  (ido-enable-flex-matching . t)
-  (ido-use-faces . nil)
-  :config
-  (ido-everywhere 1))
+  (completion-styles . '(orderless basic))
+  (completion-category-defaults . nil)
+  (completion-category-overrides . '((file (styles partial-completion)))))
 
-(leaf flx-ido
-  ;; https://github.com/lewang/flx
+(leaf marginalia
+  ;; https://github.com/minad/marginalia
   :ensure t
-  :global-minor-mode flx-ido-mode)
+  :bind
+  ("M-A" . marginalia-cycle)
+  (:minibuffer-local-map
+   ("M-A" . marginalia-cycle))
+  :global-minor-mode marginalia-mode)
 
-(leaf ido-completing-read+
-  ;; https://github.com/DarwinAwardWinner/ido-completing-read-plus
+(leaf embark
+  ;; https://github.com/oantolin/embark
   :ensure t
-  :global-minor-mode ido-ubiquitous-mode)
+  :bind
+  ("C-." . embark-act)
+  ("C-;" . embark-dwim)
+  ("C-h B" . embark-bindings)
+  :setq
+  (prefix-help-command . #'embark-prefix-help-command))
+
+(leaf embark-consult
+  ;; https://github.com/oantolin/embark
+  :ensure t
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
 (leaf prescient
   ;; https://github.com/raxod502/prescient.el
@@ -224,18 +244,11 @@
   :commands prescient-persist-mode
   :global-minor-mode prescient-persist-mode)
 
-(leaf selectrum
-  ;; https://github.com/raxod502/selectrum
+(leaf vertico-prescient
+  ;; https://melpa.org/#/vertico-prescient
   :ensure t
-  :disabled t
-  :global-minor-mode selectrum-mode)
-
-(leaf selectrum-prescient
-  ;; https://github.com/raxod502/selectrum
-  :ensure t
-  :disabled t
-  :after prescient selectrum
-  :global-minor-mode selectrum-prescient-mode)
+  :after prescient vertico
+  :global-minor-mode vertico-prescient-mode)
 
 (leaf which-key
   ;; https://github.com/justbur/emacs-which-key
@@ -358,6 +371,74 @@
   :global-minor-mode global-undo-tree-mode
   :custom
   (undo-tree-auto-save-history . nil))
+
+(leaf savehist
+  :ensure t
+  :global-minor-mode savehist-mode)
+
+;; Navigation
+
+(leaf consult
+  ;; https://github.com/minad/consult
+  :ensure t
+  :bind
+  ;; C-c bindings (mode-specific-map)
+  ("C-c h" . consult-history)
+  ("C-c m" . consult-mode-command)
+  ("C-c k" . consult-kmacro)
+  ;; C-x bindings (ctl-x-map)
+  ("C-x M-:" . consult-complex-command)
+  ("C-x b" . consult-buffer)
+  ("C-x 4 b" . consult-buffer-other-window)
+  ("C-x 5 b" . consult-buffer-other-frame)
+  ("C-x r b" . consult-bookmark)
+  ("C-x p b" . consult-project-buffer)
+  ;; Custom M-# bindings for fast register access
+  ("M-#" . consult-register-load)
+  ("M-'" . consult-register-store)
+  ("C-M-#" . consult-register)
+  ;; Other custom bindings
+  ("M-y" . consult-yank-pop)
+  ;; M-g bindings (goto-map)
+  ("M-g e" . consult-compile-error)
+  ("M-g f" . consult-flymake)
+  ("M-g g" . consult-goto-line)
+  ("M-g M-g" . consult-goto-line)
+  ("M-g o" . consult-outline)
+  ("M-g m" . consult-mark)
+  ("M-g k" . consult-global-mark)
+  ("M-g i" . consult-imenu)
+  ("M-g I" . consult-imenu-multi)
+  ;; M-s bindings (search-map)
+  ("M-s d" . consult-find)
+  ("M-s D" . consult-locate)
+  ("M-s g" . consult-grep)
+  ("M-s G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ("M-s k" . consult-keep-lines)
+  ("M-s u" . consult-focus-lines)
+  ;; Isearch integration
+  ("M-s e" . consult-isearch-history)
+  (:isearch-mode-map
+   ("M-e" . consult-isesarch-history)
+   ("M-s e" . consult-isearch-history)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi))
+  ;; Minibuffer history
+  (:minibuffer-local-map
+   ("M-s" . consult-history)
+   ("M-r" . consult-history))
+  :hook
+  (completion-list-mode . consult-preview-at-point-mode)
+  :setq
+  (register-preview-delay . 0.5)
+  (register-preview-function . #'consult-register-format)
+  (xref-show-xrefs-function . #'consult-xref)
+  (xref-show-definitions-function . #'consult-xref)
+  :init
+  (advice-add #'register-preview :override #'consult-register-window))
 
 ;; SCM
 
