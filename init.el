@@ -20,10 +20,9 @@
                        ("melpa" . "https://melpa.org/packages/")
                        ("gnu" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
-  (unless (and (package-installed-p 'leaf) (package-installed-p 'benchmark-init))
+  (unless (package-installed-p 'leaf)
     (package-refresh-contents)
-    (package-install 'leaf)
-    (package-install 'benchmark-init))
+    (package-install 'leaf))
 
   (leaf leaf-keywords
     :ensure t
@@ -33,10 +32,6 @@
     (leaf blackout :ensure t)
     :config
     (leaf-keywords-init)))
-
-;; https://github.com/dholm/benchmark-init-el
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 ;; Environment variables
 
