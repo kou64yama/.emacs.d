@@ -393,24 +393,64 @@
 
 ;; Completion
 
-(leaf company
-  ;; http://company-mode.github.io
+(leaf corfu
+  ;; https://github.com/minad/corfu
   :ensure t
-  :global-minor-mode global-company-mode)
+  :global-minor-mode global-corfu-mode
+  :custom
+  (corfu-auto . t))
 
-(leaf company-box
-  ;; https://github.com/sebastiencs/company-box
+(leaf cape
+  ;; https://github.com/minad/cape
   :ensure t
-  :after company
-  :hook
-  (company-mode-hook . company-box-mode))
+  :bind
+  ("C-c p p" . completion-at-point)
+  ("C-c p t" . complete-tag)
+  ("C-c p d" . cape-dabbrev)
+  ("C-c p h" . cape-history)
+  ("C-c p f" . cape-file)
+  ("C-c p k" . cape-keyword)
+  ("C-c p s" . cape-symbol)
+  ("C-c p a" . cape-addrev)
+  ("C-c p i" . cape-ispell)
+  ("C-c p l" . cape-line)
+  ("C-c p w" . cape-dict)
+  ("C-c p \\" . cape-tex)
+  ("C-c p _" . cape-tex)
+  ("C-c p ^" . cape-tex)
+  ("C-c p &" . cape-sgml)
+  ("C-c p r" . cape-rfc1345)
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;;(add-to-list 'completion-at-point-functions #'cape-history)
+  ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+  ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+  ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+  ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+  ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+  ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+  ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+  ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
+  ;;(add-to-list 'completion-at-point-functions #'cape-line)
+  )
 
-(leaf company-prescient
-  ;; https://github.com/raxod502/prescient.el
+(leaf kind-icon
+  ;; https://github.com/jdtsmith/kind-icon
   :ensure t
+  ;; See #59081 (https://debbugs.gnu.org/cgi/bugreport.cgi?bug=59081)
   :disabled t
-  :after company prescient
-  :global-minor-mode company-prescient-mode)
+  :after corfu
+  :custom
+  (kind-icon-default-face . 'corfu-default)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+(leaf corfu-prescient
+  ;; https://github.com/radian-software/prescient.el
+  :ensure t
+  :after corfu prescient
+  :global-minor-mode corfu-prescient-mode)
 
 ;; Snippet
 
