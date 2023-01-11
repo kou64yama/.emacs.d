@@ -299,8 +299,6 @@
   (modus-themes-hl-line . '(intense))
   (modus-themes-region . '(bg-only))
   :init
-  (modus-themes-load-themes)
-  :config
   (load-theme 'modus-vivendi))
 
 (leaf moody
