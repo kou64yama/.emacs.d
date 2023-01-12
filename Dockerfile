@@ -1,22 +1,53 @@
-# syntax=docker/dockerfile:1.2
+# syntax=docker/dockerfile:1
 
-FROM ubuntu:20.04 AS base
+FROM ubuntu:22.04 AS builder
 
-RUN --mount=type=cache,target=/var/lib/apt/lists apt-get update \
-    && apt-get install --no-install-recommends -y tzdata language-pack-en \
-    && apt-get install --no-install-recommends -y ca-certificates curl \
-    && curl -fsSL https://deb.nodesource.com/setup_16.x | bash \
-    && apt-get install --no-install-recommends -y emacs sudo git python3 nodejs
+# Download the GNU Emacs tarball
+WORKDIR /usr/src
+ARG EMACS_VERSION=28.2
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked --mount=type=cache,target=/var/cache/apt/archives,sharing=locked \
+    apt-get update \
+    && apt-get install -y --no-install-recommends curl ca-certificates
+RUN curl -O http://mirrors.kernel.org/gnu/emacs/emacs-${EMACS_VERSION}.tar.gz
+RUN tar -x -f emacs-${EMACS_VERSION}.tar.gz
 
-FROM base AS builder
+# Build and install the GNU Emacs
+WORKDIR /usr/src/emacs-${EMACS_VERSION}
+ARG BUILD_PACKAGES="\
+    build-essential \
+    pkg-config \
+    libgnutls28-dev \
+    libncurses-dev \
+    zlib1g-dev \
+    libgccjit-11-dev \
+    python3 \
+    "
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked --mount=type=cache,target=/var/cache/apt/archives,sharing=locked \
+    apt-get install -y --no-install-recommends ${BUILD_PACKAGES}
+RUN ./configure --prefix=/opt/emacs --with-native-compilation
+RUN make
+RUN make install
 
-WORKDIR /workspace
+FROM ubuntu:22.04
 
-COPY init.el .
-RUN emacs --script init.el
+# Install runtime packages
+ARG RUNTIME_PACKAGES="\
+    tzdata \
+    language-pack-en \
+    ca-certificates \
+    build-essential \
+    libgccjit-11-dev \
+    sudo \
+    curl \
+    python3 \
+    git \
+    "
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked --mount=type=cache,target=/var/cache/apt/archives,sharing=locked \
+    apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${RUNTIME_PACKAGES}
+COPY --from=builder /opt/emacs /opt/emacs
 
-FROM base
-
+# Add a runttime user
 ARG USERNAME=emacs
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
@@ -25,11 +56,11 @@ RUN groupadd -g ${USER_GID} ${USERNAME} \
     && echo "${USERNAME} ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} \
     && chmod 0400 /etc/sudoers.d/${USERNAME}
 
-COPY --from=builder --chown=${USERNAME}:${USERNAME} /root/.emacs.d /home/${USERNAME}/.emacs.d
-COPY --chown=${USERNAME}:${USERNAME} init.el /home/${USERNAME}/.emacs.d
-
 USER ${USERNAME}
 WORKDIR /workspace
-
+ENTRYPOINT [ "/opt/emacs/bin/emacs" ]
 ENV LANG=en-US.UTF-8
-ENTRYPOINT [ "/usr/bin/emacs" ]
+ENV PATH=/opt/emacs/bin:$PATH
+
+COPY --chown=${USERNAME}:${USERNAME} init.el /home/${USERNAME}/.emacs.d/init.el
+RUN /opt/emacs/bin/emacs --script /home/${USERNAME}/.emacs.d/init.el

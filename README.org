@@ -2,7 +2,7 @@
 
 ** Requirements
 
-   + [[https://www.gnu.org/software/emacs/][GNU Emacs]] 26+
+   + [[https://www.gnu.org/software/emacs/][GNU Emacs]] 27+
 
 ** Installation
 
