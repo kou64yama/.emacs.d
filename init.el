@@ -48,6 +48,11 @@
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+(use-package markdown-mode
+  :mode (("\\.markdown\\'" . markdown-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode)))
+
 (use-package diff-hl
   :demand t
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
