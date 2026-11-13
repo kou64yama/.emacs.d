@@ -6,6 +6,8 @@
 # Emacs state and backups
 /auto-save-list/
 /backups/
+/projects.eld
+/transient/
 *~
 \#*\#
 .\#*
