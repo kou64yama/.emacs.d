@@ -23,10 +23,17 @@ If package installation fails, check your network connection, run `M-x package-r
 - [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
 - [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
 - [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.
+- [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
 - Line numbers and matching parentheses are displayed. The menu bar, tool bar, and scroll bar are hidden when available.
 - Backups are stored in `backups/` under the Emacs configuration directory. Up to two old versions and six new versions are retained.
 
 Use `M-x` to run a command and see completion candidates. In Vertico, use `C-n` and `C-p` to move between candidates and `RET` to select one.
+
+### Language servers
+
+Install a language server for the language you use, and make sure Emacs can find its executable on `exec-path`. Eglot includes default commands for many servers; see `M-x describe-variable RET eglot-server-programs RET` and the [Eglot manual](https://www.gnu.org/software/emacs/manual/html_node/eglot/Setting-Up-LSP-Servers.html) for server configuration. Server installation and versions are managed separately from this configuration.
+
+Open a source file in its project and run `M-x eglot RET`. Once connected, use `M-.` to find a definition, `M-,` to return, and `M-x completion-at-point RET` for completion. Commands such as `M-x eglot-rename RET` and `M-x eglot-code-actions RET` are available when supported by the server. To enable Eglot automatically for a language, add `eglot-ensure` to that major mode's hook after installing its server.
 
 ## Files
 

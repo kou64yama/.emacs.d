@@ -41,4 +41,8 @@
   :init
   (marginalia-mode 1))
 
+(use-package eglot
+  :ensure nil
+  :commands (eglot eglot-ensure))
+
 ;;; init.el ends here
