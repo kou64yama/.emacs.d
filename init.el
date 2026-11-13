@@ -45,4 +45,15 @@
   :ensure nil
   :commands (eglot eglot-ensure))
 
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
+(use-package diff-hl
+  :demand t
+  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
+         (magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config
+  (global-diff-hl-mode 1))
+
 ;;; init.el ends here
