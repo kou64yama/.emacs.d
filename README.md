@@ -26,6 +26,7 @@ If package installation fails, check your network connection, run `M-x package-r
 - [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.
 - [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
 - [Magit](https://magit.vc/): Git interface; open the current repository with `C-x g`.
+- [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
 - Line numbers and matching parentheses are displayed. The menu bar, tool bar, and scroll bar are hidden when available.
@@ -34,6 +35,12 @@ If package installation fails, check your network connection, run `M-x package-r
 Use `M-x` to run a command and see completion candidates. In Vertico, use `C-n` and `C-p` to move between candidates and `RET` to select one.
 
 In a Magit status buffer, use `TAB` to expand a section, `s` to stage the change at point, `u` to unstage it, and `c c` to start a commit. Finish the commit message with `C-c C-c`. See the [Magit getting started guide](https://docs.magit.vc/magit/Getting-Started.html) for more commands.
+
+### AI agents
+
+Install and authenticate an agent separately, following the [agent-shell agent setup instructions](https://github.com/xenodium/agent-shell#agent-installation). Some agents also require an ACP adapter; for example, Codex requires `codex-acp`. Make sure the relevant executable is available on Emacs's `exec-path`. Agent and adapter versions are managed separately from this configuration.
+
+From a project, run `M-x agent-shell` and select an installed agent. In the agent buffer, `RET` submits a prompt, `M-J` inserts a newline, and `C-c C-c` interrupts the current operation. Available capabilities and authentication depend on the chosen agent.
 
 ### Language servers
 

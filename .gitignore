@@ -4,6 +4,7 @@
 *.elc
 
 # Emacs state and backups
+/agent/
 /auto-save-list/
 /backups/
 /projects.eld

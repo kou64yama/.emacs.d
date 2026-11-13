@@ -48,6 +48,9 @@
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+(use-package agent-shell
+  :commands (agent-shell))
+
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
