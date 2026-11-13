@@ -1,0 +1,14 @@
+# Installed packages and compiled files
+/elpa/
+/eln-cache/
+*.elc
+
+# Emacs state and backups
+/auto-save-list/
+/backups/
+*~
+\#*\#
+.\#*
+
+# Local tooling
+/.serena/
