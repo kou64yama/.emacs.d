@@ -23,6 +23,38 @@
 (global-display-line-numbers-mode 1)
 (show-paren-mode 1)
 
+;; Share kills and yanks with the graphical desktop clipboard.
+(setq select-enable-clipboard t)
+
+;; macOS terminal frames do not have the GUI clipboard integration.
+(when (and (eq system-type 'darwin)
+           (executable-find "pbcopy")
+           (executable-find "pbpaste"))
+  (defvar my-terminal-last-clipboard nil
+    "Last clipboard text exchanged with the macOS terminal clipboard.")
+  (defun my-terminal-cut-to-clipboard (text &optional push)
+    "Send TEXT to the macOS clipboard in a terminal frame.
+PUSH is ignored."
+    (unless (display-graphic-p)
+      (let ((coding-system-for-write 'utf-8))
+        (with-temp-buffer
+          (insert text)
+          (when (zerop (call-process-region (point-min) (point-max) "pbcopy"))
+            (setq my-terminal-last-clipboard text))))))
+  (defun my-terminal-paste-from-clipboard ()
+    "Return the macOS clipboard contents in a terminal frame."
+    (unless (display-graphic-p)
+      (let ((coding-system-for-read 'utf-8))
+        (with-temp-buffer
+          (when (zerop (call-process "pbpaste" nil t nil))
+            (let ((text (buffer-string)))
+              (unless (or (equal text "")
+                          (equal text my-terminal-last-clipboard))
+                (setq my-terminal-last-clipboard text))))))))
+  (unless (display-graphic-p)
+    (setq interprogram-cut-function #'my-terminal-cut-to-clipboard
+          interprogram-paste-function #'my-terminal-paste-from-clipboard)))
+
 (use-package dracula-theme
   :config
   (load-theme 'dracula t))

@@ -30,6 +30,7 @@ If package installation fails, check your network connection, run `M-x package-r
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
 - Line numbers and matching parentheses are displayed. The menu bar, tool bar, and scroll bar are hidden when available.
+- Kills and copies are shared with the OS clipboard, and `C-y` can paste text copied in other applications. In a macOS terminal, this uses the system `pbcopy` and `pbpaste` commands. Other terminal environments require their own clipboard integration.
 - Backups are stored in `backups/` under the Emacs configuration directory. Up to two old versions and six new versions are retained.
 
 Use `M-x` to run a command and see completion candidates. In Vertico, use `C-n` and `C-p` to move between candidates and `RET` to select one.
