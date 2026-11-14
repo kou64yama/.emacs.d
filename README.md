@@ -26,12 +26,15 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 - [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
 - [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
 - [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.
+- [Consult](https://github.com/minad/consult): Switch buffers with `C-x b` and search lines with `M-s l`.
+- [Corfu](https://github.com/minad/corfu): Shows completion candidates while typing, including candidates from Eglot. On terminal Emacs 29 and 30, standard completion remains in use; terminal Emacs 31 and graphical Emacs use Corfu.
 - [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
 - [Magit](https://magit.vc/): Git interface; open the current repository with `C-x g`.
 - [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
 - Line numbers and matching parentheses are displayed. The menu bar, tool bar, and scroll bar are hidden when available.
+- Minibuffer history is saved between sessions. Files changed externally are automatically reloaded when their buffers have no unsaved edits.
 - Mouse clicks, dragging, and wheel scrolling are enabled in xterm-compatible terminals. Terminal text selection may require holding Shift; terminal multiplexers may need additional mouse configuration.
 - Kills and copies are shared with the OS clipboard, and `C-y` can paste text copied in other applications. In a macOS terminal, this uses the system `pbcopy` and `pbpaste` commands. Other terminal environments require their own clipboard integration.
 - Backups are stored in `backups/` under the Emacs configuration directory. Up to two old versions and six new versions are retained.

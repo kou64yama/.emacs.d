@@ -23,6 +23,8 @@
 (xterm-mouse-mode 1)
 (global-display-line-numbers-mode 1)
 (show-paren-mode 1)
+(savehist-mode 1)
+(global-auto-revert-mode 1)
 
 ;; Share kills and yanks with the graphical desktop clipboard.
 (setq select-enable-clipboard t)
@@ -73,6 +75,18 @@ PUSH is ignored."
 (use-package marginalia
   :init
   (marginalia-mode 1))
+
+(use-package consult
+  :bind (("C-x b" . consult-buffer)
+         ("M-s l" . consult-line)))
+
+(use-package corfu
+  :custom
+  (corfu-auto t)
+  :init
+  ;; Terminal child frames are available starting with Emacs 31.
+  (when (or (display-graphic-p) (>= emacs-major-version 31))
+    (global-corfu-mode 1)))
 
 (use-package eglot
   :ensure nil
