@@ -18,6 +18,8 @@ The local Emacs version is 31.1. Package versions are not pinned.
 
 If package installation fails, check your network connection, run `M-x package-refresh-contents`, and restart Emacs.
 
+On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is unset, working around a native-compilation error in affected libgccjit builds. An existing value is respected. The setting is inherited by subprocesses started by Emacs.
+
 ## Configuration
 
 - [Dracula theme](https://github.com/dracula/emacs): Color theme.
@@ -51,6 +53,7 @@ Open a source file in its project and run `M-x eglot RET`. Once connected, use `
 
 ## Files
 
+- `early-init.el`: Early startup settings, including the macOS native-compilation workaround.
 - `init.el`: Package, display, and backup settings.
 - `custom.el`: Settings saved by Emacs Customize, loaded from `init.el`.
 - `elpa/`, `eln-cache/`, and `backups/`: Directories for installed packages, compiled files, and backups. These are excluded from Git.
