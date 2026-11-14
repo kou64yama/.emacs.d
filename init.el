@@ -23,8 +23,17 @@
 (xterm-mouse-mode 1)
 (global-display-line-numbers-mode 1)
 (show-paren-mode 1)
+(global-hl-line-mode 1)
 (savehist-mode 1)
 (global-auto-revert-mode 1)
+
+(if (< emacs-major-version 30)
+    (use-package editorconfig
+      :ensure t
+      :config (editorconfig-mode 1))
+  (use-package editorconfig
+    :ensure nil
+    :config (editorconfig-mode 1)))
 
 ;; Share kills and yanks with the graphical desktop clipboard.
 (setq select-enable-clipboard t)
@@ -79,6 +88,14 @@ PUSH is ignored."
 (use-package consult
   :bind (("C-x b" . consult-buffer)
          ("M-s l" . consult-line)))
+
+(use-package embark
+  :bind (("C-." . embark-act)
+         ("C-;" . embark-dwim)
+         ("C-h B" . embark-bindings)))
+
+(use-package embark-consult
+  :after (embark consult))
 
 (use-package corfu
   :custom
