@@ -23,6 +23,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 ## Configuration
 
 - [Dracula theme](https://github.com/dracula/emacs): Color theme.
+- [doom-modeline](https://github.com/seagle0128/doom-modeline): Displays buffer and version-control information in the mode line. Icons are disabled so no additional font is needed. The package and its dependencies are installed from MELPA.
 - [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
 - [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
 - [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.

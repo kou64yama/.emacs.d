@@ -71,6 +71,12 @@ PUSH is ignored."
   :config
   (load-theme 'dracula t))
 
+(use-package doom-modeline
+  :custom
+  (doom-modeline-icon nil)
+  :config
+  (doom-modeline-mode 1))
+
 (use-package vertico
   :init
   (vertico-mode 1))
