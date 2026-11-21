@@ -1,76 +1,104 @@
 # Emacs Configuration
 
-This is a personal Emacs configuration with the Catppuccin theme and packages that improve minibuffer completion and search.
+A personal, modern Emacs configuration featuring the Catppuccin theme, lightweight completion (Vertico, Orderless, Marginalia, Consult, Corfu), built-in LSP (Eglot), and comprehensive Git tooling (Magit, Forge).
 
 ## Requirements
 
-- Emacs 29 or later (for the built-in `use-package`)
-- Git, available on Emacs's `exec-path` (for Magit and Git repositories)
-- [JetBrains Mono](https://www.jetbrains.com/lp/mono/), for graphical frames (`brew install --cask font-jetbrains-mono`)
-- An internet connection to download packages on the first launch
-
-The local Emacs version is 31.1. Package versions are not pinned.
+- Emacs 29 or later (local version is 31.1; relies on built-in `use-package`, `eglot`, `sqlite`)
+- Git on `exec-path` (for Magit and version-control features)
+- [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
+- Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
 
 ## Setup
 
 1. If `~/.emacs.d` already exists, back up any files you need to keep.
-2. Place this repository at `~/.emacs.d`. Emacs gives precedence to `~/.emacs` and `~/.emacs.el` if they exist, so back them up as needed.
-3. Start Emacs. `use-package` will download any missing packages.
+2. Place this repository at `~/.emacs.d`. (Back up `~/.emacs` or `~/.emacs.el` if present, as Emacs prioritizes them).
+3. Start Emacs. `use-package` will download and compile missing packages automatically.
 
-If package installation fails, check your network connection, run `M-x package-refresh-contents`, and restart Emacs.
+If package installation fails, run `M-x package-refresh-contents` and restart Emacs.
 
-On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is unset, working around a native-compilation error in affected libgccjit builds. An existing value is respected. The setting is inherited by subprocesses started by Emacs.
+> [!NOTE]
+> On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if unset to work around a native-compilation issue in affected libgccjit builds. An existing value is respected and inherited by subprocesses.
 
-## Configuration
+## Features & Configuration
 
-- [Catppuccin theme](https://github.com/catppuccin/emacs): Color theme configured with the Mocha flavor.
-- Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for Latin text and Hiragino Sans for Japanese text, including `fixed-pitch` text such as code blocks. Terminal frames keep the font configured in the terminal emulator.
-- [doom-modeline](https://github.com/seagle0128/doom-modeline): Displays buffer and version-control information in the mode line. Icons are disabled so no additional font is needed. The package and its dependencies are installed from MELPA.
-- [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
-- [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
-- [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.
-- [Consult](https://github.com/minad/consult): Switch buffers with `C-x b`, search lines with `M-s l`, search with ripgrep (`M-s r`) and find (`M-s d`), jump to lines with `M-g g`, jump to symbols with `M-g i` (imenu), and browse kill-ring with `M-y`. Consult also formats Xref jump results.
-- [Embark](https://github.com/oantolin/embark): Act on a candidate or the item at point with `C-.`, use the default action with `C-;`, and view bindings with `C-h B`. Embark Consult supports exporting Consult search results.
-- EditorConfig: Applies project `.editorconfig` settings. Emacs 30 and later include it; Emacs 29 installs the [EditorConfig package](https://github.com/editorconfig/editorconfig-emacs).
-- which-key: Displays available keybindings following an incomplete key sequence. Emacs 30 and later include it; Emacs 29 installs the [which-key package](https://github.com/justbur/emacs-which-key).
-- [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell): Inherits environment variables such as `$PATH` from the user's shell in graphical frames and daemon sessions.
-- [Corfu](https://github.com/minad/corfu): Shows completion candidates while typing, including candidates from Eglot. On terminal Emacs 29 and 30, standard completion remains in use; terminal Emacs 31 and graphical Emacs use Corfu.
-- [Cape](https://github.com/minad/cape): Provides completion-at-point backends for Corfu, including file paths and dabbrev word completion.
-- [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
-- [Magit](https://magit.vc/): Git interface; open the current repository with `C-x g`.
-- [Forge](https://magit.vc/manual/forge/): Magit interface for Git forges (such as GitHub) to view and manage issues and pull requests.
-- [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
-- [expand-region](https://github.com/magnars/expand-region.el): Semantically expands the selected region with `C-=`.
-- [multiple-cursors](https://github.com/magnars/multiple-cursors.el): Simultaneously edits multiple lines (`C-S-c C-S-c`) or matched occurrences (`C->`, `C-<`, `C-c C-<`).
-- [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters): Highlights parentheses, brackets, and braces by nesting depth in programming buffers.
-- [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode. Markup is hidden by default, and fenced code blocks use native syntax highlighting.
-- [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
-- Built-in EWW browser and `browse-url` open web pages in Emacs using DuckDuckGo search and auto-rename buffers per page. Media-heavy sites (YouTube) and GitHub issues/PRs open directly in the system's default browser; press `&` in EWW to view the current page externally. Global bindings `C-c w w` starts EWW and `C-c w s` searches for selected text.
-- Line numbers are enabled in programming and text buffers (`prog-mode`, `text-mode`, and their derivatives), but not in shells or terminals. The current line and matching parentheses are highlighted. The menu bar, tool bar, and scroll bar are hidden when available.
-- Minibuffer history and recently opened files are saved between sessions. Files changed externally are automatically reloaded when their buffers have no unsaved edits.
-- Mouse clicks, dragging, and wheel scrolling are enabled in xterm-compatible terminals. Terminal text selection may require holding Shift; terminal multiplexers may need additional mouse configuration.
-- Kills and copies are shared with the OS clipboard, and `C-y` can paste text copied in other applications. In a macOS terminal, this uses the system `pbcopy` and `pbpaste` commands. Other terminal environments require their own clipboard integration.
-- Backups are stored in `backups/` under the Emacs configuration directory. Up to two old versions and six new versions are retained.
+### Appearance & Display
+- **Theme**: [Catppuccin theme](https://github.com/catppuccin/emacs) with the Mocha flavor.
+- **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
+- **Typography**: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt (Latin) and Hiragino Sans (Japanese) in graphical frames. Terminal frames retain the emulator's font.
+- **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
 
-Use `M-x` to run a command and see completion candidates. In Vertico, use `C-n` and `C-p` to move between candidates and `RET` to select one.
+### Minibuffer & Completion
+- **Vertical Minibuffer**: [Vertico](https://github.com/minad/vertico) displays candidates vertically.
+- **Flexible Matching**: [Orderless](https://github.com/oantolin/orderless) filters candidates by multiple space-separated patterns. File names use `partial-completion`.
+- **Annotations**: [Marginalia](https://github.com/minad/marginalia) displays candidate types, file sizes, and docstrings.
+- **Search & Navigation**: [Consult](https://github.com/minad/consult) provides enhanced buffer switching, line search, `ripgrep`/`find`, imenu jump, and Xref integration.
+- **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
+- **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion (in graphical frames and terminal Emacs 31+).
+- **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
+- **Key Discovery**: which-key shows hints for partial key sequences (built-in on Emacs 30+; installs [which-key](https://github.com/justbur/emacs-which-key) on Emacs 29).
 
-In a Magit status buffer, use `TAB` to expand a section, `s` to stage the change at point, `u` to unstage it, and `c c` to start a commit. Finish the commit message with `C-c C-c`. See the [Magit getting started guide](https://docs.magit.vc/magit/Getting-Started.html) for more commands. In a repository hosted on GitHub or another supported forge, use `N` in Magit to fetch topics with `forge-pull` and view issues or pull requests.
+### Editing
+- **Region Expansion**: [expand-region](https://github.com/magnars/expand-region.el) semantically expands selections (`C-=`).
+- **Multiple Cursors**: [multiple-cursors](https://github.com/magnars/multiple-cursors.el) edits multiple lines or matched occurrences simultaneously.
+- **EditorConfig**: Enforces project indentation and whitespace rules (built-in on Emacs 30+; installs [EditorConfig](https://github.com/editorconfig/editorconfig-emacs) on Emacs 29).
+- **Clipboard**: Seamless OS clipboard integration (including macOS terminal frames via `pbcopy`/`pbpaste`).
 
-### AI agents
+### Git & Version Control
+- **Git Interface**: [Magit](https://magit.vc/) for Git operations (`C-x g`).
+- **Forge Integration**: [Forge](https://magit.vc/manual/forge/) allows viewing and managing GitHub/GitLab issues and pull requests inside Magit.
+- **Diff Highlighting**: [diff-hl](https://github.com/dgutov/diff-hl) displays uncommitted changes in the window margin/fringe and refreshes with Magit.
 
-Install and authenticate an agent separately, following the [agent-shell agent setup instructions](https://github.com/xenodium/agent-shell#agent-installation). Some agents also require an ACP adapter; for example, Codex requires `codex-acp`. Make sure the relevant executable is available on Emacs's `exec-path`. Agent and adapter versions are managed separately from this configuration.
+### Development & Tools
+- **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
+- **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`).
+- **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding.
+- **Web Browser**: Built-in [EWW](https://www.gnu.org/software/emacs/manual/html_node/emacs/EWW.html) with DuckDuckGo search, auto-renamed buffers, and automatic external browser routing for media-heavy sites and GitHub PRs.
 
-From a project, run `M-x agent-shell` and select an installed agent. In the agent buffer, `RET` submits a prompt, `M-J` inserts a newline, and `C-c C-c` interrupts the current operation. Available capabilities and authentication depend on the chosen agent.
+### System & Environment
+- **Environment Variables**: [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell) syncs shell `$PATH` and variables in graphical frames and daemon sessions.
+- **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).
+- **Backups**: Centralized in `backups/` under the configuration directory with revision retention.
+- **Mouse Support**: Terminal mouse click, drag, and scrolling enabled (`xterm-mouse-mode`).
 
-### Language servers
+## Keybindings Quick Reference
 
-Install a language server for the language you use, and make sure Emacs can find its executable on `exec-path`. Eglot includes default commands for many servers; see `M-x describe-variable RET eglot-server-programs RET` and the [Eglot manual](https://www.gnu.org/software/emacs/manual/html_node/eglot/Setting-Up-LSP-Servers.html) for server configuration. Server installation and versions are managed separately from this configuration.
+| Category | Keybinding | Command / Function |
+| :--- | :--- | :--- |
+| **Minibuffer** | `C-x b` | `consult-buffer` (switch buffer & recent files) |
+| | `M-s l` | `consult-line` (search lines in buffer) |
+| | `M-s r` | `consult-ripgrep` (search project with ripgrep) |
+| | `M-s d` | `consult-find` (find file in project) |
+| | `M-g g` | `consult-goto-line` (jump to line with preview) |
+| | `M-g i` | `consult-imenu` (jump to symbol / heading) |
+| | `M-y` | `consult-yank-pop` (browse kill ring history) |
+| | `C-.` / `C-;` | `embark-act` / `embark-dwim` |
+| | `C-h B` | `embark-bindings` |
+| **Editing** | `C-=` | `er/expand-region` (expand selection semantically) |
+| | `C-S-c C-S-c` | `mc/edit-lines` (edit all lines in selection) |
+| | `C->` / `C-<` | `mc/mark-next-like-this` / `previous` |
+| | `C-c C-<` | `mc/mark-all-like-this` |
+| **Git** | `C-x g` | `magit-status` |
+| | `N` (in Magit) | `forge-pull` (fetch forge issues & PRs) |
+| | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
+| **Web & Docs** | `C-c w w` | `eww` (open EWW browser) |
+| | `C-c w s` | `eww-search-words` (search selected text) |
+| | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
+| **Tools** | `M-x eglot` | Start Language Server Protocol client |
+| | `M-x agent-shell` | Open ACP AI agent shell |
 
-Open a source file in its project and run `M-x eglot RET`. Once connected, use `M-.` to find a definition, `M-,` to return, and `M-x completion-at-point RET` for completion. Commands such as `M-x eglot-rename RET` and `M-x eglot-code-actions RET` are available when supported by the server. To enable Eglot automatically for a language, add `eglot-ensure` to that major mode's hook after installing its server.
+## Additional Setup
+
+### AI Agents (`agent-shell`)
+Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` to submit, `M-J` for newline, `C-c C-c` to interrupt).
+
+### Language Servers (`Eglot`)
+Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.
 
 ## Files
 
 - `early-init.el`: Early startup settings, including the macOS native-compilation workaround.
 - `init.el`: Package, display, and backup settings.
-- `custom.el`: Settings saved by Emacs Customize, loaded from `init.el`.
-- `elpa/`, `eln-cache/`, and `backups/`: Directories for installed packages, compiled files, and backups. These are excluded from Git.
+- `custom.el`: Settings managed by Emacs Customize (auto-loaded).
+- `LICENSE`: MIT License.
+- `elpa/`, `eln-cache/`, `backups/`: Directories for installed packages, compiled cache, and backups (excluded from Git).
