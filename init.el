@@ -21,7 +21,13 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (xterm-mouse-mode 1)
-(global-display-line-numbers-mode 1)
+;; Show line numbers in programming and text buffers.
+(defun my-enable-line-numbers ()
+  (display-line-numbers-mode 1))
+
+(dolist (hook '(prog-mode-hook text-mode-hook))
+  (add-hook hook #'my-enable-line-numbers))
+
 (show-paren-mode 1)
 (global-hl-line-mode 1)
 (savehist-mode 1)

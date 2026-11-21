@@ -36,7 +36,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 - [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
-- Line numbers, the current line, and matching parentheses are highlighted. The menu bar, tool bar, and scroll bar are hidden when available.
+- Line numbers are enabled in programming and text buffers (`prog-mode`, `text-mode`, and their derivatives), but not in shells or terminals. The current line and matching parentheses are highlighted. The menu bar, tool bar, and scroll bar are hidden when available.
 - Minibuffer history is saved between sessions. Files changed externally are automatically reloaded when their buffers have no unsaved edits.
 - Mouse clicks, dragging, and wheel scrolling are enabled in xterm-compatible terminals. Terminal text selection may require holding Shift; terminal multiplexers may need additional mouse configuration.
 - Kills and copies are shared with the OS clipboard, and `C-y` can paste text copied in other applications. In a macOS terminal, this uses the system `pbcopy` and `pbpaste` commands. Other terminal environments require their own clipboard integration.
