@@ -10,7 +10,9 @@
 /eww-bookmarks
 /forge-database.sqlite*
 /history
+/.mc-lists.el
 /projects.eld
+/recentf*
 /transient/
 /url/
 *~

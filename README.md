@@ -29,19 +29,25 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 - [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
 - [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
 - [Marginalia](https://github.com/minad/marginalia): Adds annotations, such as descriptions, to completion candidates.
-- [Consult](https://github.com/minad/consult): Switch buffers with `C-x b` and search lines with `M-s l`.
+- [Consult](https://github.com/minad/consult): Switch buffers with `C-x b`, search lines with `M-s l`, search with ripgrep (`M-s r`) and find (`M-s d`), jump to lines with `M-g g`, jump to symbols with `M-g i` (imenu), and browse kill-ring with `M-y`. Consult also formats Xref jump results.
 - [Embark](https://github.com/oantolin/embark): Act on a candidate or the item at point with `C-.`, use the default action with `C-;`, and view bindings with `C-h B`. Embark Consult supports exporting Consult search results.
 - EditorConfig: Applies project `.editorconfig` settings. Emacs 30 and later include it; Emacs 29 installs the [EditorConfig package](https://github.com/editorconfig/editorconfig-emacs).
+- which-key: Displays available keybindings following an incomplete key sequence. Emacs 30 and later include it; Emacs 29 installs the [which-key package](https://github.com/justbur/emacs-which-key).
+- [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell): Inherits environment variables such as `$PATH` from the user's shell in graphical frames and daemon sessions.
 - [Corfu](https://github.com/minad/corfu): Shows completion candidates while typing, including candidates from Eglot. On terminal Emacs 29 and 30, standard completion remains in use; terminal Emacs 31 and graphical Emacs use Corfu.
+- [Cape](https://github.com/minad/cape): Provides completion-at-point backends for Corfu, including file paths and dabbrev word completion.
 - [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
 - [Magit](https://magit.vc/): Git interface; open the current repository with `C-x g`.
 - [Forge](https://magit.vc/manual/forge/): Magit interface for Git forges (such as GitHub) to view and manage issues and pull requests.
 - [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
+- [expand-region](https://github.com/magnars/expand-region.el): Semantically expands the selected region with `C-=`.
+- [multiple-cursors](https://github.com/magnars/multiple-cursors.el): Simultaneously edits multiple lines (`C-S-c C-S-c`) or matched occurrences (`C->`, `C-<`, `C-c C-<`).
+- [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters): Highlights parentheses, brackets, and braces by nesting depth in programming buffers.
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
 - Built-in EWW browser and `browse-url` open web pages in Emacs using DuckDuckGo search and auto-rename buffers per page. Media-heavy sites (YouTube) and GitHub issues/PRs open directly in the system's default browser; press `&` in EWW to view the current page externally. Global bindings `C-c w w` starts EWW and `C-c w s` searches for selected text.
 - Line numbers are enabled in programming and text buffers (`prog-mode`, `text-mode`, and their derivatives), but not in shells or terminals. The current line and matching parentheses are highlighted. The menu bar, tool bar, and scroll bar are hidden when available.
-- Minibuffer history is saved between sessions. Files changed externally are automatically reloaded when their buffers have no unsaved edits.
+- Minibuffer history and recently opened files are saved between sessions. Files changed externally are automatically reloaded when their buffers have no unsaved edits.
 - Mouse clicks, dragging, and wheel scrolling are enabled in xterm-compatible terminals. Terminal text selection may require holding Shift; terminal multiplexers may need additional mouse configuration.
 - Kills and copies are shared with the OS clipboard, and `C-y` can paste text copied in other applications. In a macOS terminal, this uses the system `pbcopy` and `pbpaste` commands. Other terminal environments require their own clipboard integration.
 - Backups are stored in `backups/` under the Emacs configuration directory. Up to two old versions and six new versions are retained.

@@ -33,6 +33,14 @@
 (savehist-mode 1)
 (global-auto-revert-mode 1)
 
+(use-package recentf
+  :ensure nil
+  :custom
+  (recentf-max-saved-items 100)
+  (recentf-exclude '("/elpa/" "/\\.git/"))
+  :init
+  (recentf-mode 1))
+
 ;; Prefer JetBrains Mono in graphical frames. Terminal frames keep the
 ;; font configured in the terminal emulator.
 (when (display-graphic-p)
@@ -49,6 +57,19 @@
   (use-package editorconfig
     :ensure nil
     :config (editorconfig-mode 1)))
+
+(if (< emacs-major-version 30)
+    (use-package which-key
+      :init (which-key-mode 1))
+  (use-package which-key
+    :ensure nil
+    :init (which-key-mode 1)))
+
+;; Inherit environment variables from shell in graphical frames and daemon.
+(use-package exec-path-from-shell
+  :if (or (memq window-system '(mac ns x)) (daemonp))
+  :config
+  (exec-path-from-shell-initialize))
 
 ;; Share kills and yanks with the graphical desktop clipboard.
 (setq select-enable-clipboard t)
@@ -110,7 +131,15 @@ PUSH is ignored."
 
 (use-package consult
   :bind (("C-x b" . consult-buffer)
-         ("M-s l" . consult-line)))
+         ("M-s l" . consult-line)
+         ("M-s r" . consult-ripgrep)
+         ("M-s d" . consult-find)
+         ("M-g g" . consult-goto-line)
+         ("M-g i" . consult-imenu)
+         ("M-y" . consult-yank-pop))
+  :init
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref))
 
 (use-package embark
   :bind (("C-." . embark-act)
@@ -127,6 +156,11 @@ PUSH is ignored."
   ;; Terminal child frames are available starting with Emacs 31.
   (when (or (display-graphic-p) (>= emacs-major-version 31))
     (global-corfu-mode 1)))
+
+(use-package cape
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
 (use-package eglot
   :ensure nil
@@ -153,6 +187,18 @@ PUSH is ignored."
          (magit-post-refresh . diff-hl-magit-post-refresh))
   :config
   (global-diff-hl-mode 1))
+
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package eww
   :ensure nil
