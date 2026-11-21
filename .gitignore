@@ -7,9 +7,11 @@
 /agent/
 /auto-save-list/
 /backups/
+/eww-bookmarks
 /history
 /projects.eld
 /transient/
+/url/
 *~
 \#*\#
 .\#*

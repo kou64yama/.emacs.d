@@ -6,7 +6,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(agent-shell consult corfu doom-modeline embark embark-consult
+   '(agent-shell consult corfu doom-modeline embark embark-consult magit
 		 marginalia markdown-mode orderless vertico)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
