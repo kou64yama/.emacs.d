@@ -82,9 +82,11 @@ PUSH is ignored."
     (setq interprogram-cut-function #'my-terminal-cut-to-clipboard
           interprogram-paste-function #'my-terminal-paste-from-clipboard)))
 
-(use-package dracula-theme
+(use-package catppuccin-theme
+  :custom
+  (catppuccin-flavor 'mocha)
   :config
-  (load-theme 'dracula t))
+  (load-theme 'catppuccin t))
 
 (use-package doom-modeline
   :custom
