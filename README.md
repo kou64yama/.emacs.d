@@ -43,7 +43,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 - [expand-region](https://github.com/magnars/expand-region.el): Semantically expands the selected region with `C-=`.
 - [multiple-cursors](https://github.com/magnars/multiple-cursors.el): Simultaneously edits multiple lines (`C-S-c C-S-c`) or matched occurrences (`C->`, `C-<`, `C-c C-<`).
 - [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters): Highlights parentheses, brackets, and braces by nesting depth in programming buffers.
-- [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
+- [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode. Markup is hidden by default, and fenced code blocks use native syntax highlighting.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
 - Built-in EWW browser and `browse-url` open web pages in Emacs using DuckDuckGo search and auto-rename buffers per page. Media-heavy sites (YouTube) and GitHub issues/PRs open directly in the system's default browser; press `&` in EWW to view the current page externally. Global bindings `C-c w w` starts EWW and `C-c w s` searches for selected text.
 - Line numbers are enabled in programming and text buffers (`prog-mode`, `text-mode`, and their derivatives), but not in shells or terminals. The current line and matching parentheses are highlighted. The menu bar, tool bar, and scroll bar are hidden when available.

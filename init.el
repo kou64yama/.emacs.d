@@ -178,7 +178,10 @@ PUSH is ignored."
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode)))
+         ("README\\.md\\'" . gfm-mode))
+  :custom
+  (markdown-hide-markup t)
+  (markdown-fontify-code-blocks-natively t))
 
 (use-package diff-hl
   :demand t
