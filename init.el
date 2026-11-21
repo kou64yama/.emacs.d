@@ -33,6 +33,15 @@
 (savehist-mode 1)
 (global-auto-revert-mode 1)
 
+;; Prefer JetBrains Mono in graphical frames. Terminal frames keep the
+;; font configured in the terminal emulator.
+(when (display-graphic-p)
+  (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
+  (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono")
+  ;; Use Hiragino Sans for Japanese text; JetBrains Mono covers Latin text.
+  (dolist (script '(kana han cjk-misc))
+    (set-fontset-font t script "Hiragino Sans")))
+
 (if (< emacs-major-version 30)
     (use-package editorconfig
       :ensure t

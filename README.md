@@ -6,6 +6,7 @@ This is a personal Emacs configuration with the Dracula theme and packages that 
 
 - Emacs 29 or later (for the built-in `use-package`)
 - Git, available on Emacs's `exec-path` (for Magit and Git repositories)
+- [JetBrains Mono](https://www.jetbrains.com/lp/mono/), for graphical frames (`brew install --cask font-jetbrains-mono`)
 - An internet connection to download packages on the first launch
 
 The local Emacs version is 31.1. Package versions are not pinned.
@@ -23,6 +24,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 ## Configuration
 
 - [Dracula theme](https://github.com/dracula/emacs): Color theme.
+- Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for Latin text and Hiragino Sans for Japanese text, including `fixed-pitch` text such as code blocks. Terminal frames keep the font configured in the terminal emulator.
 - [doom-modeline](https://github.com/seagle0128/doom-modeline): Displays buffer and version-control information in the mode line. Icons are disabled so no additional font is needed. The package and its dependencies are installed from MELPA.
 - [Vertico](https://github.com/minad/vertico): Displays minibuffer completion candidates vertically.
 - [Orderless](https://github.com/oantolin/orderless): Filters candidates using multiple space-separated patterns. File name completion uses `partial-completion`.
