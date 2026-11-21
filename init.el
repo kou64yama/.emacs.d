@@ -135,6 +135,9 @@ PUSH is ignored."
 (use-package magit
   :bind ("C-x g" . magit-status))
 
+(use-package forge
+  :after magit)
+
 (use-package agent-shell
   :commands (agent-shell))
 

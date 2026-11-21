@@ -8,6 +8,7 @@
 /auto-save-list/
 /backups/
 /eww-bookmarks
+/forge-database.sqlite*
 /history
 /projects.eld
 /transient/

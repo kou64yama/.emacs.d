@@ -35,6 +35,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 - [Corfu](https://github.com/minad/corfu): Shows completion candidates while typing, including candidates from Eglot. On terminal Emacs 29 and 30, standard completion remains in use; terminal Emacs 31 and graphical Emacs use Corfu.
 - [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/): Built-in Language Server Protocol client, started manually for a project.
 - [Magit](https://magit.vc/): Git interface; open the current repository with `C-x g`.
+- [Forge](https://magit.vc/manual/forge/): Magit interface for Git forges (such as GitHub) to view and manage issues and pull requests.
 - [agent-shell](https://github.com/xenodium/agent-shell): An Emacs interface for ACP-compatible AI agents, started with `M-x agent-shell`.
 - [markdown-mode](https://jblevins.org/projects/markdown-mode/): Edits `.md` and `.markdown` files; `README.md` uses GitHub-flavored Markdown mode.
 - [diff-hl](https://github.com/dgutov/diff-hl): Highlights version-controlled changes, including unsaved edits, at the side of file buffers and refreshes after Magit operations. In terminals, indicators use the window margin.
@@ -47,7 +48,7 @@ On macOS 27, early startup sets `MACOSX_DEPLOYMENT_TARGET` to `27.0` if it is un
 
 Use `M-x` to run a command and see completion candidates. In Vertico, use `C-n` and `C-p` to move between candidates and `RET` to select one.
 
-In a Magit status buffer, use `TAB` to expand a section, `s` to stage the change at point, `u` to unstage it, and `c c` to start a commit. Finish the commit message with `C-c C-c`. See the [Magit getting started guide](https://docs.magit.vc/magit/Getting-Started.html) for more commands.
+In a Magit status buffer, use `TAB` to expand a section, `s` to stage the change at point, `u` to unstage it, and `c c` to start a commit. Finish the commit message with `C-c C-c`. See the [Magit getting started guide](https://docs.magit.vc/magit/Getting-Started.html) for more commands. In a repository hosted on GitHub or another supported forge, use `N` in Magit to fetch topics with `forge-pull` and view issues or pull requests.
 
 ### AI agents
 
