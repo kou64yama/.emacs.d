@@ -8,13 +8,28 @@ A personal, modern Emacs configuration featuring the Catppuccin theme, lightweig
 - Git on `exec-path` (for Magit and version-control features)
 - [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
-- GPG (with a secret key) if using Google Calendar sync credentials stored in `~/.authinfo.gpg`
+- [age](https://github.com/FiloSottile/age) 1.0 or later on `exec-path` for encrypted authentication (for example, `brew install age` on macOS). The `age` Emacs package is installed from MELPA.
 
 ## Setup
 
 1. If `~/.emacs.d` already exists, back up any files you need to keep.
 2. Place this repository at `~/.emacs.d`. (Back up `~/.emacs` or `~/.emacs.el` if present, as Emacs prioritizes them).
-3. Start Emacs. `use-package` will download and compile missing packages automatically.
+3. Create an age identity and recipient before using authentication:
+
+   ```sh
+   mkdir -p ~/.emacs.d/age
+   chmod 700 ~/.emacs.d/age
+   age-keygen -o ~/.emacs.d/age/identity.txt
+   age-keygen -y ~/.emacs.d/age/identity.txt > ~/.emacs.d/age/recipients.txt
+   chmod 600 ~/.emacs.d/age/identity.txt
+   ```
+
+   Keep a secure backup of the identity: it is an unencrypted private key and anyone who can read it can decrypt the stores. Do not overwrite an existing identity. For a configuration directory elsewhere, use its `age` subdirectory instead.
+4. Start Emacs. `use-package` will download and compile missing packages automatically.
+
+To migrate existing authentication, open `~/.authinfo.gpg` in Emacs, copy its contents into `~/.emacs.d/authinfo.age`, and save. This preserves Forge entries as well as the Google client credentials. Disable auto-save and backups for the plaintext buffer while copying. Keep the original until the new file and Forge access have been verified. The configured `auth-sources` uses only the age file; other auth sources must be migrated too.
+
+If an old `oauth2-auto.plist` exists but `oauth2-auto.age` does not, move the old file aside and authorize Google again. Verify synchronization before removing the old file.
 
 If package installation fails, run `M-x package-refresh-contents` and restart Emacs.
 
@@ -50,7 +65,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Modern Styling**: [org-modern](https://github.com/minad/org-modern) renders bullets, tags, TODO keywords, and folded headings with cleaner glyphs, including in the agenda.
 - **Markup Reveal**: [org-appear](https://github.com/awth13/org-appear) shows emphasis markers only while the cursor is on the text, so documents stay visually clean.
 - **Editing Comforts**: Indented startup view, content folding, native syntax highlighting for source blocks, fast TODO selection, and done-time logging into the `LOGBOOK` drawer.
-- **Google Calendar**: [org-gcal](https://github.com/kidd/org-gcal.el) synchronizes the primary calendar bidirectionally with `~/org/gcal.org`; OAuth credentials are read lazily from `~/.authinfo.gpg` (manual sync only, no timer).
+- **Google Calendar**: [org-gcal](https://github.com/kidd/org-gcal.el) synchronizes the primary calendar bidirectionally with `~/org/gcal.org`; OAuth credentials are read lazily from the age-encrypted auth source (manual sync only, no timer).
 - **Japanese Holidays**: [japanese-holidays](https://github.com/emacs-jp/japanese-holidays) marks holidays in `M-x calendar` and includes them in the Org agenda via the diary.
 
 ### Git & Version Control
@@ -119,7 +134,7 @@ Japanese national holidays are calculated locally by `japanese-holidays` and rep
 ### Google Calendar (`org-gcal`)
 
 1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, enable the **Google Calendar API**, configure the **OAuth consent screen** (External), and create an **OAuth client ID** of type **Desktop app**. Add your own Google account as a test user (or publish the app to avoid token expiry).
-2. Open `~/.authinfo.gpg` in Emacs (`C-x C-f`) and add the client ID and secret, then save so EPA encrypts them with your GPG key:
+2. Open `~/.emacs.d/authinfo.age` in Emacs (`C-x C-f`) and add the client ID and secret, then save to encrypt them with age:
 
    ```
    machine gcal-client-id password 1234567890-xxxxxxxx.apps.googleusercontent.com
@@ -131,10 +146,10 @@ Japanese national holidays are calculated locally by `japanese-holidays` and rep
 `org-gcal` stores fetched events in `~/org/gcal.org` (included in the agenda via the `~/org` scan). `C-c c a` captures a new appointment there with the required `:org-gcal:` drawer, and `C-c g p` sends the entry at point to Google; `C-c g s` runs a full bidirectional sync. Sync is manual only — nothing runs at startup or on a timer. Credentials are injected with `:before` advice on the upstream `org-gcal` commands, so `M-x org-gcal-sync` and automatic post/refile/delete hooks are covered too. `org-gcal` inserts events into a buffer without writing the file, so this configuration also saves `gcal.org` automatically after each update.
 
 > [!IMPORTANT]
-> OAuth tokens are kept in `~/.emacs.d/oauth2-auto.plist` (plstore-encrypted; the passphrase is cached for the session) and sync tokens in `~/.emacs.d/persist/`. Both are excluded from Git.
+> OAuth tokens are kept in `~/.emacs.d/oauth2-auto.age` and sync tokens in `~/.emacs.d/persist/`. Both are excluded from Git. age.el uses temporary files for plaintext during encryption and decryption; it uses `/dev/shm` when available and the system temporary directory otherwise. The age private key is not passphrase-protected by this setup.
 > A consent screen left in **Testing** makes refresh tokens expire after **7 days**; publish the app (and accept the unverified-app warning) for personal use to avoid this.
 > `gcal.org` is managed by `org-gcal`. Do not hand-edit its `:ID:` / `:ETag:` properties, and keep personal notes in other files such as `inbox.org`.
-> If nothing happens after `C-c g f`, check the minibuffer first: Emacs may be waiting for a GPG/plstore passphrase or for the browser authorization; the sync is asynchronous and `gcal.org` stays empty until it finishes. If the external browser cannot reach the localhost callback, set `oauth2-auto-manually-auth` to `t` and paste the authorization code from the redirect URL instead.
+> If nothing happens after `C-c g f`, check the minibuffer first: Emacs may be waiting for browser authorization; the sync is asynchronous and `gcal.org` stays empty until it finishes. If the external browser cannot reach the localhost callback, set `oauth2-auto-manually-auth` to `t` and paste the authorization code from the redirect URL instead.
 
 ### Language Servers (`Eglot`)
 Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.

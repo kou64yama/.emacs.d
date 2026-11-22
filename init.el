@@ -12,6 +12,54 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;;; Encrypted authentication
+
+(use-package age
+  :demand t
+  :custom
+  (age-default-identity (expand-file-name "age/identity.txt" user-emacs-directory))
+  (age-default-recipient (expand-file-name "age/recipients.txt" user-emacs-directory))
+  :config
+  (age-file-enable)
+  (setq auth-sources (list (expand-file-name "authinfo.age" user-emacs-directory))))
+
+(defvar my-oauth-age-file (expand-file-name "oauth2-auto.age" user-emacs-directory)
+  "Age-encrypted OAuth token store.")
+
+(defun my-oauth-age-read-all ()
+  "Read the age-encrypted OAuth token alist."
+  (if (not (file-exists-p my-oauth-age-file))
+      (if (file-exists-p (expand-file-name "oauth2-auto.plist" user-emacs-directory))
+          (user-error "Legacy OAuth store exists; move it aside before reauthorizing")
+        nil)
+    (with-temp-buffer
+      (insert-file-contents my-oauth-age-file)
+      (let ((read-eval nil))
+        (read (current-buffer))))))
+
+(defun my-oauth-age-read (username provider)
+  "Read the OAuth token for USERNAME and PROVIDER."
+  (alist-get (list username provider) (my-oauth-age-read-all) nil nil #'equal))
+
+(defun my-oauth-age-write (username provider plist)
+  "Store PLIST for USERNAME and PROVIDER in the age-encrypted store."
+  (let* ((entries (my-oauth-age-read-all))
+         (temporary (make-temp-file
+                     (expand-file-name ".oauth2-auto-" user-emacs-directory)
+                     nil ".age")))
+    (unwind-protect
+        (progn
+          (setf (alist-get (list username provider) entries nil nil #'equal) plist)
+          (with-temp-buffer
+            (let ((print-length nil) (print-level nil))
+              (prin1 entries (current-buffer)))
+            (let ((coding-system-for-write 'utf-8-unix))
+              (write-region (point-min) (point-max) temporary nil 'silent)))
+          (set-file-modes temporary #o600)
+          (rename-file temporary my-oauth-age-file t)
+          plist)
+      (when (file-exists-p temporary) (delete-file temporary)))))
+
 ;;; Basic editing and display
 
 ;; Keep backup files together, without hard-coding a home directory.
@@ -315,7 +363,7 @@ Arguments are ignored so this can be used as :before advice."
       (when (and org-gcal-client-id org-gcal-client-secret)
         (setq my-org-gcal--credentials-loaded t)))
     (unless (and org-gcal-client-id org-gcal-client-secret)
-      (user-error "Add gcal-client-id and gcal-client-secret to ~/.authinfo.gpg"))
+      (user-error "Add gcal-client-id and gcal-client-secret to authinfo.age"))
     (org-gcal-reload-client-id-secret))
 
   (defun my-org-gcal-save (&rest _)
@@ -341,13 +389,14 @@ Arguments are ignored so this can be used as :before advice."
         org-gcal-down-days 90
         org-gcal-remove-api-cancelled-events nil
         org-gcal-strip-html-descriptions t)
-  ;; Cache the plstore passphrase for the session.
-  (setq plstore-cache-passphrase-for-symmetric-encryption t)
   ;; Non-nil placeholders avoid org-gcal's load-time warning. The real values
   ;; are substituted by `my-org-gcal-ensure-auth' before any request.
   (setq org-gcal-client-id "not-set"
         org-gcal-client-secret "not-set")
   :config
+  ;; oauth2-auto otherwise encrypts its token store using GPG/plstore.
+  (advice-add 'oauth2-auto--plstore-read :override #'my-oauth-age-read)
+  (advice-add 'oauth2-auto--plstore-write :override #'my-oauth-age-write)
   ;; `org-gcal-fetch' delegates to `org-gcal-sync', so advising sync covers
   ;; both. Also cover the hooks that post/refile/delete entries automatically.
   (dolist (command '(org-gcal-sync
