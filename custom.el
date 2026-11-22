@@ -7,7 +7,8 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(agent-shell consult corfu doom-modeline embark embark-consult magit
-		 marginalia markdown-mode orderless vertico)))
+		 marginalia markdown-mode mixed-pitch olivetti
+		 orderless vertico)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
