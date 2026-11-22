@@ -184,13 +184,36 @@ PUSH is ignored."
   :custom
   (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
 
+;; Keep generated HTML previews out of the directories holding Markdown files.
+;; Mirror the source path beneath this directory so same-named files in
+;; different projects do not overwrite each other.
+(defvar my-markdown-preview-directory
+  (expand-file-name "markdown-preview" user-emacs-directory)
+  "Directory where Markdown HTML previews are written.")
+
+(defun my-markdown-export-file-name (original &optional extension)
+  "Relocate the export path returned by ORIGIN to `my-markdown-preview-directory'.
+Keep ORIGIN's extension handling and its nil result for non-file buffers.
+Mirror the absolute path so same-named files in different projects do not
+overwrite each other.  EXTENSION is passed through to ORIGIN."
+  (when-let* ((name (funcall original extension)))
+    (let* ((absolute (expand-file-name name))
+           (target (expand-file-name
+                    (string-trim-left absolute "/")
+                    my-markdown-preview-directory)))
+      (make-directory (file-name-directory target) t)
+      target)))
+
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
          ("README\\.md\\'" . gfm-mode))
   :custom
   (markdown-hide-markup t)
-  (markdown-fontify-code-blocks-natively t))
+  (markdown-fontify-code-blocks-natively t)
+  :config
+  ;; Export, export-and-preview, and live preview all use this function.
+  (advice-add 'markdown-export-file-name :around #'my-markdown-export-file-name))
 
 ;;; Org
 (defvar my-org-directory (expand-file-name "~/org/")

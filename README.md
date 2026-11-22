@@ -61,7 +61,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ### Development & Tools
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`).
-- **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding.
+- **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 - **Web Browser**: Built-in [EWW](https://www.gnu.org/software/emacs/manual/html_node/emacs/EWW.html) with DuckDuckGo search, auto-renamed buffers, and automatic external browser routing for media-heavy sites and GitHub PRs.
 
 ### System & Environment
@@ -145,4 +145,4 @@ Install the language server for your language and ensure its executable is avail
 - `init.el`: Package, display, and backup settings.
 - `custom.el`: Settings managed by Emacs Customize (auto-loaded).
 - `LICENSE`: MIT License.
-- `elpa/`, `eln-cache/`, `backups/`, `oauth2-auto.plist`, `persist/`: Installed packages, compiled cache, backups, and org-gcal OAuth/sync tokens (excluded from Git).
+- `elpa/`, `eln-cache/`, `backups/`, `markdown-preview/`, `oauth2-auto.plist`, `persist/`: Installed packages, compiled cache, backups, generated Markdown previews, and org-gcal OAuth/sync tokens (excluded from Git).
