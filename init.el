@@ -197,7 +197,8 @@ PUSH is ignored."
   (doom-modeline-mode 1))
 
 (use-package olivetti
-  :commands (olivetti-mode))
+  :hook ((markdown-mode . olivetti-mode)
+         (org-mode . olivetti-mode)))
 
 (use-package mixed-pitch
   :hook ((markdown-mode . mixed-pitch-mode)
