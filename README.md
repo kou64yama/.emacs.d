@@ -44,6 +44,12 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **EditorConfig**: Enforces project indentation and whitespace rules (built-in on Emacs 30+; installs [EditorConfig](https://github.com/editorconfig/editorconfig-emacs) on Emacs 29).
 - **Clipboard**: Seamless OS clipboard integration (including macOS terminal frames via `pbcopy`/`pbpaste`).
 
+### Org
+- **Capture & Agenda**: Built-in Org with `C-c c` for capture (task/note into `~/org/inbox.org`) and `C-c a` for the agenda. All `.org` files under `~/org` are used automatically.
+- **Modern Styling**: [org-modern](https://github.com/minad/org-modern) renders bullets, tags, TODO keywords, and folded headings with cleaner glyphs, including in the agenda.
+- **Markup Reveal**: [org-appear](https://github.com/awth13/org-appear) shows emphasis markers only while the cursor is on the text, so documents stay visually clean.
+- **Editing Comforts**: Indented startup view, content folding, native syntax highlighting for source blocks, fast TODO selection, and done-time logging into the `LOGBOOK` drawer.
+
 ### Git & Version Control
 - **Git Interface**: [Magit](https://magit.vc/) for Git operations (`C-x g`).
 - **Forge Integration**: [Forge](https://magit.vc/manual/forge/) allows viewing and managing GitHub/GitLab issues and pull requests inside Magit.
@@ -78,6 +84,12 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `C-S-c C-S-c` | `mc/edit-lines` (edit all lines in selection) |
 | | `C->` / `C-<` | `mc/mark-next-like-this` / `previous` |
 | | `C-c C-<` | `mc/mark-all-like-this` |
+| **Org** | `C-c a` | `org-agenda` (agenda for `~/org`) |
+| | `C-c c t` / `C-c c n` | `org-capture` (task / note) |
+| | `C-c c C` | Finish capture |
+| | `C-c l` | `org-store-link` (link to current location) |
+| | `C-c C-e` | Export dispatcher (in Org buffer) |
+| | `TAB` / `S-TAB` | Fold / unfold (in Org buffer) |
 | **Git** | `C-x g` | `magit-status` |
 | | `N` (in Magit) | `forge-pull` (fetch forge issues & PRs) |
 | | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
@@ -91,6 +103,9 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### AI Agents (`agent-shell`)
 Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` to submit, `M-J` for newline, `C-c C-c` to interrupt). Transcripts, screenshots, and worktrees are kept under `~/.emacs.d/.agent-shell/` instead of each project directory.
+
+### Org Files
+Org data lives outside this repository in `~/org/`. The directory is scanned automatically for agenda files, and the first capture creates `~/org/inbox.org` with `Tasks` and `Notes` sections. Back up `~/org` separately if needed.
 
 ### Language Servers (`Eglot`)
 Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.

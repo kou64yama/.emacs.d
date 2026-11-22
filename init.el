@@ -192,6 +192,58 @@ PUSH is ignored."
   (markdown-hide-markup t)
   (markdown-fontify-code-blocks-natively t))
 
+;;; Org
+(defvar my-org-directory (expand-file-name "~/org/")
+  "Directory for Org files.")
+
+(use-package org
+  :ensure nil
+  :bind (("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+         ("C-c l" . org-store-link))
+  :custom
+  (org-directory my-org-directory)
+  (org-default-notes-file (expand-file-name "inbox.org" my-org-directory))
+  (org-agenda-files (list my-org-directory))
+  (org-capture-templates
+   '(("t" "Task" entry (file+headline "inbox.org" "Tasks")
+      "* TODO %?\n%a")
+     ("n" "Note" entry (file+headline "inbox.org" "Notes")
+      "* %?\n%U\n%a")))
+  ;; Display
+  (org-startup-indented t)
+  (org-startup-folded 'content)
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  (org-ellipsis " ▾")
+  ;; Editing
+  (org-return-follows-link t)
+  (org-M-RET-may-split-line nil)
+  (org-insert-heading-respect-content t)
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t)
+  (org-src-preserve-indentation t)
+  (org-edit-src-content-indentation 0)
+  (org-use-fast-todo-selection t)
+  (org-log-done 'time)
+  (org-log-into-drawer t))
+
+(use-package org-appear
+  :hook (org-mode . org-appear-mode)
+  :custom
+  (org-appear-autoemphasis t)
+  (org-appear-autosubmarkers t)
+  (org-appear-autoentities t)
+  (org-appear-autolinks nil)
+  (org-appear-inside-latex t))
+
+(use-package org-modern
+  :hook ((org-mode . org-modern-mode)
+         (org-agenda-finalize . org-modern-agenda))
+  :custom
+  (org-modern-star 'replace)
+  (org-modern-list '((43 . "◦") (45 . "•") (42 . "⁃"))))
+
 (use-package diff-hl
   :demand t
   :hook ((diff-hl-mode . diff-hl-flydiff-mode)
