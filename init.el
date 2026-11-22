@@ -96,11 +96,15 @@
 ;; Prefer JetBrains Mono in graphical frames. Terminal frames keep the
 ;; font configured in the terminal emulator.
 (when (display-graphic-p)
-  (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
-  (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono")
-  ;; Use Hiragino Sans for Japanese text; JetBrains Mono covers Latin text.
-  (dolist (script '(kana han cjk-misc))
-    (set-fontset-font t script "Hiragino Sans")))
+  (when (find-font (font-spec :family "JetBrains Mono"))
+    (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
+    (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono"))
+  (when (find-font (font-spec :family "Avenir Next"))
+    (set-face-attribute 'variable-pitch nil :family "Avenir Next"))
+  ;; Use Hiragino Sans for Japanese text when available.
+  (when (find-font (font-spec :family "Hiragino Sans"))
+    (dolist (script '(kana han cjk-misc))
+      (set-fontset-font t script "Hiragino Sans"))))
 
 ;; These packages are built in starting with Emacs 30.
 (if (< emacs-major-version 30)
@@ -174,6 +178,10 @@ PUSH is ignored."
 
 (use-package olivetti
   :commands (olivetti-mode))
+
+(use-package mixed-pitch
+  :hook ((markdown-mode . mixed-pitch-mode)
+         (org-mode . mixed-pitch-mode)))
 
 ;;; Completion and navigation
 

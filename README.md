@@ -6,7 +6,7 @@ A personal, modern Emacs configuration featuring the Catppuccin theme, lightweig
 
 - Emacs 29 or later (local version is 31.1; relies on built-in `use-package`, `eglot`, `sqlite`)
 - Git on `exec-path` (for Magit and version-control features)
-- [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
+- Optional: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
 - [age](https://github.com/FiloSottile/age) 1.0 or later on `exec-path` for encrypted authentication (for example, `brew install age` on macOS). The `age` Emacs package is installed from MELPA.
 
@@ -41,9 +41,10 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ### Appearance & Display
 - **Theme**: [Catppuccin theme](https://github.com/catppuccin/emacs) with the Mocha flavor.
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
-- **Typography**: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt (Latin) and Hiragino Sans (Japanese) in graphical frames. Terminal frames retain the emulator's font.
+- **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
 - **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area; toggle it in the current buffer with `M-x olivetti-mode`.
+- **Mixed-pitch Text**: [mixed-pitch](https://github.com/jdtsmith/mixed-pitch) uses Avenir Next for prose in Markdown and Org buffers when available, falling back to the environment's variable-pitch font otherwise. Suitable elements remain fixed-pitch. Toggle it in the current buffer with `M-x mixed-pitch-mode`. Terminal frames use the terminal's font.
 
 ### Minibuffer & Completion
 - **Vertical Minibuffer**: [Vertico](https://github.com/minad/vertico) displays candidates vertically.
