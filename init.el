@@ -1,5 +1,7 @@
 ;;; init.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
+;;; Startup and package management
+
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file :noerror)
 
@@ -9,6 +11,8 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;;; Basic editing and display
 
 ;; Keep backup files together, without hard-coding a home directory.
 (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory)))
@@ -50,6 +54,7 @@
   (dolist (script '(kana han cjk-misc))
     (set-fontset-font t script "Hiragino Sans")))
 
+;; These packages are built in starting with Emacs 30.
 (if (< emacs-major-version 30)
     (use-package editorconfig
       :ensure t
@@ -64,6 +69,8 @@
   (use-package which-key
     :ensure nil
     :init (which-key-mode 1)))
+
+;;; Environment and clipboard
 
 ;; Inherit environment variables from shell in graphical frames and daemon.
 (use-package exec-path-from-shell
@@ -103,6 +110,8 @@ PUSH is ignored."
     (setq interprogram-cut-function #'my-terminal-cut-to-clipboard
           interprogram-paste-function #'my-terminal-paste-from-clipboard)))
 
+;;; Appearance
+
 (use-package catppuccin-theme
   :custom
   (catppuccin-flavor 'mocha)
@@ -114,6 +123,8 @@ PUSH is ignored."
   (doom-modeline-icon nil)
   :config
   (doom-modeline-mode 1))
+
+;;; Completion and navigation
 
 (use-package vertico
   :init
@@ -162,6 +173,8 @@ PUSH is ignored."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
+;;; Development and project tools
+
 (use-package eglot
   :ensure nil
   :commands (eglot eglot-ensure))
@@ -174,12 +187,12 @@ PUSH is ignored."
 
 ;; Keep agent-shell data (transcripts, screenshots, worktrees) out of project
 ;; directories and together under `user-emacs-directory'.
-(defun my-agent-shell-dot-subdir (subdir)
-  "Return path to agent-shell SUBDIR under `user-emacs-directory'."
-  (expand-file-name (file-name-concat ".agent-shell" subdir)
-                    user-emacs-directory))
-
 (use-package agent-shell
+  :preface
+  (defun my-agent-shell-dot-subdir (subdir)
+    "Return path to agent-shell SUBDIR under `user-emacs-directory'."
+    (expand-file-name (file-name-concat ".agent-shell" subdir)
+                      user-emacs-directory))
   :commands (agent-shell)
   :custom
   (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
@@ -187,24 +200,24 @@ PUSH is ignored."
 ;; Keep generated HTML previews out of the directories holding Markdown files.
 ;; Mirror the source path beneath this directory so same-named files in
 ;; different projects do not overwrite each other.
-(defvar my-markdown-preview-directory
-  (expand-file-name "markdown-preview" user-emacs-directory)
-  "Directory where Markdown HTML previews are written.")
-
-(defun my-markdown-export-file-name (original &optional extension)
-  "Relocate the export path returned by ORIGIN to `my-markdown-preview-directory'.
-Keep ORIGIN's extension handling and its nil result for non-file buffers.
-Mirror the absolute path so same-named files in different projects do not
-overwrite each other.  EXTENSION is passed through to ORIGIN."
-  (when-let* ((name (funcall original extension)))
-    (let* ((absolute (expand-file-name name))
-           (target (expand-file-name
-                    (string-trim-left absolute "/")
-                    my-markdown-preview-directory)))
-      (make-directory (file-name-directory target) t)
-      target)))
-
 (use-package markdown-mode
+  :preface
+  (defvar my-markdown-preview-directory
+    (expand-file-name "markdown-preview" user-emacs-directory)
+    "Directory where Markdown HTML previews are written.")
+
+  (defun my-markdown-export-file-name (original &optional extension)
+    "Relocate the export path returned by ORIGINAL to `my-markdown-preview-directory'.
+Keep ORIGINAL's extension handling and its nil result for non-file buffers.
+Mirror the absolute path so same-named files in different projects do not
+overwrite each other.  EXTENSION is passed through to ORIGINAL."
+    (when-let* ((name (funcall original extension)))
+      (let* ((absolute (expand-file-name name))
+             (target (expand-file-name
+                      (string-trim-left absolute "/")
+                      my-markdown-preview-directory)))
+        (make-directory (file-name-directory target) t)
+        target)))
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
          ("README\\.md\\'" . gfm-mode))
@@ -289,6 +302,31 @@ overwrite each other.  EXTENSION is passed through to ORIGIN."
   :preface
   (defvar my-org-gcal--credentials-loaded nil
     "Non-nil after auth-source credentials have been read.")
+  (defun my-org-gcal-ensure-auth (&rest _)
+    "Load Google OAuth credentials from auth-source and register them.
+Arguments are ignored so this can be used as :before advice."
+    (require 'auth-source)
+    ;; Read the encrypted auth file only once per session.
+    (unless my-org-gcal--credentials-loaded
+      (setq org-gcal-client-id
+            (auth-source-pick-first-password :host "gcal-client-id")
+            org-gcal-client-secret
+            (auth-source-pick-first-password :host "gcal-client-secret"))
+      (when (and org-gcal-client-id org-gcal-client-secret)
+        (setq my-org-gcal--credentials-loaded t)))
+    (unless (and org-gcal-client-id org-gcal-client-secret)
+      (user-error "Add gcal-client-id and gcal-client-secret to ~/.authinfo.gpg"))
+    (org-gcal-reload-client-id-secret))
+
+  (defun my-org-gcal-save (&rest _)
+    "Persist org-gcal fetch files after the current update."
+    (run-at-time
+     0 nil
+     (lambda ()
+       (dolist (file (mapcar #'cdr org-gcal-fetch-file-alist))
+         (let ((buffer (get-file-buffer file)))
+           (when (and buffer (buffer-modified-p buffer))
+             (with-current-buffer buffer (save-buffer))))))))
   :bind (("C-c g f" . org-gcal-fetch)
          ("C-c g s" . org-gcal-sync)
          ("C-c g p" . org-gcal-post-at-point))
@@ -310,22 +348,6 @@ overwrite each other.  EXTENSION is passed through to ORIGIN."
   (setq org-gcal-client-id "not-set"
         org-gcal-client-secret "not-set")
   :config
-  (defun my-org-gcal-ensure-auth (&rest _)
-    "Load Google OAuth credentials from auth-source and register them.
-Arguments are ignored so this can be used as :before advice."
-    (require 'auth-source)
-    ;; Read the encrypted auth file only once per session.
-    (unless my-org-gcal--credentials-loaded
-      (setq org-gcal-client-id
-            (auth-source-pick-first-password :host "gcal-client-id")
-            org-gcal-client-secret
-            (auth-source-pick-first-password :host "gcal-client-secret"))
-      (when (and org-gcal-client-id org-gcal-client-secret)
-        (setq my-org-gcal--credentials-loaded t)))
-    (unless (and org-gcal-client-id org-gcal-client-secret)
-      (user-error "Add gcal-client-id and gcal-client-secret to ~/.authinfo.gpg"))
-    (org-gcal-reload-client-id-secret))
-
   ;; `org-gcal-fetch' delegates to `org-gcal-sync', so advising sync covers
   ;; both. Also cover the hooks that post/refile/delete entries automatically.
   (dolist (command '(org-gcal-sync
@@ -336,16 +358,9 @@ Arguments are ignored so this can be used as :before advice."
 
   ;; org-gcal inserts fetched events into the buffer but never saves it.
   ;; Defer the save so it runs outside `atomic-change-group'.
-  (defun my-org-gcal-save (&rest _)
-    "Persist org-gcal fetch files after the current update."
-    (run-at-time
-     0 nil
-     (lambda ()
-       (dolist (file (mapcar #'cdr org-gcal-fetch-file-alist))
-         (let ((buffer (get-file-buffer file)))
-           (when (and buffer (buffer-modified-p buffer))
-             (with-current-buffer buffer (save-buffer))))))))
   (add-to-list 'org-gcal-after-update-entry-functions #'my-org-gcal-save))
+
+;;; Editing and version control
 
 (use-package diff-hl
   :demand t
@@ -366,6 +381,8 @@ Arguments are ignored so this can be used as :before advice."
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;;; Web browsing
 
 (use-package eww
   :ensure nil
