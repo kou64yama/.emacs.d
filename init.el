@@ -172,6 +172,9 @@ PUSH is ignored."
   :config
   (doom-modeline-mode 1))
 
+(use-package olivetti
+  :commands (olivetti-mode))
+
 ;;; Completion and navigation
 
 (use-package vertico

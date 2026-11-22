@@ -43,6 +43,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Typography**: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt (Latin) and Hiragino Sans (Japanese) in graphical frames. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
+- **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area; toggle it in the current buffer with `M-x olivetti-mode`.
 
 ### Minibuffer & Completion
 - **Vertical Minibuffer**: [Vertico](https://github.com/minad/vertico) displays candidates vertically.
