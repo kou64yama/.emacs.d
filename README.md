@@ -90,7 +90,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ## Additional Setup
 
 ### AI Agents (`agent-shell`)
-Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` to submit, `M-J` for newline, `C-c C-c` to interrupt).
+Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` to submit, `M-J` for newline, `C-c C-c` to interrupt). Transcripts, screenshots, and worktrees are kept under `~/.emacs.d/.agent-shell/` instead of each project directory.
 
 ### Language Servers (`Eglot`)
 Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.

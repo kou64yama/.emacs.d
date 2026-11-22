@@ -172,8 +172,17 @@ PUSH is ignored."
 (use-package forge
   :after magit)
 
+;; Keep agent-shell data (transcripts, screenshots, worktrees) out of project
+;; directories and together under `user-emacs-directory'.
+(defun my-agent-shell-dot-subdir (subdir)
+  "Return path to agent-shell SUBDIR under `user-emacs-directory'."
+  (expand-file-name (file-name-concat ".agent-shell" subdir)
+                    user-emacs-directory))
+
 (use-package agent-shell
-  :commands (agent-shell))
+  :commands (agent-shell)
+  :custom
+  (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
 
 (use-package markdown-mode
   :mode (("\\.markdown\\'" . markdown-mode)
