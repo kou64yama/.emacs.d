@@ -12,6 +12,12 @@
 /eww-bookmarks
 /forge-database.sqlite*
 /history
+/oauth2-auto.plist
+/persist/
+/.org-generic-id-locations
+/.org-id-locations
+/bookmarks.eld
+/request/
 /.mc-lists.el
 /projects.eld
 /recentf*

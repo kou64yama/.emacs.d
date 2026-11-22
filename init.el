@@ -209,7 +209,10 @@ PUSH is ignored."
    '(("t" "Task" entry (file+headline "inbox.org" "Tasks")
       "* TODO %?\n%a")
      ("n" "Note" entry (file+headline "inbox.org" "Notes")
-      "* %?\n%U\n%a")))
+      "* %?\n%U\n%a")
+     ("a" "Appointment" entry (file "gcal.org")
+      "* %?\n:PROPERTIES:\n:calendar-id: primary\n:END:\n:org-gcal:\n%^T--%^T\n:END:\n"
+      :jump-to-captured t)))
   ;; Display
   (org-startup-indented t)
   (org-startup-folded 'content)
@@ -243,6 +246,70 @@ PUSH is ignored."
   :custom
   (org-modern-star 'replace)
   (org-modern-list '((43 . "◦") (45 . "•") (42 . "⁃"))))
+
+;;; Google Calendar (org-gcal)
+(use-package org-gcal
+  :defer t
+  :preface
+  (defvar my-org-gcal--credentials-loaded nil
+    "Non-nil after auth-source credentials have been read.")
+  :bind (("C-c g f" . org-gcal-fetch)
+         ("C-c g s" . org-gcal-sync)
+         ("C-c g p" . org-gcal-post-at-point))
+  :init
+  (setq org-gcal-fetch-file-alist
+        (list (cons "primary" (expand-file-name "gcal.org" my-org-directory)))
+        org-gcal-local-timezone "Asia/Tokyo"
+        ;; Show OAuth/completion prompts in the minibuffer, not Notification Center.
+        org-gcal-notify-p t
+        alert-default-style 'message
+        org-gcal-up-days 30
+        org-gcal-down-days 90
+        org-gcal-remove-api-cancelled-events nil
+        org-gcal-strip-html-descriptions t)
+  ;; Cache the plstore passphrase for the session.
+  (setq plstore-cache-passphrase-for-symmetric-encryption t)
+  ;; Non-nil placeholders avoid org-gcal's load-time warning. The real values
+  ;; are substituted by `my-org-gcal-ensure-auth' before any request.
+  (setq org-gcal-client-id "not-set"
+        org-gcal-client-secret "not-set")
+  :config
+  (defun my-org-gcal-ensure-auth (&rest _)
+    "Load Google OAuth credentials from auth-source and register them.
+Arguments are ignored so this can be used as :before advice."
+    (require 'auth-source)
+    ;; Read the encrypted auth file only once per session.
+    (unless my-org-gcal--credentials-loaded
+      (setq org-gcal-client-id
+            (auth-source-pick-first-password :host "gcal-client-id")
+            org-gcal-client-secret
+            (auth-source-pick-first-password :host "gcal-client-secret"))
+      (when (and org-gcal-client-id org-gcal-client-secret)
+        (setq my-org-gcal--credentials-loaded t)))
+    (unless (and org-gcal-client-id org-gcal-client-secret)
+      (user-error "Add gcal-client-id and gcal-client-secret to ~/.authinfo.gpg"))
+    (org-gcal-reload-client-id-secret))
+
+  ;; `org-gcal-fetch' delegates to `org-gcal-sync', so advising sync covers
+  ;; both. Also cover the hooks that post/refile/delete entries automatically.
+  (dolist (command '(org-gcal-sync
+                     org-gcal-sync-buffer
+                     org-gcal-post-at-point
+                     org-gcal-delete-at-point))
+    (advice-add command :before #'my-org-gcal-ensure-auth))
+
+  ;; org-gcal inserts fetched events into the buffer but never saves it.
+  ;; Defer the save so it runs outside `atomic-change-group'.
+  (defun my-org-gcal-save (&rest _)
+    "Persist org-gcal fetch files after the current update."
+    (run-at-time
+     0 nil
+     (lambda ()
+       (dolist (file (mapcar #'cdr org-gcal-fetch-file-alist))
+         (let ((buffer (get-file-buffer file)))
+           (when (and buffer (buffer-modified-p buffer))
+             (with-current-buffer buffer (save-buffer))))))))
+  (add-to-list 'org-gcal-after-update-entry-functions #'my-org-gcal-save))
 
 (use-package diff-hl
   :demand t
@@ -298,7 +365,9 @@ PUSH is ignored."
   (browse-url-secondary-browser-function #'browse-url-default-browser)
   ;; Direct complex or media-heavy pages directly to system browser.
   (browse-url-handlers
-   '(("https?://\\(www\\.\\)?youtube\\.com" . browse-url-default-browser)
+   '(;; OAuth must open in a real browser so the localhost callback can fire.
+     ("https?://accounts\\.google\\.com/" . browse-url-default-browser)
+     ("https?://\\(www\\.\\)?youtube\\.com" . browse-url-default-browser)
      ("https?://github\\.com/.*/\\(issues\\|pull\\)" . browse-url-default-browser))))
 
 ;;; init.el ends here

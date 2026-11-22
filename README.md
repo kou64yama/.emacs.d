@@ -8,6 +8,7 @@ A personal, modern Emacs configuration featuring the Catppuccin theme, lightweig
 - Git on `exec-path` (for Magit and version-control features)
 - [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
+- GPG (with a secret key) if using Google Calendar sync credentials stored in `~/.authinfo.gpg`
 
 ## Setup
 
@@ -49,6 +50,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Modern Styling**: [org-modern](https://github.com/minad/org-modern) renders bullets, tags, TODO keywords, and folded headings with cleaner glyphs, including in the agenda.
 - **Markup Reveal**: [org-appear](https://github.com/awth13/org-appear) shows emphasis markers only while the cursor is on the text, so documents stay visually clean.
 - **Editing Comforts**: Indented startup view, content folding, native syntax highlighting for source blocks, fast TODO selection, and done-time logging into the `LOGBOOK` drawer.
+- **Google Calendar**: [org-gcal](https://github.com/kidd/org-gcal.el) synchronizes the primary calendar bidirectionally with `~/org/gcal.org`; OAuth credentials are read lazily from `~/.authinfo.gpg` (manual sync only, no timer).
 
 ### Git & Version Control
 - **Git Interface**: [Magit](https://magit.vc/) for Git operations (`C-x g`).
@@ -85,8 +87,11 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `C->` / `C-<` | `mc/mark-next-like-this` / `previous` |
 | | `C-c C-<` | `mc/mark-all-like-this` |
 | **Org** | `C-c a` | `org-agenda` (agenda for `~/org`) |
-| | `C-c c t` / `C-c c n` | `org-capture` (task / note) |
+| | `C-c c t` / `C-c c n` / `C-c c a` | `org-capture` (task / note / appointment) |
 | | `C-c c C` | Finish capture |
+| | `C-c g f` | Fetch Google Calendar events into `gcal.org` |
+| | `C-c g s` | Bidirectional Google Calendar / Org sync |
+| | `C-c g p` | Post the appointment at point to Google Calendar |
 | | `C-c l` | `org-store-link` (link to current location) |
 | | `C-c C-e` | Export dispatcher (in Org buffer) |
 | | `TAB` / `S-TAB` | Fold / unfold (in Org buffer) |
@@ -107,6 +112,26 @@ Install and authenticate an agent separately (see [agent-shell installation](htt
 ### Org Files
 Org data lives outside this repository in `~/org/`. The directory is scanned automatically for agenda files, and the first capture creates `~/org/inbox.org` with `Tasks` and `Notes` sections. Back up `~/org` separately if needed.
 
+### Google Calendar (`org-gcal`)
+
+1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, enable the **Google Calendar API**, configure the **OAuth consent screen** (External), and create an **OAuth client ID** of type **Desktop app**. Add your own Google account as a test user (or publish the app to avoid token expiry).
+2. Open `~/.authinfo.gpg` in Emacs (`C-x C-f`) and add the client ID and secret, then save so EPA encrypts them with your GPG key:
+
+   ```
+   machine gcal-client-id password 1234567890-xxxxxxxx.apps.googleusercontent.com
+   machine gcal-client-secret password GOCSPX-xxxxxxxxxxxxxxxx
+   ```
+
+3. Run `C-c g f` in Emacs. A message in the minibuffer asks you to log in, and your **external browser** opens for the first OAuth authorization (EWW is bypassed for `accounts.google.com`). Grant access to your calendar, approve the "unverified app" warning if the consent screen is in Testing mode, then wait for `Completed event fetching` in the minibuffer before opening the agenda.
+
+`org-gcal` stores fetched events in `~/org/gcal.org` (included in the agenda via the `~/org` scan). `C-c c a` captures a new appointment there with the required `:org-gcal:` drawer, and `C-c g p` sends the entry at point to Google; `C-c g s` runs a full bidirectional sync. Sync is manual only — nothing runs at startup or on a timer. Credentials are injected with `:before` advice on the upstream `org-gcal` commands, so `M-x org-gcal-sync` and automatic post/refile/delete hooks are covered too. `org-gcal` inserts events into a buffer without writing the file, so this configuration also saves `gcal.org` automatically after each update.
+
+> [!IMPORTANT]
+> OAuth tokens are kept in `~/.emacs.d/oauth2-auto.plist` (plstore-encrypted; the passphrase is cached for the session) and sync tokens in `~/.emacs.d/persist/`. Both are excluded from Git.
+> A consent screen left in **Testing** makes refresh tokens expire after **7 days**; publish the app (and accept the unverified-app warning) for personal use to avoid this.
+> `gcal.org` is managed by `org-gcal`. Do not hand-edit its `:ID:` / `:ETag:` properties, and keep personal notes in other files such as `inbox.org`.
+> If nothing happens after `C-c g f`, check the minibuffer first: Emacs may be waiting for a GPG/plstore passphrase or for the browser authorization; the sync is asynchronous and `gcal.org` stays empty until it finishes. If the external browser cannot reach the localhost callback, set `oauth2-auto-manually-auth` to `t` and paste the authorization code from the redirect URL instead.
+
 ### Language Servers (`Eglot`)
 Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.
 
@@ -116,4 +141,4 @@ Install the language server for your language and ensure its executable is avail
 - `init.el`: Package, display, and backup settings.
 - `custom.el`: Settings managed by Emacs Customize (auto-loaded).
 - `LICENSE`: MIT License.
-- `elpa/`, `eln-cache/`, `backups/`: Directories for installed packages, compiled cache, and backups (excluded from Git).
+- `elpa/`, `eln-cache/`, `backups/`, `oauth2-auto.plist`, `persist/`: Installed packages, compiled cache, backups, and org-gcal OAuth/sync tokens (excluded from Git).
