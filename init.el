@@ -247,6 +247,19 @@ PUSH is ignored."
   (org-modern-star 'replace)
   (org-modern-list '((43 . "◦") (45 . "•") (42 . "⁃"))))
 
+;;; Japanese holidays (calendar and Org agenda)
+(use-package japanese-holidays
+  :after calendar
+  :init
+  (setq org-agenda-include-diary t)
+  :config
+  ;; Do not append to `calendar-holidays': its default list contains US
+  ;; holidays such as Thanksgiving, and this config may run twice.
+  (setq calendar-holidays (append japanese-holidays
+                                  holiday-local-holidays
+                                  holiday-other-holidays)
+        calendar-mark-holidays-flag t))
+
 ;;; Google Calendar (org-gcal)
 (use-package org-gcal
   :defer t

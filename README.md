@@ -51,6 +51,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Markup Reveal**: [org-appear](https://github.com/awth13/org-appear) shows emphasis markers only while the cursor is on the text, so documents stay visually clean.
 - **Editing Comforts**: Indented startup view, content folding, native syntax highlighting for source blocks, fast TODO selection, and done-time logging into the `LOGBOOK` drawer.
 - **Google Calendar**: [org-gcal](https://github.com/kidd/org-gcal.el) synchronizes the primary calendar bidirectionally with `~/org/gcal.org`; OAuth credentials are read lazily from `~/.authinfo.gpg` (manual sync only, no timer).
+- **Japanese Holidays**: [japanese-holidays](https://github.com/emacs-jp/japanese-holidays) marks holidays in `M-x calendar` and includes them in the Org agenda via the diary.
 
 ### Git & Version Control
 - **Git Interface**: [Magit](https://magit.vc/) for Git operations (`C-x g`).
@@ -111,6 +112,9 @@ Install and authenticate an agent separately (see [agent-shell installation](htt
 
 ### Org Files
 Org data lives outside this repository in `~/org/`. The directory is scanned automatically for agenda files, and the first capture creates `~/org/inbox.org` with `Tasks` and `Notes` sections. Back up `~/org` separately if needed.
+
+### Japanese Holidays
+Japanese national holidays are calculated locally by `japanese-holidays` and replace the default `calendar-holidays`, so unrelated holidays such as Thanksgiving are not shown. They are highlighted in `M-x calendar` and appear as `Diary:` entries in the Org agenda (`org-agenda-include-diary`), including month view.
 
 ### Google Calendar (`org-gcal`)
 
