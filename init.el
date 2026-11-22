@@ -463,45 +463,4 @@ Arguments are ignored so this can be used as :before advice."
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-;;; Web browsing
-
-(use-package eww
-  :ensure nil
-  :custom
-  ;; Use DuckDuckGo HTML version for fast, clean text search.
-  (eww-search-prefix "https://html.duckduckgo.com/html/?q=")
-  ;; Rename buffer based on page title/URL so multiple pages can be opened.
-  (eww-auto-rename-buffer t)
-  (eww-bookmarks-directory (expand-file-name "eww-bookmarks" user-emacs-directory))
-  :bind (("C-c w w" . eww)
-         ("C-c w s" . eww-search-words)
-         :map eww-mode-map
-         ("r" . eww-reload)
-         ("h" . eww-back-url)
-         ("l" . eww-forward-url)
-         ("o" . eww)))
-
-(use-package shr
-  :ensure nil
-  :custom
-  (shr-use-fonts t)
-  (shr-use-colors t)
-  ;; Constrain inline image size relative to window width.
-  (shr-max-image-proportion 0.6)
-  (shr-image-animate t)
-  (shr-width nil))
-
-;; Prefer EWW inside Emacs, with external browser fallback.
-(use-package browse-url
-  :ensure nil
-  :custom
-  (browse-url-browser-function #'eww-browse-url)
-  (browse-url-secondary-browser-function #'browse-url-default-browser)
-  ;; Direct complex or media-heavy pages directly to system browser.
-  (browse-url-handlers
-   '(;; OAuth must open in a real browser so the localhost callback can fire.
-     ("https?://accounts\\.google\\.com/" . browse-url-default-browser)
-     ("https?://\\(www\\.\\)?youtube\\.com" . browse-url-default-browser)
-     ("https?://github\\.com/.*/\\(issues\\|pull\\)" . browse-url-default-browser))))
-
 ;;; init.el ends here

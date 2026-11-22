@@ -79,7 +79,6 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`).
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
-- **Web Browser**: Built-in [EWW](https://www.gnu.org/software/emacs/manual/html_node/emacs/EWW.html) with DuckDuckGo search, auto-renamed buffers, and automatic external browser routing for media-heavy sites and GitHub PRs.
 
 ### System & Environment
 - **Environment Variables**: [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell) syncs shell `$PATH` and variables in graphical frames and daemon sessions.
@@ -116,9 +115,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | **Git** | `C-x g` | `magit-status` |
 | | `N` (in Magit) | `forge-pull` (fetch forge issues & PRs) |
 | | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
-| **Web & Docs** | `C-c w w` | `eww` (open EWW browser) |
-| | `C-c w s` | `eww-search-words` (search selected text) |
-| | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
+| **Web & Docs** | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
 | **Tools** | `M-x eglot` | Start Language Server Protocol client |
 | | `M-x agent-shell` | Open ACP AI agent shell |
 
@@ -143,7 +140,7 @@ Japanese national holidays are calculated locally by `japanese-holidays` and rep
    machine gcal-client-secret password GOCSPX-xxxxxxxxxxxxxxxx
    ```
 
-3. Run `C-c g f` in Emacs. A message in the minibuffer asks you to log in, and your **external browser** opens for the first OAuth authorization (EWW is bypassed for `accounts.google.com`). Grant access to your calendar, approve the "unverified app" warning if the consent screen is in Testing mode, then wait for `Completed event fetching` in the minibuffer before opening the agenda.
+3. Run `C-c g f` in Emacs. A message in the minibuffer asks you to log in, and your **external browser** opens for the first OAuth authorization. Grant access to your calendar, approve the "unverified app" warning if the consent screen is in Testing mode, then wait for `Completed event fetching` in the minibuffer before opening the agenda.
 
 `org-gcal` stores fetched events in `~/org/gcal.org` (included in the agenda via the `~/org` scan). `C-c c a` captures a new appointment there with the required `:org-gcal:` drawer, and `C-c g p` sends the entry at point to Google; `C-c g s` runs a full bidirectional sync. Sync is manual only — nothing runs at startup or on a timer. Credentials are injected with `:before` advice on the upstream `org-gcal` commands, so `M-x org-gcal-sync` and automatic post/refile/delete hooks are covered too. `org-gcal` inserts events into a buffer without writing the file, so this configuration also saves `gcal.org` automatically after each update.
 
