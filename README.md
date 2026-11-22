@@ -1,6 +1,6 @@
 # Emacs Configuration
 
-A personal, modern Emacs configuration featuring the Catppuccin theme, lightweight completion (Vertico, Orderless, Marginalia, Consult, Corfu), built-in LSP (Eglot), and comprehensive Git tooling (Magit, Forge).
+A personal, modern Emacs configuration featuring Modus themes, lightweight completion (Vertico, Orderless, Marginalia, Consult, Corfu), built-in LSP (Eglot), and comprehensive Git tooling (Magit, Forge).
 
 ## Requirements
 
@@ -39,7 +39,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ## Features & Configuration
 
 ### Appearance & Display
-- **Theme**: [Catppuccin theme](https://github.com/catppuccin/emacs) with the Mocha flavor.
+- **Theme**: Built-in Modus Vivendi (dark) and Modus Operandi (light) follow the OS appearance. On macOS, the global appearance is checked every five seconds using `defaults`; on other systems, [auto-dark](https://github.com/LionyxML/auto-dark-emacs) handles detection (Linux requires D-Bus). Vivendi is the fallback when detection is unavailable.
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).

@@ -164,11 +164,31 @@ PUSH is ignored."
 
 ;;; Appearance
 
-(use-package catppuccin-theme
-  :custom
-  (catppuccin-flavor 'mocha)
-  :config
-  (load-theme 'catppuccin t))
+(load-theme 'modus-vivendi t)
+
+(if (eq system-type 'darwin)
+    (progn
+      (defun my-update-macos-theme ()
+        "Match the Modus theme to the macOS global appearance."
+        (with-temp-buffer
+          (when (zerop (call-process "defaults" nil t nil "read" "-g"))
+            (goto-char (point-min))
+            (let ((theme (if (re-search-forward
+                              "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
+                             'modus-vivendi
+                           'modus-operandi)))
+              (unless (memq theme custom-enabled-themes)
+                (mapc #'disable-theme
+                      (seq-filter (lambda (enabled)
+                                    (memq enabled '(modus-vivendi modus-operandi)))
+                                  custom-enabled-themes))
+                (load-theme theme t))))))
+      (run-with-timer 0 5 #'my-update-macos-theme))
+  (use-package auto-dark
+    :custom
+    (auto-dark-themes '((modus-vivendi) (modus-operandi)))
+    :config
+    (auto-dark-mode 1)))
 
 (use-package doom-modeline
   :custom
