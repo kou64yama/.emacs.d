@@ -84,6 +84,10 @@
 (global-hl-line-mode 1)
 (savehist-mode 1)
 (global-auto-revert-mode 1)
+(save-place-mode 1)
+(repeat-mode 1)
+(setq enable-recursive-minibuffers t
+      auto-revert-verbose nil)
 
 (use-package recentf
   :ensure nil
@@ -164,27 +168,42 @@ PUSH is ignored."
 
 ;;; Appearance
 
+(defun my-macos-appearance-theme ()
+  "Return the Modus theme matching the macOS global appearance."
+  (condition-case nil
+      (with-temp-buffer
+        (when (eq 0 (call-process "defaults" nil t nil "read" "-g"))
+          (goto-char (point-min))
+          (if (re-search-forward "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
+              'modus-vivendi
+            'modus-operandi)))
+    (file-error nil)))
+
+(defun my-apply-modus-theme (theme)
+  "Enable THEME unless already active, disabling the other Modus variant."
+  (unless (memq theme custom-enabled-themes)
+    (mapc #'disable-theme
+          (seq-filter (lambda (enabled)
+                        (memq enabled '(modus-vivendi modus-operandi)))
+                      custom-enabled-themes))
+    (load-theme theme t)))
+
+(defun my-sync-macos-theme ()
+  "Match the Modus theme to macOS appearance in a graphical frame."
+  (when (display-graphic-p)
+    (when-let* ((theme (my-macos-appearance-theme)))
+      (my-apply-modus-theme theme))))
+
+;; Themes are global; start dark even when the first frame is a terminal.
 (load-theme 'modus-vivendi t)
 
 (if (eq system-type 'darwin)
     (progn
-      (defun my-update-macos-theme ()
-        "Match the Modus theme to the macOS global appearance."
-        (with-temp-buffer
-          (when (zerop (call-process "defaults" nil t nil "read" "-g"))
-            (goto-char (point-min))
-            (let ((theme (if (re-search-forward
-                              "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
-                             'modus-vivendi
-                           'modus-operandi)))
-              (unless (memq theme custom-enabled-themes)
-                (mapc #'disable-theme
-                      (seq-filter (lambda (enabled)
-                                    (memq enabled '(modus-vivendi modus-operandi)))
-                                  custom-enabled-themes))
-                (load-theme theme t))))))
-      (run-with-timer 0 5 #'my-update-macos-theme))
+      (my-sync-macos-theme)
+      (add-function :after after-focus-change-function #'my-sync-macos-theme)
+      (run-with-idle-timer 30 t #'my-sync-macos-theme))
   (use-package auto-dark
+    :if (display-graphic-p)
     :custom
     (auto-dark-themes '((modus-vivendi) (modus-operandi)))
     :config
@@ -246,7 +265,10 @@ PUSH is ignored."
   :init
   ;; Terminal child frames are available starting with Emacs 31.
   (when (or (display-graphic-p) (>= emacs-major-version 31))
-    (global-corfu-mode 1)))
+    (global-corfu-mode 1))
+  :config
+  (corfu-popupinfo-mode 1)
+  (corfu-history-mode 1))
 
 (use-package cape
   :init
@@ -255,9 +277,14 @@ PUSH is ignored."
 
 ;;; Development and project tools
 
+;; Larger reads keep LSP traffic from being split into tiny chunks.
+(setq read-process-output-max (* 1024 1024))
+
 (use-package eglot
   :ensure nil
-  :commands (eglot eglot-ensure))
+  :commands (eglot eglot-ensure)
+  :config
+  (setq eglot-autoshutdown t))
 
 (use-package magit
   :bind ("C-x g" . magit-status))

@@ -9,6 +9,7 @@ A personal, modern Emacs configuration featuring Modus themes, lightweight compl
 - Optional: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
 - [age](https://github.com/FiloSottile/age) 1.0 or later on `exec-path` for encrypted authentication (for example, `brew install age` on macOS). The `age` Emacs package is installed from MELPA.
+- Optional: [ripgrep](https://github.com/BurntSushi/ripgrep) on `exec-path` for `consult-ripgrep`, and [Pandoc](https://pandoc.org/) for Markdown export and preview.
 
 ## Setup
 
@@ -39,7 +40,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ## Features & Configuration
 
 ### Appearance & Display
-- **Theme**: Built-in Modus Vivendi (dark) and Modus Operandi (light) follow the OS appearance. On macOS, the global appearance is checked every five seconds using `defaults`; on other systems, [auto-dark](https://github.com/LionyxML/auto-dark-emacs) handles detection (Linux requires D-Bus). Vivendi is the fallback when detection is unavailable.
+- **Theme**: Terminal-only sessions use Modus Vivendi (dark). In graphical sessions, Modus Vivendi and Modus Operandi (light) follow the OS appearance: macOS checks on focus changes and after 30 seconds idle; other systems use [auto-dark](https://github.com/LionyxML/auto-dark-emacs) (Linux requires D-Bus). Themes are global to an Emacs process, so GUI and terminal frames in the same process cannot have independent themes.
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
@@ -52,13 +53,14 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Annotations**: [Marginalia](https://github.com/minad/marginalia) displays candidate types, file sizes, and docstrings.
 - **Search & Navigation**: [Consult](https://github.com/minad/consult) provides enhanced buffer switching, line search, `ripgrep`/`find`, imenu jump, and Xref integration.
 - **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
-- **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion (in graphical frames and terminal Emacs 31+).
+- **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
 - **Key Discovery**: which-key shows hints for partial key sequences (built-in on Emacs 30+; installs [which-key](https://github.com/justbur/emacs-which-key) on Emacs 29).
 
 ### Editing
 - **Region Expansion**: [expand-region](https://github.com/magnars/expand-region.el) semantically expands selections (`C-=`).
 - **Multiple Cursors**: [multiple-cursors](https://github.com/magnars/multiple-cursors.el) edits multiple lines or matched occurrences simultaneously.
+- **Repeatable Commands**: `repeat-mode` repeats commands such as `C-x o` with single keys.
 - **EditorConfig**: Enforces project indentation and whitespace rules (built-in on Emacs 30+; installs [EditorConfig](https://github.com/editorconfig/editorconfig-emacs) on Emacs 29).
 - **Clipboard**: Seamless OS clipboard integration (including macOS terminal frames via `pbcopy`/`pbpaste`).
 
@@ -82,7 +84,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### System & Environment
 - **Environment Variables**: [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell) syncs shell `$PATH` and variables in graphical frames and daemon sessions.
-- **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).
+- **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), cursor position restoration (`save-place-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).
 - **Backups**: Centralized in `backups/` under the configuration directory with revision retention.
 - **Mouse Support**: Terminal mouse click, drag, and scrolling enabled (`xterm-mouse-mode`).
 
@@ -151,7 +153,7 @@ Japanese national holidays are calculated locally by `japanese-holidays` and rep
 > If nothing happens after `C-c g f`, check the minibuffer first: Emacs may be waiting for browser authorization; the sync is asynchronous and `gcal.org` stays empty until it finishes. If the external browser cannot reach the localhost callback, set `oauth2-auto-manually-auth` to `t` and paste the authorization code from the redirect URL instead.
 
 ### Language Servers (`Eglot`)
-Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook.
+Install the language server for your language and ensure its executable is available on `exec-path`. Open a source file in its project and run `M-x eglot RET`. Use `M-.` to find definitions, `M-,` to return, `M-x completion-at-point` for completion, `M-x eglot-rename` to rename symbols, and `M-x eglot-code-actions` for code actions. To automate, add `eglot-ensure` to the major mode's hook. `eglot-autoshutdown` stops the server when its last buffer is closed, and `read-process-output-max` is raised to 1 MiB for LSP traffic.
 
 ## Files
 
