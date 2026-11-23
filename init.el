@@ -23,71 +23,56 @@
   (age-file-enable)
   (setq auth-sources (list (expand-file-name "authinfo.age" user-emacs-directory))))
 
-(defvar my-oauth-age-file (expand-file-name "oauth2-auto.age" user-emacs-directory)
-  "Age-encrypted OAuth token store.")
-
-(defun my-oauth-age-read-all ()
-  "Read the age-encrypted OAuth token alist."
-  (if (not (file-exists-p my-oauth-age-file))
-      (if (file-exists-p (expand-file-name "oauth2-auto.plist" user-emacs-directory))
-          (user-error "Legacy OAuth store exists; move it aside before reauthorizing")
-        nil)
-    (with-temp-buffer
-      (insert-file-contents my-oauth-age-file)
-      (let ((read-eval nil))
-        (read (current-buffer))))))
-
-(defun my-oauth-age-read (username provider)
-  "Read the OAuth token for USERNAME and PROVIDER."
-  (alist-get (list username provider) (my-oauth-age-read-all) nil nil #'equal))
-
-(defun my-oauth-age-write (username provider plist)
-  "Store PLIST for USERNAME and PROVIDER in the age-encrypted store."
-  (let* ((entries (my-oauth-age-read-all))
-         (temporary (make-temp-file
-                     (expand-file-name ".oauth2-auto-" user-emacs-directory)
-                     nil ".age")))
-    (unwind-protect
-        (progn
-          (setf (alist-get (list username provider) entries nil nil #'equal) plist)
-          (with-temp-buffer
-            (let ((print-length nil) (print-level nil))
-              (prin1 entries (current-buffer)))
-            (let ((coding-system-for-write 'utf-8-unix))
-              (write-region (point-min) (point-max) temporary nil 'silent)))
-          (set-file-modes temporary #o600)
-          (rename-file temporary my-oauth-age-file t)
-          plist)
-      (when (file-exists-p temporary) (delete-file temporary)))))
-
 ;;; Basic editing and display
 
-;; Keep backup files together, without hard-coding a home directory.
-(setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory)))
-      version-control t
-      delete-old-versions t
-      kept-old-versions 2
-      kept-new-versions 6)
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun my-enable-line-numbers ()
+    (display-line-numbers-mode 1))
+  :init
+  ;; Keep backup files together under the configuration directory.
+  (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory)))
+        version-control t
+        delete-old-versions t
+        kept-old-versions 2
+        kept-new-versions 6
+        enable-recursive-minibuffers t
+        auto-revert-verbose nil)
+  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+  ;; Show line numbers in programming and text buffers.
+  (dolist (hook '(prog-mode-hook text-mode-hook))
+    (add-hook hook #'my-enable-line-numbers)))
 
-(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(xterm-mouse-mode 1)
-;; Show line numbers in programming and text buffers.
-(defun my-enable-line-numbers ()
-  (display-line-numbers-mode 1))
+(use-package xt-mouse
+  :ensure nil
+  :init (xterm-mouse-mode 1))
 
-(dolist (hook '(prog-mode-hook text-mode-hook))
-  (add-hook hook #'my-enable-line-numbers))
+(use-package paren
+  :ensure nil
+  :init (show-paren-mode 1))
 
-(show-paren-mode 1)
-(global-hl-line-mode 1)
-(savehist-mode 1)
-(global-auto-revert-mode 1)
-(save-place-mode 1)
-(repeat-mode 1)
-(setq enable-recursive-minibuffers t
-      auto-revert-verbose nil)
+(use-package hl-line
+  :ensure nil
+  :init (global-hl-line-mode 1))
+
+(use-package savehist
+  :ensure nil
+  :init (savehist-mode 1))
+
+(use-package autorevert
+  :ensure nil
+  :init (global-auto-revert-mode 1))
+
+(use-package saveplace
+  :ensure nil
+  :init (save-place-mode 1))
+
+(use-package repeat
+  :ensure nil
+  :init (repeat-mode 1))
 
 (use-package recentf
   :ensure nil
@@ -97,34 +82,27 @@
   :init
   (recentf-mode 1))
 
-;; Prefer JetBrains Mono in graphical frames. Terminal frames keep the
-;; font configured in the terminal emulator.
-(when (display-graphic-p)
-  (when (find-font (font-spec :family "JetBrains Mono"))
-    (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
-    (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono"))
-  (when (find-font (font-spec :family "Avenir Next"))
-    (set-face-attribute 'variable-pitch nil :family "Avenir Next"))
-  ;; Use Hiragino Sans for Japanese text when available.
-  (when (find-font (font-spec :family "Hiragino Sans"))
-    (dolist (script '(kana han cjk-misc))
-      (set-fontset-font t script "Hiragino Sans"))))
+(use-package faces
+  :ensure nil
+  :init
+  ;; Terminal frames keep the font configured in the terminal emulator.
+  (when (display-graphic-p)
+    (when (find-font (font-spec :family "JetBrains Mono"))
+      (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
+      (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono"))
+    (when (find-font (font-spec :family "Avenir Next"))
+      (set-face-attribute 'variable-pitch nil :family "Avenir Next"))
+    (when (find-font (font-spec :family "Hiragino Sans"))
+      (dolist (script '(kana han cjk-misc))
+        (set-fontset-font t script "Hiragino Sans")))))
 
-;; These packages are built in starting with Emacs 30.
-(if (< emacs-major-version 30)
-    (use-package editorconfig
-      :ensure t
-      :config (editorconfig-mode 1))
-  (use-package editorconfig
-    :ensure nil
-    :config (editorconfig-mode 1)))
+(use-package editorconfig
+  :ensure nil
+  :config (editorconfig-mode 1))
 
-(if (< emacs-major-version 30)
-    (use-package which-key
-      :init (which-key-mode 1))
-  (use-package which-key
-    :ensure nil
-    :init (which-key-mode 1)))
+(use-package which-key
+  :ensure nil
+  :init (which-key-mode 1))
 
 ;;; Environment and clipboard
 
@@ -134,13 +112,9 @@
   :config
   (exec-path-from-shell-initialize))
 
-;; Share kills and yanks with the graphical desktop clipboard.
-(setq select-enable-clipboard t)
-
-;; macOS terminal frames do not have the GUI clipboard integration.
-(when (and (eq system-type 'darwin)
-           (executable-find "pbcopy")
-           (executable-find "pbpaste"))
+(use-package select
+  :ensure nil
+  :preface
   (defvar my-terminal-last-clipboard nil
     "Last clipboard text exchanged with the macOS terminal clipboard.")
   (defun my-terminal-cut-to-clipboard (text &optional push)
@@ -162,52 +136,62 @@ PUSH is ignored."
               (unless (or (equal text "")
                           (equal text my-terminal-last-clipboard))
                 (setq my-terminal-last-clipboard text))))))))
-  (unless (display-graphic-p)
+  :init
+  ;; Share kills and yanks with the graphical desktop clipboard.
+  (setq select-enable-clipboard t)
+  ;; macOS terminal frames do not have the GUI clipboard integration.
+  (when (and (eq system-type 'darwin)
+             (executable-find "pbcopy")
+             (executable-find "pbpaste")
+             (not (display-graphic-p)))
     (setq interprogram-cut-function #'my-terminal-cut-to-clipboard
           interprogram-paste-function #'my-terminal-paste-from-clipboard)))
 
 ;;; Appearance
 
-(defun my-macos-appearance-theme ()
-  "Return the Modus theme matching the macOS global appearance."
-  (condition-case nil
-      (with-temp-buffer
-        (when (eq 0 (call-process "defaults" nil t nil "read" "-g"))
-          (goto-char (point-min))
-          (if (re-search-forward "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
-              'modus-vivendi
-            'modus-operandi)))
-    (file-error nil)))
+(use-package modus-themes
+  :ensure nil
+  :preface
+  (defun my-macos-appearance-theme ()
+    "Return the Modus theme matching the macOS global appearance."
+    (condition-case nil
+        (with-temp-buffer
+          (when (eq 0 (call-process "defaults" nil t nil "read" "-g"))
+            (goto-char (point-min))
+            (if (re-search-forward "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
+                'modus-vivendi
+              'modus-operandi)))
+      (file-error nil)))
 
-(defun my-apply-modus-theme (theme)
-  "Enable THEME unless already active, disabling the other Modus variant."
-  (unless (memq theme custom-enabled-themes)
-    (mapc #'disable-theme
-          (seq-filter (lambda (enabled)
-                        (memq enabled '(modus-vivendi modus-operandi)))
-                      custom-enabled-themes))
-    (load-theme theme t)))
+  (defun my-apply-modus-theme (theme)
+    "Enable THEME unless already active, disabling the other Modus variant."
+    (unless (memq theme custom-enabled-themes)
+      (mapc #'disable-theme
+            (seq-filter (lambda (enabled)
+                          (memq enabled '(modus-vivendi modus-operandi)))
+                        custom-enabled-themes))
+      (load-theme theme t)))
 
-(defun my-sync-macos-theme ()
-  "Match the Modus theme to macOS appearance in a graphical frame."
-  (when (display-graphic-p)
-    (when-let* ((theme (my-macos-appearance-theme)))
-      (my-apply-modus-theme theme))))
+  (defun my-sync-macos-theme ()
+    "Match the Modus theme to macOS appearance in a graphical frame."
+    (when (display-graphic-p)
+      (when-let* ((theme (my-macos-appearance-theme)))
+        (my-apply-modus-theme theme))))
 
-;; Themes are global; start dark even when the first frame is a terminal.
-(load-theme 'modus-vivendi t)
+  :init
+  ;; Themes are global; start dark even when the first frame is a terminal.
+  (load-theme 'modus-vivendi t)
+  (when (eq system-type 'darwin)
+    (my-sync-macos-theme)
+    (add-function :after after-focus-change-function #'my-sync-macos-theme)
+    (run-with-idle-timer 30 t #'my-sync-macos-theme)))
 
-(if (eq system-type 'darwin)
-    (progn
-      (my-sync-macos-theme)
-      (add-function :after after-focus-change-function #'my-sync-macos-theme)
-      (run-with-idle-timer 30 t #'my-sync-macos-theme))
-  (use-package auto-dark
-    :if (display-graphic-p)
-    :custom
-    (auto-dark-themes '((modus-vivendi) (modus-operandi)))
-    :config
-    (auto-dark-mode 1)))
+(use-package auto-dark
+  :if (and (not (eq system-type 'darwin)) (display-graphic-p))
+  :custom
+  (auto-dark-themes '((modus-vivendi) (modus-operandi)))
+  :config
+  (auto-dark-mode 1))
 
 (use-package doom-modeline
   :custom
@@ -219,7 +203,7 @@ PUSH is ignored."
   :hook ((markdown-mode . olivetti-mode)
          (org-mode . olivetti-mode)
          (olivetti-mode . my-olivetti-line-numbers))
-  :init
+  :preface
   (defvar-local my-olivetti-previous-line-numbers nil)
   (defun my-olivetti-line-numbers ()
     "Hide line numbers in Olivetti and restore their previous state."
@@ -288,11 +272,11 @@ PUSH is ignored."
 
 ;;; Development and project tools
 
-;; Larger reads keep LSP traffic from being split into tiny chunks.
-(setq read-process-output-max (* 1024 1024))
-
 (use-package eglot
   :ensure nil
+  :init
+  ;; Larger reads keep LSP traffic from being split into tiny chunks.
+  (setq read-process-output-max (* 1024 1024))
   :commands (eglot eglot-ensure)
   :config
   (setq eglot-autoshutdown t))
@@ -347,11 +331,11 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   (advice-add 'markdown-export-file-name :around #'my-markdown-export-file-name))
 
 ;;; Org
-(defvar my-org-directory (expand-file-name "~/org/")
-  "Directory for Org files.")
-
 (use-package org
   :ensure nil
+  :preface
+  (defvar my-org-directory (expand-file-name "~/org/")
+    "Directory for Org files.")
   :bind (("C-c a" . org-agenda)
          ("C-c c" . org-capture)
          ("C-c l" . org-store-link))
@@ -418,6 +402,43 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
 (use-package org-gcal
   :defer t
   :preface
+  (defvar my-oauth-age-file (expand-file-name "oauth2-auto.age" user-emacs-directory)
+    "Age-encrypted OAuth token store.")
+
+  (defun my-oauth-age-read-all ()
+    "Read the age-encrypted OAuth token alist."
+    (if (not (file-exists-p my-oauth-age-file))
+        (if (file-exists-p (expand-file-name "oauth2-auto.plist" user-emacs-directory))
+            (user-error "Legacy OAuth store exists; move it aside before reauthorizing")
+          nil)
+      (with-temp-buffer
+        (insert-file-contents my-oauth-age-file)
+        (let ((read-eval nil))
+          (read (current-buffer))))))
+
+  (defun my-oauth-age-read (username provider)
+    "Read the OAuth token for USERNAME and PROVIDER."
+    (alist-get (list username provider) (my-oauth-age-read-all) nil nil #'equal))
+
+  (defun my-oauth-age-write (username provider plist)
+    "Store PLIST for USERNAME and PROVIDER in the age-encrypted store."
+    (let* ((entries (my-oauth-age-read-all))
+           (temporary (make-temp-file
+                       (expand-file-name ".oauth2-auto-" user-emacs-directory)
+                       nil ".age")))
+      (unwind-protect
+          (progn
+            (setf (alist-get (list username provider) entries nil nil #'equal) plist)
+            (with-temp-buffer
+              (let ((print-length nil) (print-level nil))
+                (prin1 entries (current-buffer)))
+              (let ((coding-system-for-write 'utf-8-unix))
+                (write-region (point-min) (point-max) temporary nil 'silent)))
+            (set-file-modes temporary #o600)
+            (rename-file temporary my-oauth-age-file t)
+            plist)
+        (when (file-exists-p temporary) (delete-file temporary)))))
+
   (defvar my-org-gcal--credentials-loaded nil
     "Non-nil after auth-source credentials have been read.")
   (defun my-org-gcal-ensure-auth (&rest _)

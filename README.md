@@ -4,7 +4,7 @@ A personal, modern Emacs configuration featuring Modus themes, lightweight compl
 
 ## Requirements
 
-- Emacs 29 or later (local version is 31.1; relies on built-in `use-package`, `eglot`, `sqlite`)
+- Emacs 30 or later (relies on built-in `use-package`, `eglot`, `sqlite`)
 - Git on `exec-path` (for Magit and version-control features)
 - Optional: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
@@ -55,13 +55,13 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
 - **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
-- **Key Discovery**: which-key shows hints for partial key sequences (built-in on Emacs 30+; installs [which-key](https://github.com/justbur/emacs-which-key) on Emacs 29).
+- **Key Discovery**: which-key shows hints for partial key sequences (built into Emacs).
 
 ### Editing
 - **Region Expansion**: [expand-region](https://github.com/magnars/expand-region.el) semantically expands selections (`C-=`).
 - **Multiple Cursors**: [multiple-cursors](https://github.com/magnars/multiple-cursors.el) edits multiple lines or matched occurrences simultaneously.
 - **Repeatable Commands**: `repeat-mode` repeats commands such as `C-x o` with single keys.
-- **EditorConfig**: Enforces project indentation and whitespace rules (built-in on Emacs 30+; installs [EditorConfig](https://github.com/editorconfig/editorconfig-emacs) on Emacs 29).
+- **EditorConfig**: Enforces project indentation and whitespace rules (built into Emacs).
 - **Clipboard**: Seamless OS clipboard integration (including macOS terminal frames via `pbcopy`/`pbpaste`).
 
 ### Org
