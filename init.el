@@ -217,7 +217,18 @@ PUSH is ignored."
 
 (use-package olivetti
   :hook ((markdown-mode . olivetti-mode)
-         (org-mode . olivetti-mode)))
+         (org-mode . olivetti-mode)
+         (olivetti-mode . my-olivetti-line-numbers))
+  :init
+  (defvar-local my-olivetti-previous-line-numbers nil)
+  (defun my-olivetti-line-numbers ()
+    "Hide line numbers in Olivetti and restore their previous state."
+    (if olivetti-mode
+        (progn
+          (setq my-olivetti-previous-line-numbers display-line-numbers-mode)
+          (display-line-numbers-mode -1))
+      (when my-olivetti-previous-line-numbers
+        (display-line-numbers-mode 1)))))
 
 (use-package mixed-pitch
   :hook ((markdown-mode . mixed-pitch-mode)

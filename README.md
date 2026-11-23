@@ -44,7 +44,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
-- **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area in Markdown and Org buffers; toggle it in the current buffer with `M-x olivetti-mode`.
+- **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area in Markdown and Org buffers and hides line numbers while active. Toggle it in the current buffer with `M-x olivetti-mode`; the previous line-number setting is restored when it is disabled.
 - **Mixed-pitch Text**: [mixed-pitch](https://github.com/jdtsmith/mixed-pitch) uses Avenir Next for prose in Markdown and Org buffers when available, falling back to the environment's variable-pitch font otherwise. Suitable elements remain fixed-pitch. Toggle it in the current buffer with `M-x mixed-pitch-mode`. Terminal frames use the terminal's font.
 
 ### Minibuffer & Completion
