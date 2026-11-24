@@ -18,17 +18,17 @@ A personal, modern Emacs configuration featuring Modus themes, lightweight compl
 3. Create an age identity and recipient before using authentication:
 
    ```sh
-   mkdir -p ~/.emacs.d/age
-   chmod 700 ~/.emacs.d/age
-   age-keygen -o ~/.emacs.d/age/identity.txt
-   age-keygen -y ~/.emacs.d/age/identity.txt > ~/.emacs.d/age/recipients.txt
-   chmod 600 ~/.emacs.d/age/identity.txt
+   mkdir -p ~/.config/age
+   chmod 700 ~/.config/age
+   age-keygen -o ~/.config/age/identity.txt
+   age-keygen -y ~/.config/age/identity.txt > ~/.config/age/recipients.txt
+   chmod 600 ~/.config/age/identity.txt
    ```
 
-   Keep a secure backup of the identity: it is an unencrypted private key and anyone who can read it can decrypt the stores. Do not overwrite an existing identity. For a configuration directory elsewhere, use its `age` subdirectory instead.
+   Keep a secure backup of the identity: it is an unencrypted private key and anyone who can read it can decrypt the stores. Do not overwrite an existing identity. If migrating from an earlier configuration, move the existing `identity.txt` and `recipients.txt` from the Emacs configuration directory's `age/` subdirectory to `~/.config/age/` instead of generating a new key.
 4. Start Emacs. `use-package` will download and compile missing packages automatically.
 
-To migrate existing authentication, open `~/.authinfo.gpg` in Emacs, copy its contents into `~/.emacs.d/authinfo.age`, and save. This preserves Forge entries as well as the Google client credentials. Disable auto-save and backups for the plaintext buffer while copying. Keep the original until the new file and Forge access have been verified. The configured `auth-sources` uses only the age file; other auth sources must be migrated too.
+To migrate existing authentication, open `~/.authinfo.gpg` in Emacs, copy its contents into `~/.authinfo.age`, and save. This preserves Forge entries as well as the Google client credentials. Disable auto-save and backups for the plaintext buffer while copying. Keep the original until the new file and Forge access have been verified. If migrating from an earlier version of this configuration, move `~/.emacs.d/authinfo.age` to `~/.authinfo.age` instead. The configured `auth-sources` uses only the age file; other auth sources must be migrated too.
 
 If an old `oauth2-auto.plist` exists but `oauth2-auto.age` does not, move the old file aside and authorize Google again. Verify synchronization before removing the old file.
 
@@ -135,7 +135,7 @@ Japanese national holidays are calculated locally by `japanese-holidays` and rep
 ### Google Calendar (`org-gcal`)
 
 1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, enable the **Google Calendar API**, configure the **OAuth consent screen** (External), and create an **OAuth client ID** of type **Desktop app**. Add your own Google account as a test user (or publish the app to avoid token expiry).
-2. Open `~/.emacs.d/authinfo.age` in Emacs (`C-x C-f`) and add the client ID and secret, then save to encrypt them with age:
+2. Open `~/.authinfo.age` in Emacs (`C-x C-f`) and add the client ID and secret, then save to encrypt them with age:
 
    ```
    machine gcal-client-id password 1234567890-xxxxxxxx.apps.googleusercontent.com

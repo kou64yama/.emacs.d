@@ -17,11 +17,11 @@
 (use-package age
   :demand t
   :custom
-  (age-default-identity (expand-file-name "age/identity.txt" user-emacs-directory))
-  (age-default-recipient (expand-file-name "age/recipients.txt" user-emacs-directory))
+  (age-default-identity (expand-file-name "~/.config/age/identity.txt"))
+  (age-default-recipient (expand-file-name "~/.config/age/recipients.txt"))
   :config
   (age-file-enable)
-  (setq auth-sources (list (expand-file-name "authinfo.age" user-emacs-directory))))
+  (setq auth-sources (list (expand-file-name "~/.authinfo.age"))))
 
 ;;; Basic editing and display
 
