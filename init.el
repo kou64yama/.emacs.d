@@ -112,6 +112,13 @@
 
 ;;; Environment and clipboard
 
+(use-package alert
+  :commands (alert)
+  :custom
+  (alert-default-style (cond
+                        ((eq system-type 'darwin) 'osx-notifier)
+                        (t 'message))))
+
 ;; Inherit environment variables from shell in graphical frames and daemon.
 (use-package exec-path-from-shell
   :if (or (memq window-system '(mac ns x)) (daemonp))
@@ -485,9 +492,7 @@ Arguments are ignored so this can be used as :before advice."
   (setq org-gcal-fetch-file-alist
         (list (cons "primary" (expand-file-name "gcal.org" my-org-directory)))
         org-gcal-local-timezone "Asia/Tokyo"
-        ;; Show OAuth/completion prompts in the minibuffer, not Notification Center.
         org-gcal-notify-p t
-        alert-default-style 'message
         org-gcal-up-days 30
         org-gcal-down-days 90
         org-gcal-remove-api-cancelled-events nil
