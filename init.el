@@ -296,6 +296,9 @@ PUSH is ignored."
     (expand-file-name (file-name-concat ".agent-shell" subdir)
                       user-emacs-directory))
   :commands (agent-shell)
+  :bind (:map agent-shell-mode-map
+              ("RET" . newline)
+              ("C-c C-c" . agent-shell-submit))
   :custom
   (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
 
