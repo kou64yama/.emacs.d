@@ -294,6 +294,7 @@ PUSH is ignored."
     (expand-file-name (file-name-concat ".agent-shell" subdir)
                       user-emacs-directory))
   :commands (agent-shell)
+  :hook (agent-shell-mode . mixed-pitch-mode)
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
               ("C-c C-c" . agent-shell-submit))
