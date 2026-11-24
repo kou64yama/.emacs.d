@@ -11,6 +11,8 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+;; Declaration order: conditions and loading, :preface, :commands, :mode,
+;; :bind, :hook, :custom, :init, then :config.
 
 ;;; Encrypted authentication
 
@@ -204,8 +206,6 @@ PUSH is ignored."
   (doom-modeline-mode 1))
 
 (use-package olivetti
-  :commands (olivetti-mode)
-  :hook (olivetti-mode . my-olivetti-line-numbers)
   :preface
   (defvar-local my-olivetti-previous-line-numbers nil)
   (defun my-olivetti-line-numbers ()
@@ -215,7 +215,9 @@ PUSH is ignored."
           (setq my-olivetti-previous-line-numbers display-line-numbers-mode)
           (display-line-numbers-mode -1))
       (when my-olivetti-previous-line-numbers
-        (display-line-numbers-mode 1)))))
+        (display-line-numbers-mode 1))))
+  :commands (olivetti-mode)
+  :hook (olivetti-mode . my-olivetti-line-numbers))
 
 (use-package mixed-pitch
   :commands (mixed-pitch-mode))
@@ -276,10 +278,10 @@ PUSH is ignored."
 
 (use-package eglot
   :ensure nil
+  :commands (eglot eglot-ensure)
   :init
   ;; Larger reads keep LSP traffic from being split into tiny chunks.
   (setq read-process-output-max (* 1024 1024))
-  :commands (eglot eglot-ensure)
   :config
   (setq eglot-autoshutdown t))
 
@@ -298,10 +300,10 @@ PUSH is ignored."
     (expand-file-name (file-name-concat ".agent-shell" subdir)
                       user-emacs-directory))
   :commands (agent-shell)
-  :hook (agent-shell-mode . mixed-pitch-mode)
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
               ("C-c C-c" . agent-shell-submit))
+  :hook (agent-shell-mode . mixed-pitch-mode)
   :custom
   (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
 
@@ -309,8 +311,6 @@ PUSH is ignored."
 ;; Mirror the source path beneath this directory so same-named files in
 ;; different projects do not overwrite each other.
 (use-package markdown-mode
-  :hook ((markdown-mode . olivetti-mode)
-         (markdown-mode . mixed-pitch-mode))
   :preface
   (defvar my-markdown-preview-directory
     (expand-file-name "markdown-preview" user-emacs-directory)
@@ -331,6 +331,8 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'" . markdown-mode)
          ("README\\.md\\'" . gfm-mode))
+  :hook ((markdown-mode . olivetti-mode)
+         (markdown-mode . mixed-pitch-mode))
   :custom
   (markdown-hide-markup t)
   (markdown-fontify-code-blocks-natively t)
@@ -341,14 +343,14 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
 ;;; Org
 (use-package org
   :ensure nil
-  :hook ((org-mode . olivetti-mode)
-         (org-mode . mixed-pitch-mode))
   :preface
   (defvar my-org-directory (expand-file-name "~/org/")
     "Directory for Org files.")
   :bind (("C-c a" . org-agenda)
          ("C-c c" . org-capture)
          ("C-c l" . org-store-link))
+  :hook ((org-mode . olivetti-mode)
+         (org-mode . mixed-pitch-mode))
   :custom
   (org-directory my-org-directory)
   (org-default-notes-file (expand-file-name "inbox.org" my-org-directory))
