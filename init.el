@@ -88,6 +88,13 @@
   :init
   (recentf-mode 1))
 
+(use-package dashboard
+  :custom
+  (dashboard-projects-backend 'project-el)
+  (dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5) (agenda . 5)))
+  :config
+  (dashboard-setup-startup-hook))
+
 (use-package faces
   :ensure nil
   :init

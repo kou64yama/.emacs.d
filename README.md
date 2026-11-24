@@ -83,6 +83,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
 ### System & Environment
+- **Startup Dashboard**: [dashboard](https://github.com/emacs-dashboard/dashboard) shows recent files, projects, bookmarks, and today's Org agenda at startup. Use `M-x dashboard-open` to revisit it, `g` to refresh, and `RET` to open an item.
 - **Notifications**: [alert](https://github.com/jwiegley/alert) uses macOS notifications on macOS and the minibuffer on other systems. `org-gcal` status notifications use the same setting.
 - **Environment Variables**: [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell) syncs shell `$PATH` and variables in graphical frames and daemon sessions.
 - **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), cursor position restoration (`save-place-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).

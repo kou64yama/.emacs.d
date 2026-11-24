@@ -6,7 +6,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(age agent-shell auto-dark cape consult corfu ddskk diff-hl
+   '(age agent-shell auto-dark cape consult corfu dashboard ddskk diff-hl
 	 doom-modeline embark embark-consult exec-path-from-shell
 	 expand-region forge japanese-holidays magit marginalia
 	 markdown-mode mixed-pitch multiple-cursors olivetti orderless
