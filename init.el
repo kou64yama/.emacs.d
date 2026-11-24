@@ -306,11 +306,24 @@ PUSH is ignored."
     "Return path to agent-shell SUBDIR under `user-emacs-directory'."
     (expand-file-name (file-name-concat ".agent-shell" subdir)
                       user-emacs-directory))
+  (defun my-agent-shell-subscribe-notifications ()
+    "Notify when this agent shell finishes outside the selected window."
+    (let ((shell-buffer (current-buffer)))
+      (agent-shell-subscribe-to
+       :shell-buffer shell-buffer
+       :event 'turn-complete
+       :on-event (lambda (_event)
+                   (when (and (buffer-live-p shell-buffer)
+                              (not (eq shell-buffer
+                                       (window-buffer (selected-window)))))
+                     (alert (format "Response finished in %s" (buffer-name shell-buffer))
+                            :title "Agent Shell"))))))
   :commands (agent-shell)
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
               ("C-c C-c" . agent-shell-submit))
-  :hook (agent-shell-mode . mixed-pitch-mode)
+  :hook ((agent-shell-mode . mixed-pitch-mode)
+         (agent-shell-mode . my-agent-shell-subscribe-notifications))
   :custom
   (agent-shell-dot-subdir-function #'my-agent-shell-dot-subdir))
 
