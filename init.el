@@ -307,16 +307,18 @@ PUSH is ignored."
     (expand-file-name (file-name-concat ".agent-shell" subdir)
                       user-emacs-directory))
   (defun my-agent-shell-subscribe-notifications ()
-    "Notify when this agent shell finishes outside the selected window."
+    "Notify about completed turns and permission requests in inactive shells."
     (let ((shell-buffer (current-buffer)))
       (agent-shell-subscribe-to
        :shell-buffer shell-buffer
-       :event 'turn-complete
-       :on-event (lambda (_event)
-                   (when (and (buffer-live-p shell-buffer)
-                              (not (eq shell-buffer
-                                       (window-buffer (selected-window)))))
-                     (alert (format "Response finished in %s" (buffer-name shell-buffer))
+       :on-event (lambda (event)
+                   (when-let* ((description (pcase (map-elt event :event)
+                                              ('turn-complete "Response finished")
+                                              ('permission-request "Permission requested")))
+                               ((buffer-live-p shell-buffer))
+                               ((not (eq shell-buffer
+                                         (window-buffer (selected-window))))))
+                     (alert (format "%s in %s" description (buffer-name shell-buffer))
                             :title "Agent Shell"))))))
   :commands (agent-shell)
   :bind (:map agent-shell-mode-map

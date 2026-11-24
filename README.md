@@ -79,7 +79,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### Development & Tools
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
-- **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. A notification is sent when a response finishes outside the selected window.
+- **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
 ### System & Environment
