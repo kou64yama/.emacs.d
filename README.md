@@ -52,6 +52,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Flexible Matching**: [Orderless](https://github.com/oantolin/orderless) filters candidates by multiple space-separated patterns. File names use `partial-completion`.
 - **Annotations**: [Marginalia](https://github.com/minad/marginalia) displays candidate types, file sizes, and docstrings.
 - **Search & Navigation**: [Consult](https://github.com/minad/consult) provides enhanced buffer switching, line search, `ripgrep`/`find`, imenu jump, and Xref integration.
+- **Workspaces**: [tabspaces](https://codeberg.org/mclear-tools/tabspaces) groups buffers by tab. Switching projects with `C-x p p` or the dashboard opens or reuses a project workspace. `C-c TAB s` switches or creates a workspace, `C-c TAB o` opens a project in a workspace, and `C-c TAB d` closes one. `C-x b` lists buffers belonging to the current workspace (including shared buffers such as `*scratch*`); Consult's `o` narrowing shows buffers from other workspaces. Recent files and bookmarks remain available across workspaces. The workspace buffer list also affects other Consult commands such as `consult-project-buffer` and `consult-line-multi`. Workspaces are not restored across Emacs restarts.
 - **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
 - **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
@@ -103,6 +104,9 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `M-y` | `consult-yank-pop` (browse kill ring history) |
 | | `C-.` / `C-;` | `embark-act` / `embark-dwim` |
 | | `C-h B` | `embark-bindings` |
+| **Workspaces** | `C-c TAB s` | Switch or create a workspace |
+| | `C-c TAB o` | Open a project in a workspace |
+| | `C-c TAB d` | Close the current workspace |
 | **Editing** | `C-=` | `er/expand-region` (expand selection semantically) |
 | | `C-S-c C-S-c` | `mc/edit-lines` (edit all lines in selection) |
 | | `C->` / `C-<` | `mc/mark-next-like-this` / `previous` |

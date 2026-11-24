@@ -264,6 +264,23 @@ PUSH is ignored."
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
 
+(use-package tabspaces
+  :demand t
+  :preface
+  (defun my-consult-tabspaces ()
+    "Limit Consult's buffer list to the workspace while tabspaces is active."
+    (require 'consult)
+    (setq consult-buffer-list-function
+          (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list)))
+  :custom
+  (tabspaces-project-switch-opens-workspace t)
+  (tabspaces-initialize-project-with-todo nil)
+  (tabspaces-session nil)
+  (tab-bar-new-tab-choice "*scratch*")
+  :config
+  (add-hook 'tabspaces-mode-hook #'my-consult-tabspaces)
+  (tabspaces-mode 1))
+
 (use-package embark
   :bind (("C-." . embark-act)
          ("C-;" . embark-dwim)
