@@ -200,9 +200,8 @@ PUSH is ignored."
   (doom-modeline-mode 1))
 
 (use-package olivetti
-  :hook ((markdown-mode . olivetti-mode)
-         (org-mode . olivetti-mode)
-         (olivetti-mode . my-olivetti-line-numbers))
+  :commands (olivetti-mode)
+  :hook (olivetti-mode . my-olivetti-line-numbers)
   :preface
   (defvar-local my-olivetti-previous-line-numbers nil)
   (defun my-olivetti-line-numbers ()
@@ -215,8 +214,7 @@ PUSH is ignored."
         (display-line-numbers-mode 1)))))
 
 (use-package mixed-pitch
-  :hook ((markdown-mode . mixed-pitch-mode)
-         (org-mode . mixed-pitch-mode)))
+  :commands (mixed-pitch-mode))
 
 ;;; Completion and navigation
 
@@ -306,6 +304,8 @@ PUSH is ignored."
 ;; Mirror the source path beneath this directory so same-named files in
 ;; different projects do not overwrite each other.
 (use-package markdown-mode
+  :hook ((markdown-mode . olivetti-mode)
+         (markdown-mode . mixed-pitch-mode))
   :preface
   (defvar my-markdown-preview-directory
     (expand-file-name "markdown-preview" user-emacs-directory)
@@ -336,6 +336,8 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
 ;;; Org
 (use-package org
   :ensure nil
+  :hook ((org-mode . olivetti-mode)
+         (org-mode . mixed-pitch-mode))
   :preface
   (defvar my-org-directory (expand-file-name "~/org/")
     "Directory for Org files.")
