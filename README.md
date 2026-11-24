@@ -85,7 +85,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ### System & Environment
 - **Environment Variables**: [exec-path-from-shell](https://github.com/purcell/exec-path-from-shell) syncs shell `$PATH` and variables in graphical frames and daemon sessions.
 - **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), cursor position restoration (`save-place-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).
-- **Backups**: Centralized in `backups/` under the configuration directory with revision retention.
+- **Backups and Locks**: Backups and editing locks are kept in `backups/` and `locks/` under the configuration directory. Lock collision detection requires other Emacs instances editing the same files to use the same lock directory; it does not coordinate across different local directories or hosts.
 - **Mouse Support**: Terminal mouse click, drag, and scrolling enabled (`xterm-mouse-mode`).
 
 ## Keybindings Quick Reference

@@ -31,6 +31,10 @@
   (defun my-enable-line-numbers ()
     (display-line-numbers-mode 1))
   :init
+  ;; Keep lock files outside the directories being edited.
+  (let ((lock-directory (expand-file-name "locks/" user-emacs-directory)))
+    (make-directory lock-directory t)
+    (setq lock-file-name-transforms `((".*" ,lock-directory t))))
   ;; Keep backup files together under the configuration directory.
   (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory)))
         version-control t
