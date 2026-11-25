@@ -394,24 +394,36 @@ Terminal frames keep the font configured in the terminal emulator."
 
 (use-package treemacs
   :preface
-  (defun my-treemacs-toggle ()
-    "Toggle Treemacs, initializing an empty workspace from its project."
-    (interactive)
-    (require 'treemacs)
+  (defun my-treemacs-sync-project (root)
+    "Make ROOT the only project in the current Treemacs workspace."
     (when (featurep 'treemacs-tab-bar)
       (treemacs-tab-bar--ensure-workspace-exists))
-    (when-let* ((project (project-current))
-                ((treemacs-workspace->is-empty?))
-                (root (project-root project)))
-      (treemacs-do-add-project-to-workspace
-       root (file-name-nondirectory (directory-file-name root))))
+    (let* ((root (treemacs-canonical-path (file-truename root)))
+           (projects (treemacs-workspace->projects (treemacs-current-workspace))))
+      (dolist (project (copy-sequence projects))
+        (unless (equal root (treemacs-project->path project))
+          (treemacs-do-remove-project-from-workspace project t)))
+      (when (treemacs-workspace->is-empty?)
+        (let ((result (treemacs-do-add-project-to-workspace
+                       root (file-name-nondirectory (directory-file-name root)))))
+          (unless (eq (car result) 'success)
+            (user-error "Could not add project to Treemacs: %s" result))))))
+  (defun my-treemacs-toggle ()
+    "Toggle Treemacs, showing the current project when available."
+    (interactive)
+    (require 'treemacs)
+    (when-let* ((project (project-current)))
+      (my-treemacs-sync-project (project-root project)))
     (treemacs))
-  (defun my-treemacs-show-after-project-switch (&rest _)
+  (defun my-treemacs-show-after-project-switch (&optional directory _prefix)
     "Show Treemacs after opening a project workspace."
     (require 'treemacs)
+    (when-let* ((directory directory)
+                (project (project-current nil directory)))
+      (my-treemacs-sync-project (project-root project)))
     (unless (treemacs-get-local-window)
       (save-selected-window
-        (my-treemacs-toggle))))
+        (treemacs))))
   :bind (("C-c t" . my-treemacs-toggle))
   :custom
   (treemacs-persist-file nil)
