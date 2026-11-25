@@ -213,6 +213,13 @@ PUSH is ignored."
   :config
   (auto-dark-mode 1))
 
+(use-package all-the-icons)
+
+(use-package all-the-icons-nerd-fonts
+  :after all-the-icons
+  :config
+  (all-the-icons-nerd-fonts-prefer))
+
 (use-package doom-modeline
   :custom
   (doom-modeline-icon nil)
@@ -354,6 +361,12 @@ PUSH is ignored."
   ;; The integration identifies workspaces by the active tab.
   (tab-bar-mode 1)
   (treemacs-set-scope-type 'Tabs))
+
+(use-package treemacs-nerd-icons
+  :after treemacs
+  :demand t
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
 (use-package magit
   :bind ("C-x g" . magit-status))

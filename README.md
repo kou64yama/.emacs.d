@@ -7,6 +7,7 @@ A personal, modern Emacs configuration featuring Modus themes, lightweight compl
 - Emacs 30 or later (relies on built-in `use-package`, `eglot`, `sqlite`)
 - Git on `exec-path` (for Magit and version-control features)
 - Optional: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
+- Optional: A [Nerd Font](https://www.nerdfonts.com/) (such as `Symbols Nerd Font`, e.g. `brew install --cask font-symbols-only-nerd-font`) for `all-the-icons-nerd-fonts` icon glyphs
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
 - [age](https://github.com/FiloSottile/age) 1.0 or later on `exec-path` for encrypted authentication (for example, `brew install age` on macOS). The `age` Emacs package is installed from MELPA.
 - Optional: [ripgrep](https://github.com/BurntSushi/ripgrep) on `exec-path` for `consult-ripgrep`, and [Pandoc](https://pandoc.org/) for Markdown export and preview.
@@ -42,6 +43,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ### Appearance & Display
 - **Theme**: Terminal-only sessions use Modus Vivendi (dark). In graphical sessions, Modus Vivendi and Modus Operandi (light) follow the OS appearance: macOS checks on focus changes and after 30 seconds idle; other systems use [auto-dark](https://github.com/LionyxML/auto-dark-emacs) (Linux requires D-Bus). Themes are global to an Emacs process, so GUI and terminal frames in the same process cannot have independent themes.
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
+- **Icons**: [all-the-icons](https://github.com/domtronn/all-the-icons.el) configured with [all-the-icons-nerd-fonts](https://github.com/mohkale/all-the-icons-nerd-fonts) (`all-the-icons-nerd-fonts-prefer`) to render icon glyphs using Nerd Fonts.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
 - **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area in Markdown and Org buffers and hides line numbers while active. Toggle it in the current buffer with `M-x olivetti-mode`; the previous line-number setting is restored when it is disabled.
@@ -80,7 +82,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### Development & Tools
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
-- **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) opens automatically when switching projects and can be toggled with `C-c t`. Its tab-bar integration keeps a separate tree per workspace, and project follow mode displays the current project's tree when Treemacs is open. Treemacs workspace state is not persisted across restarts.
+- **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) opens automatically when switching projects and can be toggled with `C-c t`. Its tab-bar integration keeps a separate tree per workspace, project follow mode displays the current project's tree when Treemacs is open, and [treemacs-nerd-icons](https://github.com/rainstormstudio/treemacs-nerd-icons) renders file and directory icons using Nerd Fonts. Treemacs workspace state is not persisted across restarts.
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
