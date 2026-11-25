@@ -26,8 +26,13 @@
   (age-default-identity (expand-file-name "~/.config/age/identity.txt"))
   (age-default-recipient (expand-file-name "~/.config/age/recipients.txt"))
   :config
-  (age-file-enable)
-  (setq auth-sources (list (expand-file-name "~/.authinfo.age"))))
+  (age-file-enable))
+
+(use-package auth-source
+  :ensure nil
+  :after age
+  :custom
+  (auth-sources (list (expand-file-name "~/.authinfo.age"))))
 
 ;;; System and environment
 
