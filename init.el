@@ -2,7 +2,11 @@
 
 ;;; Startup and package management
 
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(defun my-emacs-path (relative)
+  "Return RELATIVE expanded under `user-emacs-directory'."
+  (expand-file-name relative user-emacs-directory))
+
+(setq custom-file (my-emacs-path "custom.el"))
 (load custom-file :noerror)
 
 (require 'package)
@@ -25,99 +29,7 @@
   (age-file-enable)
   (setq auth-sources (list (expand-file-name "~/.authinfo.age"))))
 
-;;; Basic editing and display
-
-(use-package emacs
-  :ensure nil
-  :preface
-  (defun my-enable-line-numbers ()
-    (display-line-numbers-mode 1))
-  :init
-  ;; Keep lock files outside the directories being edited.
-  (let ((lock-directory (expand-file-name "locks/" user-emacs-directory)))
-    (make-directory lock-directory t)
-    (setq lock-file-name-transforms `((".*" ,lock-directory t))))
-  ;; Keep backup files together under the configuration directory.
-  (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" user-emacs-directory)))
-        version-control t
-        delete-old-versions t
-        kept-old-versions 2
-        kept-new-versions 6
-        enable-recursive-minibuffers t
-        auto-revert-verbose nil)
-  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-  ;; Show line numbers in programming and text buffers.
-  (dolist (hook '(prog-mode-hook text-mode-hook))
-    (add-hook hook #'my-enable-line-numbers)))
-
-(use-package xt-mouse
-  :ensure nil
-  :init (xterm-mouse-mode 1))
-
-(use-package paren
-  :ensure nil
-  :init (show-paren-mode 1))
-
-(use-package hl-line
-  :ensure nil
-  :init (global-hl-line-mode 1))
-
-(use-package savehist
-  :ensure nil
-  :init (savehist-mode 1))
-
-(use-package autorevert
-  :ensure nil
-  :init (global-auto-revert-mode 1))
-
-(use-package saveplace
-  :ensure nil
-  :init (save-place-mode 1))
-
-(use-package repeat
-  :ensure nil
-  :init (repeat-mode 1))
-
-(use-package recentf
-  :ensure nil
-  :custom
-  (recentf-max-saved-items 100)
-  (recentf-exclude '("/elpa/" "/\\.git/"))
-  :init
-  (recentf-mode 1))
-
-(use-package dashboard
-  :custom
-  (dashboard-projects-backend 'project-el)
-  (dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5) (agenda . 5)))
-  :config
-  (dashboard-setup-startup-hook))
-
-(use-package faces
-  :ensure nil
-  :init
-  ;; Terminal frames keep the font configured in the terminal emulator.
-  (when (display-graphic-p)
-    (when (find-font (font-spec :family "JetBrains Mono"))
-      (set-face-attribute 'default nil :family "JetBrains Mono" :height 140)
-      (set-face-attribute 'fixed-pitch nil :family "JetBrains Mono"))
-    (when (find-font (font-spec :family "Avenir Next"))
-      (set-face-attribute 'variable-pitch nil :family "Avenir Next"))
-    (when (find-font (font-spec :family "Hiragino Sans"))
-      (dolist (script '(kana han cjk-misc))
-        (set-fontset-font t script "Hiragino Sans")))))
-
-(use-package editorconfig
-  :ensure nil
-  :config (editorconfig-mode 1))
-
-(use-package which-key
-  :ensure nil
-  :init (which-key-mode 1))
-
-;;; Environment and clipboard
+;;; System and environment
 
 (use-package alert
   :commands (alert)
@@ -137,9 +49,9 @@
   :preface
   (defvar my-terminal-last-clipboard nil
     "Last clipboard text exchanged with the macOS terminal clipboard.")
-  (defun my-terminal-cut-to-clipboard (text &optional push)
+  (defun my-terminal-cut-to-clipboard (text &optional _push)
     "Send TEXT to the macOS clipboard in a terminal frame.
-PUSH is ignored."
+_PUSH is ignored."
     (unless (display-graphic-p)
       (let ((coding-system-for-write 'utf-8))
         (with-temp-buffer
@@ -156,9 +68,10 @@ PUSH is ignored."
               (unless (or (equal text "")
                           (equal text my-terminal-last-clipboard))
                 (setq my-terminal-last-clipboard text))))))))
-  :init
+  :custom
   ;; Share kills and yanks with the graphical desktop clipboard.
-  (setq select-enable-clipboard t)
+  (select-enable-clipboard t)
+  :init
   ;; macOS terminal frames do not have the GUI clipboard integration.
   (when (and (eq system-type 'darwin)
              (executable-find "pbcopy")
@@ -167,7 +80,125 @@ PUSH is ignored."
     (setq interprogram-cut-function #'my-terminal-cut-to-clipboard
           interprogram-paste-function #'my-terminal-paste-from-clipboard)))
 
+(use-package which-key
+  :ensure nil
+  :init (which-key-mode 1))
+
+(use-package xt-mouse
+  :ensure nil
+  :init (xterm-mouse-mode 1))
+
+(use-package savehist
+  :ensure nil
+  :init (savehist-mode 1))
+
+(use-package autorevert
+  :ensure nil
+  :init (global-auto-revert-mode 1))
+
+(use-package saveplace
+  :ensure nil
+  :init (save-place-mode 1))
+
+(use-package recentf
+  :ensure nil
+  :custom
+  (recentf-max-saved-items 100)
+  (recentf-exclude '("/elpa/" "/\\.git/"))
+  :init
+  (recentf-mode 1))
+
+(use-package repeat
+  :ensure nil
+  :init (repeat-mode 1))
+
+;;; Basic editing and display
+
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun my-enable-line-numbers ()
+    "Enable line numbers in the current buffer."
+    (display-line-numbers-mode 1))
+  :hook ((prog-mode text-mode) . my-enable-line-numbers)
+  :custom
+  ;; Keep backup files together under the configuration directory.
+  (backup-directory-alist `(("." . ,(my-emacs-path "backups/"))))
+  (version-control t)
+  (delete-old-versions t)
+  (kept-old-versions 2)
+  (kept-new-versions 6)
+  (enable-recursive-minibuffers t)
+  (auto-revert-verbose nil)
+  :init
+  ;; Keep lock files outside the directories being edited.
+  (let ((lock-directory (my-emacs-path "locks/")))
+    (make-directory lock-directory t)
+    (setq lock-file-name-transforms `((".*" ,lock-directory t))))
+  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1)))
+
+(use-package paren
+  :ensure nil
+  :init (show-paren-mode 1))
+
+(use-package hl-line
+  :ensure nil
+  :init (global-hl-line-mode 1))
+
+(use-package editorconfig
+  :ensure nil
+  :init (editorconfig-mode 1))
+
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
+(use-package drag-stuff
+  :config
+  ;; Avoid overriding Org's M-<up>/<down>/<left>/<right> structure commands.
+  (add-to-list 'drag-stuff-except-modes 'org-mode)
+  (drag-stuff-global-mode 1)
+  (drag-stuff-define-keys))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
 ;;; Appearance
+
+(use-package dashboard
+  :custom
+  (dashboard-projects-backend 'project-el)
+  (dashboard-items '((recents . 5) (projects . 5) (bookmarks . 5) (agenda . 5)))
+  :config
+  (dashboard-setup-startup-hook))
+
+(use-package faces
+  :ensure nil
+  :preface
+  (defun my-setup-fonts (&optional frame)
+    "Configure fonts for graphical FRAME (or the current frame when nil).
+Terminal frames keep the font configured in the terminal emulator."
+    (when (display-graphic-p frame)
+      (when (find-font (font-spec :family "JetBrains Mono") frame)
+        (set-face-attribute 'default frame :family "JetBrains Mono" :height 140)
+        (set-face-attribute 'fixed-pitch frame :family "JetBrains Mono"))
+      (when (find-font (font-spec :family "Avenir Next") frame)
+        (set-face-attribute 'variable-pitch frame :family "Avenir Next"))
+      (when (find-font (font-spec :family "Hiragino Sans") frame)
+        (dolist (script '(kana han cjk-misc))
+          (set-fontset-font t script "Hiragino Sans" frame)))))
+  :init
+  (when (display-graphic-p)
+    (my-setup-fonts))
+  (when (daemonp)
+    (add-hook 'after-make-frame-functions #'my-setup-fonts)))
 
 (use-package modus-themes
   :ensure nil
@@ -197,12 +228,13 @@ PUSH is ignored."
     (when (display-graphic-p)
       (when-let* ((theme (my-macos-appearance-theme)))
         (my-apply-modus-theme theme))))
-
   :init
   ;; Themes are global; start dark even when the first frame is a terminal.
-  (load-theme 'modus-vivendi t)
+  (let ((initial-theme (if (and (eq system-type 'darwin) (display-graphic-p))
+                           (or (my-macos-appearance-theme) 'modus-vivendi)
+                         'modus-vivendi)))
+    (load-theme initial-theme t))
   (when (eq system-type 'darwin)
-    (my-sync-macos-theme)
     (add-function :after after-focus-change-function #'my-sync-macos-theme)
     (run-with-idle-timer 30 t #'my-sync-macos-theme)))
 
@@ -228,7 +260,8 @@ PUSH is ignored."
 
 (use-package olivetti
   :preface
-  (defvar-local my-olivetti-previous-line-numbers nil)
+  (defvar-local my-olivetti-previous-line-numbers nil
+    "Line-number mode state saved before entering Olivetti.")
   (defun my-olivetti-line-numbers ()
     "Hide line numbers in Olivetti and restore their previous state."
     (if olivetti-mode
@@ -276,9 +309,10 @@ PUSH is ignored."
   :preface
   (defun my-consult-tabspaces ()
     "Limit Consult's buffer list to the workspace while tabspaces is active."
-    (require 'consult)
-    (setq consult-buffer-list-function
-          (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list)))
+    (when (featurep 'consult)
+      (setq consult-buffer-list-function
+            (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list))))
+  :hook (tabspaces-mode . my-consult-tabspaces)
   :custom
   (tabspaces-project-switch-opens-workspace t)
   (tabspaces-project-switch-commands #'ignore)
@@ -286,7 +320,8 @@ PUSH is ignored."
   (tabspaces-session nil)
   (tab-bar-new-tab-choice "*scratch*")
   :config
-  (add-hook 'tabspaces-mode-hook #'my-consult-tabspaces)
+  (with-eval-after-load 'consult
+    (my-consult-tabspaces))
   (tabspaces-mode 1))
 
 (use-package embark
@@ -313,16 +348,32 @@ PUSH is ignored."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
+;;; Version control
+
+(use-package magit
+  :bind ("C-x g" . magit-status))
+
+(use-package forge
+  :after magit)
+
+(use-package diff-hl
+  :demand t
+  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
+         (magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
+  :config
+  (global-diff-hl-mode 1))
+
 ;;; Development and project tools
 
 (use-package eglot
   :ensure nil
   :commands (eglot eglot-ensure)
+  :custom
+  (eglot-autoshutdown t)
   :init
   ;; Larger reads keep LSP traffic from being split into tiny chunks.
-  (setq read-process-output-max (* 1024 1024))
-  :config
-  (setq eglot-autoshutdown t))
+  (setq read-process-output-max (* 1024 1024)))
 
 (use-package treemacs
   :preface
@@ -368,20 +419,13 @@ PUSH is ignored."
   :config
   (treemacs-load-theme "nerd-icons"))
 
-(use-package magit
-  :bind ("C-x g" . magit-status))
-
-(use-package forge
-  :after magit)
-
 ;; Keep agent-shell data (transcripts, screenshots, worktrees) out of project
 ;; directories and together under `user-emacs-directory'.
 (use-package agent-shell
   :preface
   (defun my-agent-shell-dot-subdir (subdir)
     "Return path to agent-shell SUBDIR under `user-emacs-directory'."
-    (expand-file-name (file-name-concat ".agent-shell" subdir)
-                      user-emacs-directory))
+    (my-emacs-path (file-name-concat ".agent-shell" subdir)))
   (defun my-agent-shell-subscribe-notifications ()
     "Notify about completed turns and permission requests in inactive shells."
     (let ((shell-buffer (current-buffer)))
@@ -411,7 +455,7 @@ PUSH is ignored."
 (use-package markdown-mode
   :preface
   (defvar my-markdown-preview-directory
-    (expand-file-name "markdown-preview" user-emacs-directory)
+    (my-emacs-path "markdown-preview")
     "Directory where Markdown HTML previews are written.")
 
   (defun my-markdown-export-file-name (original &optional extension)
@@ -439,6 +483,7 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   (advice-add 'markdown-export-file-name :around #'my-markdown-export-file-name))
 
 ;;; Org
+
 (use-package org
   :ensure nil
   :preface
@@ -495,7 +540,8 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   (org-modern-star 'replace)
   (org-modern-list '((43 . "◦") (45 . "•") (42 . "⁃"))))
 
-;;; Japanese holidays (calendar and Org agenda)
+;;;; Japanese holidays (calendar and Org agenda)
+
 (use-package japanese-holidays
   :after calendar
   :init
@@ -508,17 +554,18 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
                                   holiday-other-holidays)
         calendar-mark-holidays-flag t))
 
-;;; Google Calendar (org-gcal)
+;;;; Google Calendar (org-gcal)
+
 (use-package org-gcal
   :defer t
   :preface
-  (defvar my-oauth-age-file (expand-file-name "oauth2-auto.age" user-emacs-directory)
+  (defvar my-oauth-age-file (my-emacs-path "oauth2-auto.age")
     "Age-encrypted OAuth token store.")
 
   (defun my-oauth-age-read-all ()
     "Read the age-encrypted OAuth token alist."
     (if (not (file-exists-p my-oauth-age-file))
-        (if (file-exists-p (expand-file-name "oauth2-auto.plist" user-emacs-directory))
+        (if (file-exists-p (my-emacs-path "oauth2-auto.plist"))
             (user-error "Legacy OAuth store exists; move it aside before reauthorizing")
           nil)
       (with-temp-buffer
@@ -533,9 +580,7 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   (defun my-oauth-age-write (username provider plist)
     "Store PLIST for USERNAME and PROVIDER in the age-encrypted store."
     (let* ((entries (my-oauth-age-read-all))
-           (temporary (make-temp-file
-                       (expand-file-name ".oauth2-auto-" user-emacs-directory)
-                       nil ".age")))
+           (temporary (make-temp-file (my-emacs-path ".oauth2-auto-") nil ".age")))
       (unwind-protect
           (progn
             (setf (alist-get (list username provider) entries nil nil #'equal) plist)
@@ -551,6 +596,7 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
 
   (defvar my-org-gcal--credentials-loaded nil
     "Non-nil after auth-source credentials have been read.")
+
   (defun my-org-gcal-ensure-auth (&rest _)
     "Load Google OAuth credentials from auth-source and register them.
 Arguments are ignored so this can be used as :before advice."
@@ -579,15 +625,16 @@ Arguments are ignored so this can be used as :before advice."
   :bind (("C-c g f" . org-gcal-fetch)
          ("C-c g s" . org-gcal-sync)
          ("C-c g p" . org-gcal-post-at-point))
+  :custom
+  (org-gcal-fetch-file-alist
+   (list (cons "primary" (expand-file-name "gcal.org" my-org-directory))))
+  (org-gcal-local-timezone "Asia/Tokyo")
+  (org-gcal-notify-p t)
+  (org-gcal-up-days 30)
+  (org-gcal-down-days 90)
+  (org-gcal-remove-api-cancelled-events nil)
+  (org-gcal-strip-html-descriptions t)
   :init
-  (setq org-gcal-fetch-file-alist
-        (list (cons "primary" (expand-file-name "gcal.org" my-org-directory)))
-        org-gcal-local-timezone "Asia/Tokyo"
-        org-gcal-notify-p t
-        org-gcal-up-days 30
-        org-gcal-down-days 90
-        org-gcal-remove-api-cancelled-events nil
-        org-gcal-strip-html-descriptions t)
   ;; Non-nil placeholders avoid org-gcal's load-time warning. The real values
   ;; are substituted by `my-org-gcal-ensure-auth' before any request.
   (setq org-gcal-client-id "not-set"
@@ -607,34 +654,5 @@ Arguments are ignored so this can be used as :before advice."
   ;; org-gcal inserts fetched events into the buffer but never saves it.
   ;; Defer the save so it runs outside `atomic-change-group'.
   (add-to-list 'org-gcal-after-update-entry-functions #'my-org-gcal-save))
-
-;;; Editing and version control
-
-(use-package diff-hl
-  :demand t
-  :hook ((diff-hl-mode . diff-hl-flydiff-mode)
-         (magit-pre-refresh . diff-hl-magit-pre-refresh)
-         (magit-post-refresh . diff-hl-magit-post-refresh))
-  :config
-  (global-diff-hl-mode 1))
-
-(use-package expand-region
-  :bind ("C-=" . er/expand-region))
-
-(use-package drag-stuff
-  :config
-  ;; Avoid overriding Org's M-<up>/<down>/<left>/<right> structure commands.
-  (add-to-list 'drag-stuff-except-modes 'org-mode)
-  (drag-stuff-global-mode 1)
-  (drag-stuff-define-keys))
-
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;;; init.el ends here
