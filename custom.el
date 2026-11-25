@@ -10,7 +10,8 @@
 	 doom-modeline embark embark-consult exec-path-from-shell
 	 expand-region forge japanese-holidays magit marginalia
 	 markdown-mode mixed-pitch multiple-cursors olivetti orderless
-	 org-appear org-gcal org-modern rainbow-delimiters vertico)))
+	 org-appear org-gcal org-modern rainbow-delimiters
+	 treemacs-tab-bar vertico)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

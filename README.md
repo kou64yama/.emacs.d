@@ -80,6 +80,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### Development & Tools
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
+- **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) opens automatically when switching projects and can be toggled with `C-c t`. Its tab-bar integration keeps a separate tree per workspace, and project follow mode displays the current project's tree when Treemacs is open. Treemacs workspace state is not persisted across restarts.
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
@@ -125,6 +126,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
 | **Web & Docs** | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
 | **Tools** | `M-x eglot` | Start Language Server Protocol client |
+| | `C-c t` | Toggle the Treemacs project tree |
 | | `M-x agent-shell` | Open ACP AI agent shell |
 
 ## Additional Setup

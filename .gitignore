@@ -5,6 +5,7 @@
 
 # Emacs state and backups
 /agent/
+/.cache/treemacs-persist*
 /auto-save-list/
 /backups/
 /eshell/

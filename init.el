@@ -317,6 +317,44 @@ PUSH is ignored."
   :config
   (setq eglot-autoshutdown t))
 
+(use-package treemacs
+  :preface
+  (defun my-treemacs-toggle ()
+    "Toggle Treemacs, initializing an empty workspace from its project."
+    (interactive)
+    (require 'treemacs)
+    (when (featurep 'treemacs-tab-bar)
+      (treemacs-tab-bar--ensure-workspace-exists))
+    (when-let* ((project (project-current))
+                ((treemacs-workspace->is-empty?))
+                (root (project-root project)))
+      (treemacs-do-add-project-to-workspace
+       root (file-name-nondirectory (directory-file-name root))))
+    (treemacs))
+  (defun my-treemacs-show-after-project-switch (&rest _)
+    "Show Treemacs after opening a project workspace."
+    (require 'treemacs)
+    (unless (treemacs-get-local-window)
+      (save-selected-window
+        (my-treemacs-toggle))))
+  :bind (("C-c t" . my-treemacs-toggle))
+  :custom
+  (treemacs-persist-file nil)
+  :init
+  (advice-add 'tabspaces-open-or-create-project-and-workspace
+              :after #'my-treemacs-show-after-project-switch)
+  :config
+  (treemacs-follow-mode 1)
+  (treemacs-project-follow-mode 1))
+
+(use-package treemacs-tab-bar
+  :after treemacs
+  :demand t
+  :config
+  ;; The integration identifies workspaces by the active tab.
+  (tab-bar-mode 1)
+  (treemacs-set-scope-type 'Tabs))
+
 (use-package magit
   :bind ("C-x g" . magit-status))
 
