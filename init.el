@@ -1,5 +1,19 @@
 ;;; init.el --- Personal Emacs configuration -*- lexical-binding: t; -*-
 
+;;; Commentary:
+;;
+;; Conventions for editing this file:
+;; - Keep hand-written configuration in `init.el` organized by `;;;` sections;
+;;   `custom.el` is managed by Emacs Customize.
+;; - Group package settings in `use-package` declarations (with `:ensure nil`
+;;   for built-in packages), keeping each package's options with its package.
+;; - `use-package` declaration order: conditions and loading, :preface,
+;;   :commands, :mode, :bind, :hook, :custom, :init, then :config.
+;; - Prefer `:custom` for customizable variables; reserve `:init`/`:config`
+;;   for imperative setup, hooks, and advice.
+;; - Resolve paths under `user-emacs-directory` via `my-emacs-path`.
+;; - Defer loading where practical and avoid unnecessary eager `require` calls.
+
 ;;; Startup and package management
 
 (defun my-emacs-path (relative)
@@ -15,8 +29,6 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
-;; Declaration order: conditions and loading, :preface, :commands, :mode,
-;; :bind, :hook, :custom, :init, then :config.
 
 ;;; Encrypted authentication
 
