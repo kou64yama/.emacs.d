@@ -136,7 +136,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ## Additional Setup
 
 ### AI Agents (`agent-shell`)
-Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` for newline, `C-c C-c` to submit). Use `M-x agent-shell-interrupt` to interrupt. Transcripts, screenshots, and worktrees are kept under `~/.emacs.d/.agent-shell/` instead of each project directory.
+Install and authenticate an agent separately (see [agent-shell installation](https://github.com/xenodium/agent-shell#agent-installation)). For Codex, ensure `codex-acp` is on `exec-path`. Run `M-x agent-shell`, select an installed agent, and interact (`RET` for newline, `C-c C-j` to submit, `C-c C-c` to interrupt). Transcripts, screenshots, and worktrees are kept under `~/.emacs.d/.agent-shell/` instead of each project directory.
 
 ### Org Files
 Org data lives outside this repository in `~/org/`. The directory is scanned automatically for agenda files, and the first capture creates `~/org/inbox.org` with `Tasks` and `Notes` sections. Back up `~/org` separately if needed.
