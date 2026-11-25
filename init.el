@@ -274,6 +274,7 @@ PUSH is ignored."
           (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list)))
   :custom
   (tabspaces-project-switch-opens-workspace t)
+  (tabspaces-project-switch-commands #'ignore)
   (tabspaces-initialize-project-with-todo nil)
   (tabspaces-session nil)
   (tab-bar-new-tab-choice "*scratch*")
