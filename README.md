@@ -62,6 +62,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### Editing
 - **Region Expansion**: [expand-region](https://github.com/magnars/expand-region.el) semantically expands selections (`C-=`).
+- **Move Text**: [drag-stuff](https://github.com/rejeep/drag-stuff.el) moves lines, words, or regions with `M-<up>`, `M-<down>`, `M-<left>`, and `M-<right>` (disabled in Org buffers to preserve Org's structure commands).
 - **Multiple Cursors**: [multiple-cursors](https://github.com/magnars/multiple-cursors.el) edits multiple lines or matched occurrences simultaneously.
 - **Repeatable Commands**: `repeat-mode` repeats commands such as `C-x o` with single keys.
 - **EditorConfig**: Enforces project indentation and whitespace rules (built into Emacs).
@@ -111,6 +112,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `C-c TAB o` | Open a project in a workspace |
 | | `C-c TAB d` | Close the current workspace |
 | **Editing** | `C-=` | `er/expand-region` (expand selection semantically) |
+| | `M-<up>` / `M-<down>` / `M-<left>` / `M-<right>` | `drag-stuff` (move line, word, or region; except in Org) |
 | | `C-S-c C-S-c` | `mc/edit-lines` (edit all lines in selection) |
 | | `C->` / `C-<` | `mc/mark-next-like-this` / `previous` |
 | | `C-c C-<` | `mc/mark-all-like-this` |

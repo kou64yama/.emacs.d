@@ -8,7 +8,7 @@
  '(org-src-content-indentation 0 nil nil "Customized with use-package org")
  '(package-selected-packages
    '(age agent-shell all-the-icons-nerd-fonts auto-dark cape consult
-	 corfu dashboard ddskk diff-hl doom-modeline embark
+	 corfu dashboard ddskk diff-hl doom-modeline drag-stuff embark
 	 embark-consult exec-path-from-shell expand-region forge
 	 japanese-holidays magit marginalia markdown-mode mixed-pitch
 	 multiple-cursors olivetti orderless org-appear org-gcal

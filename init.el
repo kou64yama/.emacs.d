@@ -621,6 +621,13 @@ Arguments are ignored so this can be used as :before advice."
 (use-package expand-region
   :bind ("C-=" . er/expand-region))
 
+(use-package drag-stuff
+  :config
+  ;; Avoid overriding Org's M-<up>/<down>/<left>/<right> structure commands.
+  (add-to-list 'drag-stuff-except-modes 'org-mode)
+  (drag-stuff-global-mode 1)
+  (drag-stuff-define-keys))
+
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
