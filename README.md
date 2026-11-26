@@ -45,6 +45,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Icons**: [all-the-icons](https://github.com/domtronn/all-the-icons.el) configured with [all-the-icons-nerd-fonts](https://github.com/mohkale/all-the-icons-nerd-fonts) (`all-the-icons-nerd-fonts-prefer`) to render icon glyphs using Nerd Fonts.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
+- **Frame Size**: The size of the last graphical frame is saved on exit to `~/.emacs.d/frame-size.el` and restored before the initial frame is drawn on the next start. Terminal frames, child frames, and fullscreen or maximized frames are ignored, so the last normal size is kept when Emacs exits fullscreen.
 - **Visual Aids**: Line numbers in programming/text buffers, matching parenthesis highlighting (`show-paren-mode`), current line highlighting (`global-hl-line-mode`), and nested delimiter coloring ([rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)).
 - **Focused Writing**: [Olivetti](https://github.com/rnkn/olivetti) centers the text area in Markdown and Org buffers and hides line numbers while active. Toggle it in the current buffer with `M-x olivetti-mode`; the previous line-number setting is restored when it is disabled.
 - **Mixed-pitch Text**: [mixed-pitch](https://github.com/jdtsmith/mixed-pitch) uses Avenir Next for prose in Markdown and Org buffers when available, falling back to the environment's variable-pitch font otherwise. Suitable elements remain fixed-pitch. Toggle it in the current buffer with `M-x mixed-pitch-mode`. Terminal frames use the terminal's font.
@@ -169,8 +170,8 @@ Install the language server for your language and ensure its executable is avail
 
 ## Files
 
-- `early-init.el`: Early startup settings, including the macOS native-compilation workaround.
+- `early-init.el`: Early startup settings, including the macOS native-compilation workaround and restoration of the saved graphical frame size.
 - `init.el`: Package, display, and backup settings.
 - `custom.el`: Settings managed by Emacs Customize (auto-loaded).
 - `LICENSE`: MIT License.
-- `elpa/`, `eln-cache/`, `backups/`, `markdown-preview/`, `oauth2-auto.plist`, `persist/`: Installed packages, compiled cache, backups, generated Markdown previews, and org-gcal OAuth/sync tokens (excluded from Git).
+- `elpa/`, `eln-cache/`, `backups/`, `markdown-preview/`, `oauth2-auto.plist`, `persist/`, `frame-size.el`: Installed packages, compiled cache, backups, generated Markdown previews, org-gcal OAuth/sync tokens, and the saved graphical frame size (excluded from Git).

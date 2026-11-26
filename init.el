@@ -16,10 +16,6 @@
 
 ;;; Startup and package management
 
-(defun my-emacs-path (relative)
-  "Return RELATIVE expanded under `user-emacs-directory'."
-  (expand-file-name relative user-emacs-directory))
-
 (setq custom-file (my-emacs-path "custom.el"))
 (load custom-file :noerror)
 
@@ -128,6 +124,48 @@ _PUSH is ignored."
 (use-package repeat
   :ensure nil
   :init (repeat-mode 1))
+
+;;; Frame size
+
+(use-package frame
+  :ensure nil
+  :preface
+  (defvar my-frame-size-file (my-emacs-path "frame-size.el")
+    "File where the last graphical frame size is saved.")
+
+  (defun my-save-frame-size (&optional frame)
+    "Save FRAME's size for the next session.
+FRAME defaults to the selected frame.  Ignore non-graphical frames, child
+frames, and frames in fullscreen or maximized state, so the last normal
+size is kept when Emacs exits fullscreen."
+    (let ((frame (or frame (selected-frame))))
+      (when (and (frame-live-p frame)
+                 (display-graphic-p frame)
+                 (null (frame-parameter frame 'parent-frame))
+                 (null (frame-parameter frame 'fullscreen)))
+        (let ((size (list (cons 'width (frame-width frame))
+                          (cons 'height (frame-height frame)))))
+          (setq my-saved-frame-size size)
+          (with-temp-file my-frame-size-file
+            (insert ";;; -*- lexical-binding: t; -*-\n")
+            (prin1 size (current-buffer))
+            (insert "\n"))))))
+
+  (defun my-apply-saved-frame-size (frame)
+    "Apply the saved size to graphical FRAME."
+    (when (and (consp my-saved-frame-size)
+               (display-graphic-p frame)
+               (null (frame-parameter frame 'parent-frame)))
+      (set-frame-size frame
+                      (alist-get 'width my-saved-frame-size)
+                      (alist-get 'height my-saved-frame-size))))
+  :hook ((kill-emacs . my-save-frame-size)
+         (delete-frame-functions . my-save-frame-size))
+  :init
+  ;; Leave terminal frames alone: `early-init.el' skips `default-frame-alist'
+  ;; in daemon sessions, so apply the saved size only to new GUI frames.
+  (when (daemonp)
+    (add-hook 'after-make-frame-functions #'my-apply-saved-frame-size)))
 
 ;;; Basic editing and display
 
