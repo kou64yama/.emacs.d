@@ -501,7 +501,8 @@ Terminal frames keep the font configured in the terminal emulator."
   :commands (agent-shell)
   :bind (:map agent-shell-mode-map
               ("RET" . newline)
-              ("C-c C-j" . agent-shell-submit))
+              ("C-c C-c" . agent-shell-submit)
+              ("C-c C-k" . agent-shell-interrupt))
   :hook ((agent-shell-mode . mixed-pitch-mode)
          (agent-shell-mode . my-agent-shell-subscribe-notifications))
   :custom
