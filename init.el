@@ -374,10 +374,6 @@ Terminal frames keep the font configured in the terminal emulator."
              (secure-hash 'sha256 (file-name-as-directory
                                    (expand-file-name project)))
              ".el")))
-  (defun my-tabspaces-restore-project-on-open (original &rest args)
-    "Enable project session restoration around ORIGINAL called with ARGS."
-    (let ((tabspaces-session-auto-restore t))
-      (apply original args)))
   (defun my-tabspaces-isolate-restored-project-map (original &rest args)
     "Keep ORIGINAL restoring ARGS from replacing the live project-tab map."
     (let ((tabspaces-project-tab-map (copy-tree tabspaces-project-tab-map)))
@@ -390,17 +386,21 @@ Terminal frames keep the font configured in the terminal emulator."
   :custom
   (tabspaces-project-switch-opens-workspace t)
   (tabspaces-project-switch-commands #'ignore)
-  (tabspaces-initialize-project-with-todo nil)
+  (tabspaces-use-filtered-buffers-as-default t)
+  (tabspaces-default-tab "Default")
+  (tabspaces-remove-to-default t)
+  (tabspaces-include-buffers '("*scratch*"))
+  (tabspaces-initialize-project-with-todo t)
+  (tabspaces-todo-file-name "project-todo.org")
+  (tabspaces-fully-resolve-paths t)
+  (tabspaces-exclude-buffers '("*Messages*" "*Compile-Log*"))
   (tabspaces-session t)
-  (tabspaces-session-auto-restore nil)
+  (tabspaces-session-auto-restore t)
   (tabspaces-session-auto-save-delay 300)
   (tabspaces-session-project-session-store #'my-tabspaces-project-session-file)
   (tabspaces-session-file (my-emacs-path "tabsession.el"))
   (tab-bar-new-tab-choice "*scratch*")
   :config
-  ;; Restore projects on demand rather than restoring all tabs at startup.
-  (advice-add 'tabspaces-open-or-create-project-and-workspace
-              :around #'my-tabspaces-restore-project-on-open)
   (advice-add 'tabspaces-restore-session
               :around #'my-tabspaces-isolate-restored-project-map)
   (add-hook 'tab-bar-tab-pre-close-functions #'my-tabspaces-save-before-tab-close)
