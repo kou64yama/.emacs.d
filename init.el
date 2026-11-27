@@ -241,9 +241,9 @@ size is kept when Emacs exits fullscreen."
     "Configure fonts for graphical FRAME (or the current frame when nil).
 Terminal frames keep the font configured in the terminal emulator."
     (when (display-graphic-p frame)
-      (when (find-font (font-spec :family "JetBrains Mono") frame)
-        (set-face-attribute 'default frame :family "JetBrains Mono" :height 140)
-        (set-face-attribute 'fixed-pitch frame :family "JetBrains Mono"))
+      (when (find-font (font-spec :family "Andale Mono") frame)
+        (set-face-attribute 'default frame :family "Andale Mono" :height 140)
+        (set-face-attribute 'fixed-pitch frame :family "Andale Mono"))
       (when (find-font (font-spec :family "Avenir Next") frame)
         (set-face-attribute 'variable-pitch frame :family "Avenir Next"))
       (when (find-font (font-spec :family "Hiragino Sans") frame)
