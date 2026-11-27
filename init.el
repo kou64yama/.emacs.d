@@ -513,7 +513,7 @@ Terminal frames keep the font configured in the terminal emulator."
   :after treemacs
   :demand t
   :config
-  (treemacs-load-theme "nerd-icons"))
+  (treemacs-nerd-icons-config))
 
 ;; Keep agent-shell data (transcripts, screenshots, worktrees) out of project
 ;; directories and together under `user-emacs-directory'.
