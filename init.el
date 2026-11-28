@@ -255,50 +255,16 @@ Terminal frames keep the font configured in the terminal emulator."
   (when (daemonp)
     (add-hook 'after-make-frame-functions #'my-setup-fonts)))
 
-(use-package modus-themes
+(use-package my-auto-theme
   :ensure nil
-  :preface
-  (defun my-macos-appearance-theme ()
-    "Return the Modus theme matching the macOS global appearance."
-    (condition-case nil
-        (with-temp-buffer
-          (when (eq 0 (call-process "defaults" nil t nil "read" "-g"))
-            (goto-char (point-min))
-            (if (re-search-forward "^[[:space:]]*AppleInterfaceStyle = Dark;" nil t)
-                'modus-vivendi
-              'modus-operandi)))
-      (file-error nil)))
-
-  (defun my-apply-modus-theme (theme)
-    "Enable THEME unless already active, disabling the other Modus variant."
-    (unless (memq theme custom-enabled-themes)
-      (mapc #'disable-theme
-            (seq-filter (lambda (enabled)
-                          (memq enabled '(modus-vivendi modus-operandi)))
-                        custom-enabled-themes))
-      (load-theme theme t)))
-
-  (defun my-sync-macos-theme ()
-    "Match the Modus theme to macOS appearance in a graphical frame."
-    (when (display-graphic-p)
-      (when-let* ((theme (my-macos-appearance-theme)))
-        (my-apply-modus-theme theme))))
-  :init
-  ;; Themes are global; start dark even when the first frame is a terminal.
-  (let ((initial-theme (if (and (eq system-type 'darwin) (display-graphic-p))
-                           (or (my-macos-appearance-theme) 'modus-vivendi)
-                         'modus-vivendi)))
-    (load-theme initial-theme t))
-  (when (eq system-type 'darwin)
-    (add-function :after after-focus-change-function #'my-sync-macos-theme)
-    (run-with-idle-timer 30 t #'my-sync-macos-theme)))
-
-(use-package auto-dark
-  :if (and (not (eq system-type 'darwin)) (display-graphic-p))
+  :load-path "lisp"
+  :demand t
   :custom
-  (auto-dark-themes '((modus-vivendi) (modus-operandi)))
+  (my-auto-theme-dark-theme 'modus-vivendi)
+  (my-auto-theme-light-theme 'modus-operandi)
+  (my-auto-theme-fallback 'dark)
   :config
-  (auto-dark-mode 1))
+  (my-auto-theme-mode 1))
 
 (use-package all-the-icons)
 
