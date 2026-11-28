@@ -172,6 +172,10 @@ _PUSH is ignored."
   :ensure nil
   :init (electric-pair-mode 1))
 
+(use-package delsel
+  :ensure nil
+  :init (delete-selection-mode 1))
+
 (use-package pixel-scroll
   :ensure nil
   :init (pixel-scroll-precision-mode 1))
