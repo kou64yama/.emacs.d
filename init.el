@@ -547,6 +547,20 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
     (add-to-list 'project-kill-buffer-conditions
                  '(derived-mode . ghostel-mode))))
 
+;; Bundle extensions: run visual programs, async commands and comint output
+;; through Ghostel's terminal emulation rather than plain ANSI handling.
+(use-package ghostel-eshell
+  :ensure nil
+  :hook (eshell-load . ghostel-eshell-visual-command-mode))
+
+(use-package ghostel-shell-command
+  :ensure nil
+  :hook (after-init . ghostel-shell-command-global-mode))
+
+(use-package ghostel-comint
+  :ensure nil
+  :hook (after-init . ghostel-comint-global-mode))
+
 ;;; Org
 
 (use-package org

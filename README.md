@@ -91,6 +91,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Terminal**: [Ghostel](https://github.com/dakra/ghostel) provides a terminal emulator backed by libghostty-vt (`C-x m` or `M-x ghostel`) with true color, the Kitty keyboard and graphics protocols, hyperlinks, and password-prompt detection. Shell integration (directory tracking and prompt navigation) is injected automatically for bash, zsh, fish, and nushell. The prebuilt native module is downloaded on first use, so no toolchain is required.
 - **Project Terminals**: [ghostel-project](https://dakra.github.io/ghostel/#project-integration) (bundled with Ghostel) opens or reuses a terminal in the current project's root (`C-x p m`) and lists the project's terminals (`C-x p M`). Both are available from the `C-x p p` dispatch menu, and `C-x p k` kills project terminals too. Terminals are matched by their current directory and the project they were created in.
+- **Shell Integration Extensions**: Bundled Ghostel extensions handle programs that need a real terminal. `ghostel-shell-command` runs asynchronous commands (`M-&`, Dired's `&`, `project-async-shell-command`) in a ghostel buffer; `ghostel-eshell` runs Eshell visual commands such as vim, htop, and less in dedicated Ghostel buffers; `ghostel-comint` renders comint output (`M-x shell`, REPLs) with Ghostty's VT parser, including OSC 8 hyperlinks. Fullscreen TUIs still need `M-x ghostel`.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
 ### System & Environment
@@ -138,6 +139,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `C-x t t` | Toggle the Treemacs project tree |
 | | `C-x m` | Open a Ghostel terminal |
 | | `C-x p m` / `C-x p M` | Open or list Ghostel terminals in the current project |
+| | `M-&` | Run an asynchronous shell command in a Ghostel terminal |
 | | `M-x agent-shell` | Open ACP AI agent shell |
 
 ## Additional Setup
