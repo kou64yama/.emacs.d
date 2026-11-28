@@ -6,7 +6,7 @@ A personal, modern Emacs configuration featuring Modus themes, lightweight compl
 
 - Emacs 30 or later (relies on built-in `use-package`, `eglot`, `sqlite`)
 - Git on `exec-path` (for Magit and version-control features)
-- Optional: [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font for graphical frames (`brew install --cask font-jetbrains-mono`)
+- Optional: [Andale Mono](https://support.apple.com/en-us/101665) font for graphical frames (bundled with macOS and Microsoft Office)
 - Optional: A [Nerd Font](https://www.nerdfonts.com/) (such as `Symbols Nerd Font`, e.g. `brew install --cask font-symbols-only-nerd-font`) for `all-the-icons-nerd-fonts` icon glyphs
 - Internet connection on first launch to download packages (unpinned versions from MELPA / ELPA)
 - [age](https://github.com/FiloSottile/age) 1.0 or later on `exec-path` for encrypted authentication (for example, `brew install age` on macOS). The `age` Emacs package is installed from MELPA.

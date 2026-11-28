@@ -168,6 +168,14 @@ _PUSH is ignored."
   :ensure nil
   :init (show-paren-mode 1))
 
+(use-package electric
+  :ensure nil
+  :init (electric-pair-mode 1))
+
+(use-package pixel-scroll
+  :ensure nil
+  :init (pixel-scroll-precision-mode 1))
+
 (use-package hl-line
   :ensure nil
   :init (global-hl-line-mode 1))
@@ -245,7 +253,7 @@ Terminal frames keep the font configured in the terminal emulator."
 
 (use-package doom-modeline
   :custom
-  (doom-modeline-icon nil)
+  (doom-modeline-icon t)
   :config
   (doom-modeline-mode 1))
 
