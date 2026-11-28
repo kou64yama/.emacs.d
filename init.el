@@ -331,6 +331,7 @@ Terminal frames keep the font configured in the terminal emulator."
   (corfu-history-mode 1))
 
 (use-package corfu-terminal
+  :if (< emacs-major-version 31)
   :after corfu
   :config
   (corfu-terminal-mode 1))
