@@ -7,9 +7,9 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(age agent-shell alert all-the-icons all-the-icons-nerd-fonts
-	 auto-dark cape centaur-tabs consult corfu corfu-terminal
-	 dashboard diff-hl doom-modeline drag-stuff embark
-	 embark-consult exec-path-from-shell expand-region
+	 auto-dark cape catppuccin-theme centaur-tabs consult corfu
+	 corfu-terminal dashboard diff-hl doom-modeline drag-stuff
+	 embark embark-consult exec-path-from-shell expand-region
 	 flymake-popon forge japanese-holidays magit marginalia
 	 mixed-pitch multiple-cursors nerd-icons-completion olivetti
 	 orderless org-appear org-gcal org-modern rainbow-delimiters

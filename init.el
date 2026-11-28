@@ -237,16 +237,26 @@ Terminal frames keep the font configured in the terminal emulator."
   (when (daemonp)
     (add-hook 'after-make-frame-functions #'my-setup-fonts)))
 
-(use-package my-auto-theme
+(use-package my-os-appearance
   :ensure nil
   :load-path "lisp"
   :demand t
   :custom
-  (my-auto-theme-dark-theme 'modus-vivendi)
-  (my-auto-theme-light-theme 'modus-operandi)
-  (my-auto-theme-fallback 'dark)
+  (my-os-appearance-fallback 'dark)
   :config
-  (my-auto-theme-mode 1))
+  (my-os-appearance-mode 1))
+
+(use-package catppuccin-theme
+  :after my-os-appearance
+  :preface
+  (defun my-catppuccin-apply-appearance (appearance)
+    "Apply the Catppuccin flavor matching APPEARANCE."
+    (setq catppuccin-flavor (if (eq appearance 'light) 'latte 'mocha))
+    (catppuccin-reload))
+  :config
+  (load-theme 'catppuccin t)
+  (my-catppuccin-apply-appearance (my-os-appearance-current))
+  (add-hook 'my-os-appearance-change-functions #'my-catppuccin-apply-appearance))
 
 (use-package all-the-icons)
 

@@ -1,6 +1,6 @@
 # Emacs Configuration
 
-A personal, modern Emacs configuration featuring Modus themes, lightweight completion (Vertico, Orderless, Marginalia, Consult, Corfu), built-in LSP (Eglot), and comprehensive Git tooling (Magit, Forge).
+A personal, modern Emacs configuration featuring Catppuccin themes, lightweight completion (Vertico, Orderless, Marginalia, Consult, Corfu), built-in LSP (Eglot), and comprehensive Git tooling (Magit, Forge).
 
 ## Requirements
 
@@ -41,7 +41,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 ## Features & Configuration
 
 ### Appearance & Display
-- **Theme**: Managed by the local `my-auto-theme` package (`lisp/my-auto-theme.el`). Configure `my-auto-theme-dark-theme` (default `modus-vivendi`) and `my-auto-theme-light-theme` (default `modus-operandi`), plus `my-auto-theme-fallback` (`dark` by default) when system appearance cannot be detected (such as non-macOS systems). On macOS (both graphical and terminal sessions), it checks the OS appearance on focus changes and after 30 seconds idle. Themes are global to an Emacs process, so GUI and terminal frames in the same process cannot have independent themes.
+- **Theme**: [Catppuccin](https://github.com/catppuccin/emacs) with automatic flavor switching via the local `my-os-appearance` package (`lisp/my-os-appearance.el`). `my-os-appearance` detects OS appearance changes and calls registered functions in `my-os-appearance-change-functions`. The Catppuccin handler applies `mocha` for dark appearance and `latte` for light appearance, with `my-os-appearance-fallback` (`dark` by default) when appearance cannot be detected. On macOS it uses native appearance notifications when available and falls back to focus-change checks and a 30-second idle poll for terminal sessions. Themes are global to an Emacs process, so GUI and terminal frames in the same process cannot have independent themes.
 - **Mode Line**: [doom-modeline](https://github.com/seagle0128/doom-modeline) without external icon font requirements.
 - **Icons**: [all-the-icons](https://github.com/domtronn/all-the-icons.el) configured with [all-the-icons-nerd-fonts](https://github.com/mohkale/all-the-icons-nerd-fonts) (`all-the-icons-nerd-fonts-prefer`) to render icon glyphs using Nerd Fonts.
 - **Typography**: Graphical frames use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) at 14pt for the default and fixed-pitch faces, and Hiragino Sans for Japanese text, when those fonts are available. Otherwise the existing font settings are retained. Terminal frames retain the emulator's font.
@@ -173,7 +173,7 @@ Install the language server for your language and ensure its executable is avail
 
 - `early-init.el`: Early startup settings, including the macOS native-compilation workaround and restoration of the saved graphical frame size.
 - `init.el`: Package, display, and backup settings.
-- `lisp/my-auto-theme.el`: Local package for Dark/Light theme switching with configurable dark/light themes and fallback behavior.
+- `lisp/my-os-appearance.el`: Local package for detecting OS appearance changes and calling registered functions.
 - `custom.el`: Settings managed by Emacs Customize (auto-loaded).
 - `LICENSE`: MIT License.
 - `elpa/`, `eln-cache/`, `backups/`, `markdown-preview/`, `oauth2-auto.plist`, `persist/`, `frame-size.el`: Installed packages, compiled cache, backups, generated Markdown previews, org-gcal OAuth/sync tokens, and the saved graphical frame size (excluded from Git).
