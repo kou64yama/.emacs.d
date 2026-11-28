@@ -3,10 +3,8 @@
 ;;; Commentary:
 ;;
 ;; Persist the last normal graphical frame size to `my-frame-size-file' on
-;; frame deletion and Emacs exit, and restore it for new graphical frames in
-;; daemon sessions.  Non-daemon sessions can read `my-saved-frame-size' in
-;; `early-init.el' to set `default-frame-alist' before the initial frame is
-;; created.
+;; frame deletion and Emacs exit, and restore it on startup and for new
+;; graphical frames in daemon sessions.
 
 ;;; Code:
 
@@ -21,6 +19,14 @@
 
 (defvar my-saved-frame-size nil
   "Frame size alist read from `my-frame-size-file', or nil.")
+
+(defun my-frame-size--load ()
+  "Load saved frame size from `my-frame-size-file' into `my-saved-frame-size'."
+  (when (file-exists-p my-frame-size-file)
+    (with-temp-buffer
+      (insert-file-contents my-frame-size-file)
+      (goto-char (point-min))
+      (setq my-saved-frame-size (ignore-errors (read (current-buffer)))))))
 
 ;;;###autoload
 (defun my-frame-size-save (&optional frame)
@@ -43,14 +49,15 @@ size is kept when Emacs exits fullscreen."
           (insert "\n"))))))
 
 ;;;###autoload
-(defun my-frame-size-apply (frame)
-  "Apply the saved size to graphical FRAME."
-  (when (and (consp my-saved-frame-size)
-             (display-graphic-p frame)
-             (null (frame-parameter frame 'parent-frame)))
-    (set-frame-size frame
-                    (alist-get 'width my-saved-frame-size)
-                    (alist-get 'height my-saved-frame-size))))
+(defun my-frame-size-apply (&optional frame)
+  "Apply the saved size to graphical FRAME (defaulting to the selected frame)."
+  (let ((frame (or frame (selected-frame))))
+    (when (and (consp my-saved-frame-size)
+               (display-graphic-p frame)
+               (null (frame-parameter frame 'parent-frame)))
+      (set-frame-size frame
+                      (alist-get 'width my-saved-frame-size)
+                      (alist-get 'height my-saved-frame-size)))))
 
 ;;;###autoload
 (define-minor-mode my-frame-size-mode
@@ -59,12 +66,16 @@ size is kept when Emacs exits fullscreen."
   :group 'my-frame-size
   (remove-hook 'kill-emacs-hook #'my-frame-size-save)
   (remove-hook 'delete-frame-functions #'my-frame-size-save)
+  (remove-hook 'window-setup-hook #'my-frame-size-apply)
   (remove-hook 'after-make-frame-functions #'my-frame-size-apply)
   (when my-frame-size-mode
+    (my-frame-size--load)
     (add-hook 'kill-emacs-hook #'my-frame-size-save)
     (add-hook 'delete-frame-functions #'my-frame-size-save)
-    ;; Leave terminal frames alone: `early-init.el' skips `default-frame-alist'
-    ;; in daemon sessions, so apply the saved size only to new GUI frames.
+    ;; Re-apply after startup finishes so font and tab-bar changes do not
+    ;; shrink the initial frame's row/column count.
+    (add-hook 'window-setup-hook #'my-frame-size-apply)
+    ;; Leave terminal frames alone: apply the saved size only to new GUI frames.
     (when (daemonp)
       (add-hook 'after-make-frame-functions #'my-frame-size-apply))))
 
