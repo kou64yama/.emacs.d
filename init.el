@@ -532,6 +532,21 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   :hook ((after-init . ghostel-status-indicator-mode))
   :bind (("C-x m" . ghostel)))
 
+;; Ships with Ghostel, so there is no separate package to install.
+(use-package ghostel-project
+  :ensure nil
+  :bind (:map project-prefix-map
+              ("m" . ghostel-project)
+              ("M" . ghostel-project-list-buffers))
+  :init
+  (with-eval-after-load 'project
+    (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
+    (add-to-list 'project-switch-commands
+                 '(ghostel-project-list-buffers "Ghostel buffers") t)
+    ;; Have `C-x p k' kill the project's terminals too.
+    (add-to-list 'project-kill-buffer-conditions
+                 '(derived-mode . ghostel-mode))))
+
 ;;; Org
 
 (use-package org
