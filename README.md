@@ -59,6 +59,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
 - **Key Discovery**: which-key shows hints for partial key sequences (built into Emacs).
+- **Tabs**: [centaur-tabs](https://github.com/ema2159/centaur-tabs) provides VSCode-style buffer tabs with `nerd-icons` file icons, unsaved-change markers, and automatic buffer grouping.
 
 ### Editing
 - **Region Expansion**: [expand-region](https://github.com/magnars/expand-region.el) semantically expands selections (`C-=`).
@@ -126,6 +127,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `N` (in Magit) | `forge-pull` (fetch forge issues & PRs) |
 | | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
 | **Web & Docs** | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
+| **Tabs** | `C-x <left>` / `C-x <right>` | `centaur-tabs-backward` / `centaur-tabs-forward` |
 | **Tools** | `M-x eglot` | Start Language Server Protocol client |
 | | `C-x t t` | Toggle the Treemacs project tree |
 | | `M-x agent-shell` | Open ACP AI agent shell |

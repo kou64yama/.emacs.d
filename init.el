@@ -319,6 +319,23 @@ Terminal frames keep the font configured in the terminal emulator."
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
+(use-package centaur-tabs
+  :demand t
+  :bind (("C-x <left>" . centaur-tabs-backward)
+         ("C-x <right>" . centaur-tabs-forward))
+  :hook (treemacs-mode . centaur-tabs-local-mode)
+  :custom
+  (centaur-tabs-style "bar")
+  (centaur-tabs-set-bar 'over)
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-icon-type 'nerd-icons)
+  (centaur-tabs-gray-out-icons 'buffer)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-cycle-scope 'tabs)
+  :config
+  (centaur-tabs-headline-match)
+  (centaur-tabs-mode 1))
+
 ;;; Version control
 
 (use-package magit
