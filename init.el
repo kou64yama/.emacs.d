@@ -132,6 +132,8 @@ _PUSH is ignored."
   :load-path "lisp"
   :custom
   (my-frame-size-file (my-emacs-path "frame-size.el"))
+  :init
+  (setq frame-resize-pixelwise t)
   :config
   (my-frame-size-mode 1))
 

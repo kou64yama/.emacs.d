@@ -40,8 +40,12 @@ size is kept when Emacs exits fullscreen."
                (display-graphic-p frame)
                (null (frame-parameter frame 'parent-frame))
                (null (frame-parameter frame 'fullscreen)))
-      (let ((size (list (cons 'width (frame-width frame))
-                        (cons 'height (frame-height frame)))))
+      (let ((size (if frame-resize-pixelwise
+                      (list (cons 'width (frame-text-width frame))
+                            (cons 'height (frame-text-height frame))
+                            (cons 'pixelwise t))
+                    (list (cons 'width (frame-width frame))
+                          (cons 'height (frame-height frame))))))
         (setq my-saved-frame-size size)
         (with-temp-file my-frame-size-file
           (insert ";;; -*- lexical-binding: t; -*-\n")
@@ -57,7 +61,8 @@ size is kept when Emacs exits fullscreen."
                (null (frame-parameter frame 'parent-frame)))
       (set-frame-size frame
                       (alist-get 'width my-saved-frame-size)
-                      (alist-get 'height my-saved-frame-size)))))
+                      (alist-get 'height my-saved-frame-size)
+                      (alist-get 'pixelwise my-saved-frame-size)))))
 
 ;;;###autoload
 (define-minor-mode my-frame-size-mode
