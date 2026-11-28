@@ -315,12 +315,15 @@ Terminal frames keep the font configured in the terminal emulator."
   :custom
   (corfu-auto t)
   :init
-  ;; Terminal child frames are available starting with Emacs 31.
-  (when (or (display-graphic-p) (>= emacs-major-version 31))
-    (global-corfu-mode 1))
+  (global-corfu-mode 1)
   :config
   (corfu-popupinfo-mode 1)
   (corfu-history-mode 1))
+
+(use-package corfu-terminal
+  :after corfu
+  :config
+  (corfu-terminal-mode 1))
 
 (use-package cape
   :init
