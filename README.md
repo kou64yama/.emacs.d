@@ -55,7 +55,6 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Flexible Matching**: [Orderless](https://github.com/oantolin/orderless) filters candidates by multiple space-separated patterns. File names use `partial-completion`.
 - **Annotations**: [Marginalia](https://github.com/minad/marginalia) displays candidate types, file sizes, and docstrings.
 - **Search & Navigation**: [Consult](https://github.com/minad/consult) provides enhanced buffer switching, line search, `ripgrep`/`find`, imenu jump, and Xref integration.
-- **Workspaces**: [tabspaces](https://codeberg.org/mclear-tools/tabspaces) groups buffers by tab. Switching projects with `C-x p p` or the dashboard opens or reuses a project workspace without prompting for another action. When a saved session exists, opening a project restores its supported buffers and window layout; otherwise it uses the normal project-opening behavior. Sessions are saved when closing a project tab, on Emacs exit, and after five minutes idle, under `~/.emacs.d/tabspaces-sessions/`. Sessions are restored at startup and when opening a project. Unsaved buffer contents and running processes are not preserved, and remote buffers are skipped during restore. `C-c TAB s` switches or creates a workspace, `C-c TAB o` opens a project in a workspace, and `C-c TAB d` closes one. `C-x b` lists buffers belonging to the current workspace (including shared buffers such as `*scratch*`); Consult's `o` narrowing shows buffers from other workspaces. New projects get a `project-todo.org` file. `*Messages*` and `*Compile-Log*` are excluded from workspace buffer lists. Recent files and bookmarks remain available across workspaces. The workspace buffer list also affects other Consult commands such as `consult-project-buffer` and `consult-line-multi`.
 - **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
 - **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
@@ -84,7 +83,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 
 ### Development & Tools
 - **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
-- **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) opens automatically when switching projects and can be toggled with `C-c t`. On project switches and when toggled from a project buffer, it synchronizes the current tab's tree to that project's root, replacing other Treemacs roots in that workspace. Its tab-bar integration keeps a separate tree per workspace, and [treemacs-nerd-icons](https://github.com/rainstormstudio/treemacs-nerd-icons) renders file and directory icons using Nerd Fonts. Treemacs workspace state is not persisted across restarts.
+- **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) can be toggled with `C-x t t`. It follows the current buffer's file and project (`treemacs-follow-mode` and `treemacs-project-follow-mode`), watches for file changes (`treemacs-filewatch-mode`), displays Git status highlights (synchronized with Magit via `treemacs-magit`), renders file and directory icons using Nerd Fonts (`treemacs-nerd-icons`), and displays icons in Dired (`treemacs-icons-dired`).
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
@@ -109,9 +108,6 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `M-y` | `consult-yank-pop` (browse kill ring history) |
 | | `C-.` / `C-;` | `embark-act` / `embark-dwim` |
 | | `C-h B` | `embark-bindings` |
-| **Workspaces** | `C-c TAB s` | Switch or create a workspace |
-| | `C-c TAB o` | Open a project in a workspace |
-| | `C-c TAB d` | Close the current workspace |
 | **Editing** | `C-=` | `er/expand-region` (expand selection semantically) |
 | | `M-<up>` / `M-<down>` / `M-<left>` / `M-<right>` | `drag-stuff` (move line, word, or region; except in Org) |
 | | `C-S-c C-S-c` | `mc/edit-lines` (edit all lines in selection) |
@@ -131,7 +127,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | | `s` / `u` / `c c` | Stage / Unstage / Commit in Magit |
 | **Web & Docs** | `C-c C-x C-m` | `markdown-toggle-markup-hiding` |
 | **Tools** | `M-x eglot` | Start Language Server Protocol client |
-| | `C-c t` | Toggle the Treemacs project tree |
+| | `C-x t t` | Toggle the Treemacs project tree |
 | | `M-x agent-shell` | Open ACP AI agent shell |
 
 ## Additional Setup

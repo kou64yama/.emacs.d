@@ -295,55 +295,6 @@ Terminal frames keep the font configured in the terminal emulator."
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
 
-(use-package tabspaces
-  :demand t
-  :preface
-  (defun my-consult-tabspaces ()
-    "Limit Consult's buffer list to the workspace while tabspaces is active."
-    (when (featurep 'consult)
-      (setq consult-buffer-list-function
-            (if tabspaces-mode #'tabspaces-local-buffer-list #'buffer-list))))
-  (defun my-tabspaces-project-session-file (project)
-    "Return a unique session file for PROJECT under the Emacs directory."
-    (my-emacs-path
-     (concat "tabspaces-sessions/"
-             (secure-hash 'sha256 (file-name-as-directory
-                                   (expand-file-name project)))
-             ".el")))
-  (defun my-tabspaces-isolate-restored-project-map (original &rest args)
-    "Keep ORIGINAL restoring ARGS from replacing the live project-tab map."
-    (let ((tabspaces-project-tab-map (copy-tree tabspaces-project-tab-map)))
-      (apply original args)))
-  (defun my-tabspaces-save-before-tab-close (tab &rest _)
-    "Save project sessions before closing project TAB."
-    (when (tabspaces--get-project-for-tab (alist-get 'name tab))
-      (tabspaces-save-all-project-sessions)))
-  :hook (tabspaces-mode . my-consult-tabspaces)
-  :custom
-  (tabspaces-project-switch-opens-workspace t)
-  (tabspaces-project-switch-commands #'ignore)
-  (tabspaces-use-filtered-buffers-as-default t)
-  (tabspaces-default-tab "Default")
-  (tabspaces-remove-to-default t)
-  (tabspaces-include-buffers '("*scratch*"))
-  (tabspaces-initialize-project-with-todo t)
-  (tabspaces-todo-file-name "project-todo.org")
-  (tabspaces-fully-resolve-paths t)
-  (tabspaces-exclude-buffers '("*Messages*" "*Compile-Log*"))
-  (tabspaces-session t)
-  (tabspaces-session-auto-restore t)
-  (tabspaces-session-auto-save-delay 300)
-  (tabspaces-session-project-session-store #'my-tabspaces-project-session-file)
-  (tabspaces-session-file (my-emacs-path "tabsession.el"))
-  (tab-bar-new-tab-choice "*scratch*")
-  :config
-  (advice-add 'tabspaces-restore-session
-              :around #'my-tabspaces-isolate-restored-project-map)
-  (add-hook 'tab-bar-tab-pre-close-functions #'my-tabspaces-save-before-tab-close)
-  (with-eval-after-load 'consult
-    (my-consult-tabspaces))
-  (tabspaces-mode 1))
-
 (use-package embark
   :bind (("C-." . embark-act)
          ("C-;" . embark-dwim)
@@ -396,60 +347,36 @@ Terminal frames keep the font configured in the terminal emulator."
   (setq read-process-output-max (* 1024 1024)))
 
 (use-package treemacs
-  :preface
-  (defun my-treemacs-sync-project (root)
-    "Make ROOT the only project in the current Treemacs workspace."
-    (when (featurep 'treemacs-tab-bar)
-      (treemacs-tab-bar--ensure-workspace-exists))
-    (let* ((root (treemacs-canonical-path (file-truename root)))
-           (projects (treemacs-workspace->projects (treemacs-current-workspace))))
-      (dolist (project (copy-sequence projects))
-        (unless (equal root (treemacs-project->path project))
-          (treemacs-do-remove-project-from-workspace project t)))
-      (when (treemacs-workspace->is-empty?)
-        (let ((result (treemacs-do-add-project-to-workspace
-                       root (file-name-nondirectory (directory-file-name root)))))
-          (unless (eq (car result) 'success)
-            (user-error "Could not add project to Treemacs: %s" result))))))
-  (defun my-treemacs-toggle ()
-    "Toggle Treemacs, showing the current project when available."
-    (interactive)
-    (require 'treemacs)
-    (when-let* ((project (project-current)))
-      (my-treemacs-sync-project (project-root project)))
-    (treemacs))
-  (defun my-treemacs-show-after-project-switch (&optional directory _prefix)
-    "Show Treemacs after opening a project workspace."
-    (require 'treemacs)
-    (when-let* ((directory directory)
-                (project (project-current nil directory)))
-      (my-treemacs-sync-project (project-root project)))
-    (unless (treemacs-get-local-window)
-      (save-selected-window
-        (treemacs))))
-  :bind (("C-c t" . my-treemacs-toggle))
-  :custom
-  (treemacs-persist-file nil)
-  :init
-  (advice-add 'tabspaces-open-or-create-project-and-workspace
-              :after #'my-treemacs-show-after-project-switch)
+  :defer t
+  :bind (("C-x t t" . treemacs)
+         ("C-x t 1" . treemacs-delete-other-windows)
+         ("C-x t d" . treemacs-select-directory)
+         ("C-x t B" . treemacs-bookmark)
+         ("C-x t C-t" . treemacs-find-file)
+         ("C-x t M-t" . treemacs-find-tag))
   :config
-  (treemacs-follow-mode 1)
-  (treemacs-project-follow-mode 1))
-
-(use-package treemacs-tab-bar
-  :after treemacs
-  :demand t
-  :config
-  ;; The integration identifies workspaces by the active tab.
-  (tab-bar-mode 1)
-  (treemacs-set-scope-type 'Tabs))
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-fringe-indicator-mode 'always)
+  (treemacs-project-follow-mode t)
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null treemacs-python-executable)))
+    (`(t . t)
+     (treemacs-git-mode 'deferred))
+    (`(t . _)
+     (treemacs-git-mode 'simple))))
 
 (use-package treemacs-nerd-icons
   :after treemacs
   :demand t
   :config
   (treemacs-nerd-icons-config))
+
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once))
+
+(use-package treemacs-magit
+  :after (treemacs magit))
 
 ;; Keep agent-shell data (transcripts, screenshots, worktrees) out of project
 ;; directories and together under `user-emacs-directory'.
