@@ -89,6 +89,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Diagnostic Popups**: [flymake-popon](https://codeberg.org/akib/emacs-flymake-popon) shows Flymake diagnostics in a floating popup next to the offending line, similar to inline error display in Zed and VS Code.
 - **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) can be toggled with `C-x t t`. It follows the current buffer's file and project (`treemacs-follow-mode` and `treemacs-project-follow-mode`), watches for file changes (`treemacs-filewatch-mode`), displays Git status highlights (synchronized with Magit via `treemacs-magit`), renders file and directory icons using Nerd Fonts (`treemacs-nerd-icons`), and displays icons in Dired (`treemacs-icons-dired`).
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
+- **Terminal**: [Ghostel](https://github.com/dakra/ghostel) provides a terminal emulator backed by libghostty-vt (`C-c t` or `M-x ghostel`) with true color, the Kitty keyboard and graphics protocols, hyperlinks, and password-prompt detection. Shell integration (directory tracking and prompt navigation) is injected automatically for bash, zsh, fish, and nushell. The prebuilt native module is downloaded on first use, so no toolchain is required.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
 
 ### System & Environment
@@ -134,6 +135,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 | **Tabs** | `C-x <left>` / `C-x <right>` | `centaur-tabs-backward` / `centaur-tabs-forward` |
 | **Tools** | `M-x eglot` | Start Language Server Protocol client |
 | | `C-x t t` | Toggle the Treemacs project tree |
+| | `C-c t` | Open a Ghostel terminal |
 | | `M-x agent-shell` | Open ACP AI agent shell |
 
 ## Additional Setup

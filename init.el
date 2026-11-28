@@ -523,6 +523,15 @@ overwrite each other.  EXTENSION is passed through to ORIGINAL."
   ;; Export, export-and-preview, and live preview all use this function.
   (advice-add 'markdown-export-file-name :around #'my-markdown-export-file-name))
 
+;;; Terminal
+
+;; Ghostel downloads a prebuilt native module on first use, so no toolchain is
+;; required.  Its shell integration (directory tracking, prompt navigation) is
+;; injected automatically for bash, zsh, fish, and nushell.
+(use-package ghostel
+  :hook ((after-init . ghostel-status-indicator-mode))
+  :bind (("C-x m" . ghostel)))
+
 ;;; Org
 
 (use-package org
