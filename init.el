@@ -295,6 +295,12 @@ Terminal frames keep the font configured in the terminal emulator."
   :init
   (marginalia-mode 1))
 
+(use-package nerd-icons-completion
+  :after marginalia
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+  :config
+  (nerd-icons-completion-mode))
+
 (use-package consult
   :bind (("C-x b" . consult-buffer)
          ("M-s l" . consult-line)
@@ -369,14 +375,32 @@ Terminal frames keep the font configured in the terminal emulator."
 
 ;;; Development and project tools
 
+;; Automatically use Tree-sitter major modes when grammars are available.
+;; Run `M-x treesit-auto-install-all' to install all grammars at once.
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 (use-package eglot
   :ensure nil
   :commands (eglot eglot-ensure)
+  ;; Add or remove entries to match the language servers you have installed.
+  :hook ((typescript-ts-mode . eglot-ensure)
+         (tsx-ts-mode        . eglot-ensure)
+         (js-ts-mode         . eglot-ensure)
+         (python-ts-mode     . eglot-ensure))
   :custom
   (eglot-autoshutdown t)
   :init
   ;; Larger reads keep LSP traffic from being split into tiny chunks.
   (setq read-process-output-max (* 1024 1024)))
+
+;; Show Flymake diagnostics in a floating popup next to the offending line.
+(use-package flymake-popon
+  :hook (flymake-mode . flymake-popon-mode))
 
 (use-package treemacs
   :defer t

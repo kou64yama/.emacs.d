@@ -56,8 +56,9 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Annotations**: [Marginalia](https://github.com/minad/marginalia) displays candidate types, file sizes, and docstrings.
 - **Search & Navigation**: [Consult](https://github.com/minad/consult) provides enhanced buffer switching, line search, `ripgrep`/`find`, imenu jump, and Xref integration.
 - **Context Actions**: [Embark](https://github.com/oantolin/embark) and [Embark Consult](https://github.com/oantolin/embark) act on candidates or targets at point.
-- **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history (in graphical frames and terminal Emacs 31+).
+- **In-Buffer Completion**: [Corfu](https://github.com/minad/corfu) provides lightweight popup completion with documentation popups and candidate history. [corfu-terminal](https://codeberg.org/akib/emacs-corfu-terminal) renders the popup in terminal frames via overlays.
 - **Completion Backends**: [Cape](https://github.com/minad/cape) adds file paths and dabbrev buffer words to Corfu.
+- **Completion Icons**: [nerd-icons-completion](https://github.com/rainstormstudio/nerd-icons-completion) renders Nerd Font file-type icons next to candidates in the minibuffer (Vertico + Marginalia).
 - **Key Discovery**: which-key shows hints for partial key sequences (built into Emacs).
 - **Tabs**: [centaur-tabs](https://github.com/ema2159/centaur-tabs) provides VSCode-style buffer tabs with `nerd-icons` file icons, unsaved-change markers, and automatic buffer grouping.
 
@@ -83,7 +84,9 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **Diff Highlighting**: [diff-hl](https://github.com/dgutov/diff-hl) displays uncommitted changes in the window margin/fringe and refreshes with Magit.
 
 ### Development & Tools
-- **LSP Client**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration (`M-x eglot`).
+- **Language Servers**: Built-in [Eglot](https://www.gnu.org/software/emacs/manual/html_node/eglot/) for Language Server Protocol integration. `eglot-ensure` starts the server automatically for TypeScript, TSX, JavaScript, and Python buffers; add further hooks for other languages as needed.
+- **Tree-sitter**: [treesit-auto](https://github.com/renzmann/treesit-auto) automatically switches to Tree-sitter major modes when grammars are available, and falls back to the traditional mode otherwise. Run `M-x treesit-auto-install-all` to install all grammars, or answer the prompt when opening a file.
+- **Diagnostic Popups**: [flymake-popon](https://codeberg.org/akib/emacs-flymake-popon) shows Flymake diagnostics in a floating popup next to the offending line, similar to inline error display in Zed and VS Code.
 - **Project Tree**: [Treemacs](https://github.com/Alexander-Miller/treemacs) can be toggled with `C-x t t`. It follows the current buffer's file and project (`treemacs-follow-mode` and `treemacs-project-follow-mode`), watches for file changes (`treemacs-filewatch-mode`), displays Git status highlights (synchronized with Magit via `treemacs-magit`), renders file and directory icons using Nerd Fonts (`treemacs-nerd-icons`), and displays icons in Dired (`treemacs-icons-dired`).
 - **AI Agents**: [agent-shell](https://github.com/xenodium/agent-shell) for interacting with ACP-compatible AI agents (`M-x agent-shell`), using mixed-pitch text. Notifications report completed responses and permission requests outside the selected window.
 - **Markdown**: [markdown-mode](https://jblevins.org/projects/markdown-mode/) with native syntax-highlighted code blocks and markup hiding. Generated HTML previews mirror the source path under `~/.emacs.d/markdown-preview/` instead of being written beside the Markdown file.
