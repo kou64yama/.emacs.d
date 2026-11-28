@@ -10,7 +10,7 @@
 	 auto-dark cape catppuccin-theme centaur-tabs consult corfu
 	 corfu-terminal dashboard diff-hl doom-modeline drag-stuff
 	 embark embark-consult exec-path-from-shell expand-region
-	 flymake-popon forge japanese-holidays magit marginalia
+	 flymake-popon forge japanese-holidays kkp magit marginalia
 	 mixed-pitch multiple-cursors nerd-icons-completion olivetti
 	 orderless org-appear org-gcal org-modern rainbow-delimiters
 	 tabspaces treemacs treemacs-icons-dired treemacs-magit

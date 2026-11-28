@@ -101,6 +101,10 @@ _PUSH is ignored."
   :ensure nil
   :init (xterm-mouse-mode 1))
 
+;; Kitty Keyboard Protocol: richer key events in supporting terminal emulators.
+(use-package kkp
+  :hook (tty-setup . global-kkp-mode))
+
 (use-package savehist
   :ensure nil
   :init (savehist-mode 1))

@@ -98,6 +98,7 @@ If package installation fails, run `M-x package-refresh-contents` and restart Em
 - **History & Revert**: Persistent minibuffer history (`savehist-mode`), recent files (`recentf-mode`), cursor position restoration (`save-place-mode`), and automatic buffer reload on external file changes (`global-auto-revert-mode`).
 - **Backups and Locks**: Backups and editing locks are kept in `backups/` and `locks/` under the configuration directory. Lock collision detection requires other Emacs instances editing the same files to use the same lock directory; it does not coordinate across different local directories or hosts.
 - **Mouse Support**: Terminal mouse click, drag, and scrolling enabled (`xterm-mouse-mode`).
+- **Kitty Keyboard Protocol**: [kkp](https://github.com/benotn/kkp) enables `global-kkp-mode` in terminal frames for richer key events (e.g. `C-S-` combinations, Hyper/Super) when the terminal supports it; `M-x kkp-status` reports support.
 
 ## Keybindings Quick Reference
 
