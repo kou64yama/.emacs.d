@@ -376,9 +376,19 @@ Terminal frames keep the font configured in the terminal emulator."
 
 ;;; Development and project tools
 
-;; Automatically use Tree-sitter major modes when grammars are available.
-;; Run `M-x treesit-auto-install-all' to install all grammars at once.
+;; Prefer Emacs 31's built-in Tree-sitter mode selection.  It populates
+;; `major-mode-remap-alist' once at startup, whereas treesit-auto rebuilt it
+;; for every buffer and made startup and file opening noticeably slow.
+(use-package treesit
+  :ensure nil
+  :if (boundp 'treesit-enabled-modes)
+  :init
+  (setopt treesit-enabled-modes t))
+
+;; Emacs 30 lacks `treesit-enabled-modes'; keep treesit-auto as a fallback
+;; there.  It is not loaded on Emacs 31.
 (use-package treesit-auto
+  :if (not (boundp 'treesit-enabled-modes))
   :custom
   (treesit-auto-install 'prompt)
   :config
